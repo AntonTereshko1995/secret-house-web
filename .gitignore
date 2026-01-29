@@ -1,0 +1,6 @@
+.vs/
+.claude/
+obj/
+PRPs/
+node_modules/
+dist/
