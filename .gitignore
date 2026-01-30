@@ -1,6 +1,45 @@
+# Visual Studio
 .vs/
-.claude/
 obj/
+*.esproj.user
+*.slnx
+*.suo
+
+# Claude Code
+.claude/
+
+# Custom
 PRPs/
+
+# Dependencies
 node_modules/
+
+# Build outputs
 dist/
+dist-ssr/
+*.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+.idea
+.DS_Store
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

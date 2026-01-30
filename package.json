@@ -7,7 +7,11 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "images:convert-heic": "node scripts/convert-heic.mjs",
+    "images:optimize": "node scripts/optimize-images.mjs",
+    "images:generate-manifest": "node scripts/generate-manifest-responsive.mjs",
+    "images:full-pipeline": "npm run images:convert-heic && npm run images:optimize && npm run images:generate-manifest"
   },
   "dependencies": {
     "react": "^19.2.0",
@@ -25,8 +29,11 @@
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
+    "glob": "^13.0.0",
     "globals": "^16.5.0",
+    "heic-convert": "^2.1.0",
     "postcss": "^8.5.6",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4.1.18",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",

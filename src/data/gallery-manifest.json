@@ -2,397 +2,1392 @@
   "items": [
     {
       "id": "green-bedroom-0",
-      "src": "/images/rooms/green-bedroom/DSC05725.JPG",
       "category": "green-bedroom",
-      "alt": "Зеленая спальня",
-      "description": "Зеленая спальня с роскошной кроватью",
-      "featured": true
+      "alt": "Зеленая спальня вид 1",
+      "description": "Зеленая спальня - фото 1",
+      "featured": true,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/green-bedroom/thumbnails/photo_2024-07-28_21-25-03.webp",
+          "jpg": "/images/rooms/green-bedroom/thumbnails/photo_2024-07-28_21-25-03.jpg",
+          "width": 640,
+          "height": 1138
+        },
+        "medium": {
+          "webp": "/images/rooms/green-bedroom/thumbnails/photo_2024-07-28_21-25-03.webp",
+          "jpg": "/images/rooms/green-bedroom/thumbnails/photo_2024-07-28_21-25-03.jpg",
+          "width": 640,
+          "height": 1138
+        },
+        "large": {
+          "webp": "/images/rooms/green-bedroom/thumbnails/photo_2024-07-28_21-25-03.webp",
+          "jpg": "/images/rooms/green-bedroom/thumbnails/photo_2024-07-28_21-25-03.jpg",
+          "width": 640,
+          "height": 1138
+        }
+      }
     },
     {
       "id": "green-bedroom-1",
-      "src": "/images/rooms/green-bedroom/DSC05729.JPG",
       "category": "green-bedroom",
       "alt": "Зеленая спальня вид 2",
-      "description": "Зеленая спальня с элегантным интерьером"
+      "description": "Зеленая спальня - фото 2",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/green-bedroom/thumbnails/DSC05736.webp",
+          "jpg": "/images/rooms/green-bedroom/thumbnails/DSC05736.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/green-bedroom/medium/DSC05736.webp",
+          "jpg": "/images/rooms/green-bedroom/medium/DSC05736.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/green-bedroom/large/DSC05736.webp",
+          "jpg": "/images/rooms/green-bedroom/large/DSC05736.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "green-bedroom-2",
-      "src": "/images/rooms/green-bedroom/DSC05731.JPG",
       "category": "green-bedroom",
       "alt": "Зеленая спальня вид 3",
-      "description": "Зеленая спальня - детали интерьера"
+      "description": "Зеленая спальня - фото 3",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/green-bedroom/thumbnails/DSC05731.webp",
+          "jpg": "/images/rooms/green-bedroom/thumbnails/DSC05731.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/green-bedroom/medium/DSC05731.webp",
+          "jpg": "/images/rooms/green-bedroom/medium/DSC05731.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/green-bedroom/large/DSC05731.webp",
+          "jpg": "/images/rooms/green-bedroom/large/DSC05731.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "green-bedroom-3",
-      "src": "/images/rooms/green-bedroom/DSC05736.JPG",
       "category": "green-bedroom",
       "alt": "Зеленая спальня вид 4",
-      "description": "Зеленая спальня - общий вид"
+      "description": "Зеленая спальня - фото 4",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/green-bedroom/thumbnails/DSC05729.webp",
+          "jpg": "/images/rooms/green-bedroom/thumbnails/DSC05729.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/green-bedroom/medium/DSC05729.webp",
+          "jpg": "/images/rooms/green-bedroom/medium/DSC05729.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/green-bedroom/large/DSC05729.webp",
+          "jpg": "/images/rooms/green-bedroom/large/DSC05729.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "green-bedroom-4",
-      "src": "/images/rooms/green-bedroom/photo_2024-07-28_21-25-03.jpg",
       "category": "green-bedroom",
       "alt": "Зеленая спальня вид 5",
-      "description": "Зеленая спальня - уютная атмосфера"
+      "description": "Зеленая спальня - фото 5",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/green-bedroom/thumbnails/DSC05725.webp",
+          "jpg": "/images/rooms/green-bedroom/thumbnails/DSC05725.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/green-bedroom/medium/DSC05725.webp",
+          "jpg": "/images/rooms/green-bedroom/medium/DSC05725.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/green-bedroom/large/DSC05725.webp",
+          "jpg": "/images/rooms/green-bedroom/large/DSC05725.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "white-bedroom-0",
-      "src": "/images/rooms/white-bedroom/DSC05513.JPG",
       "category": "white-bedroom",
-      "alt": "Белая спальня",
-      "description": "Белая спальня в минималистичном стиле",
-      "featured": true
+      "alt": "Белая спальня вид 1",
+      "description": "Белая спальня - фото 1",
+      "featured": true,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/white-bedroom/thumbnails/DSC05747.webp",
+          "jpg": "/images/rooms/white-bedroom/thumbnails/DSC05747.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/white-bedroom/medium/DSC05747.webp",
+          "jpg": "/images/rooms/white-bedroom/medium/DSC05747.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/white-bedroom/large/DSC05747.webp",
+          "jpg": "/images/rooms/white-bedroom/large/DSC05747.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "white-bedroom-1",
-      "src": "/images/rooms/white-bedroom/DSC05516.JPG",
       "category": "white-bedroom",
       "alt": "Белая спальня вид 2",
-      "description": "Белая спальня с изысканным декором"
+      "description": "Белая спальня - фото 2",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/white-bedroom/thumbnails/DSC05742.webp",
+          "jpg": "/images/rooms/white-bedroom/thumbnails/DSC05742.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/white-bedroom/medium/DSC05742.webp",
+          "jpg": "/images/rooms/white-bedroom/medium/DSC05742.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/white-bedroom/large/DSC05742.webp",
+          "jpg": "/images/rooms/white-bedroom/large/DSC05742.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "white-bedroom-2",
-      "src": "/images/rooms/white-bedroom/DSC05742.JPG",
       "category": "white-bedroom",
       "alt": "Белая спальня вид 3",
-      "description": "Белая спальня - детали интерьера"
+      "description": "Белая спальня - фото 3",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/white-bedroom/thumbnails/DSC05516.webp",
+          "jpg": "/images/rooms/white-bedroom/thumbnails/DSC05516.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/white-bedroom/medium/DSC05516.webp",
+          "jpg": "/images/rooms/white-bedroom/medium/DSC05516.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/white-bedroom/large/DSC05516.webp",
+          "jpg": "/images/rooms/white-bedroom/large/DSC05516.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "white-bedroom-3",
-      "src": "/images/rooms/white-bedroom/DSC05747.JPG",
       "category": "white-bedroom",
       "alt": "Белая спальня вид 4",
-      "description": "Белая спальня - уютное пространство"
-    },
-    {
-      "id": "white-bedroom-4",
-      "src": "/images/rooms/white-bedroom/DSC05754.JPG",
-      "category": "white-bedroom",
-      "alt": "Белая спальня вид 5",
-      "description": "Белая спальня с роскошным текстилем"
-    },
-    {
-      "id": "white-bedroom-5",
-      "src": "/images/rooms/white-bedroom/DSC05756.JPG",
-      "category": "white-bedroom",
-      "alt": "Белая спальня вид 6",
-      "description": "Белая спальня - элегантный дизайн"
-    },
-    {
-      "id": "white-bedroom-6",
-      "src": "/images/rooms/white-bedroom/DSC05758.JPG",
-      "category": "white-bedroom",
-      "alt": "Белая спальня вид 7",
-      "description": "Белая спальня - комфортная обстановка"
-    },
-    {
-      "id": "white-bedroom-7",
-      "src": "/images/rooms/white-bedroom/DSC05761.JPG",
-      "category": "white-bedroom",
-      "alt": "Белая спальня вид 8",
-      "description": "Белая спальня - стильный интерьер"
+      "description": "Белая спальня - фото 4",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/white-bedroom/thumbnails/DSC05513.webp",
+          "jpg": "/images/rooms/white-bedroom/thumbnails/DSC05513.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/white-bedroom/medium/DSC05513.webp",
+          "jpg": "/images/rooms/white-bedroom/medium/DSC05513.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/white-bedroom/large/DSC05513.webp",
+          "jpg": "/images/rooms/white-bedroom/large/DSC05513.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "secret-room-0",
-      "src": "/images/rooms/secret-room/DSC05538.JPG",
       "category": "secret-room",
-      "alt": "Секретная комната",
-      "description": "Секретная комната для особых моментов",
-      "featured": true
+      "alt": "Секретная комната вид 1",
+      "description": "Секретная комната - фото 1",
+      "featured": true,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/secret-room/thumbnails/IMG_4901.webp",
+          "jpg": "/images/rooms/secret-room/thumbnails/IMG_4901.jpg",
+          "width": 640,
+          "height": 853
+        },
+        "medium": {
+          "webp": "/images/rooms/secret-room/medium/IMG_4901.webp",
+          "jpg": "/images/rooms/secret-room/medium/IMG_4901.jpg",
+          "width": 1280,
+          "height": 1707
+        },
+        "large": {
+          "webp": "/images/rooms/secret-room/large/IMG_4901.webp",
+          "jpg": "/images/rooms/secret-room/large/IMG_4901.jpg",
+          "width": 1920,
+          "height": 2560
+        }
+      }
     },
     {
       "id": "secret-room-1",
-      "src": "/images/rooms/secret-room/DSC05547.JPG",
       "category": "secret-room",
       "alt": "Секретная комната вид 2",
-      "description": "Приватное пространство с продуманным освещением"
+      "description": "Секретная комната - фото 2",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/secret-room/thumbnails/IMG_1213.webp",
+          "jpg": "/images/rooms/secret-room/thumbnails/IMG_1213.jpg",
+          "width": 640,
+          "height": 960
+        },
+        "medium": {
+          "webp": "/images/rooms/secret-room/medium/IMG_1213.webp",
+          "jpg": "/images/rooms/secret-room/medium/IMG_1213.jpg",
+          "width": 1280,
+          "height": 1920
+        },
+        "large": {
+          "webp": "/images/rooms/secret-room/large/IMG_1213.webp",
+          "jpg": "/images/rooms/secret-room/large/IMG_1213.jpg",
+          "width": 1920,
+          "height": 2880
+        }
+      }
     },
     {
       "id": "secret-room-2",
-      "src": "/images/rooms/secret-room/DSC05763.JPG",
       "category": "secret-room",
       "alt": "Секретная комната вид 3",
-      "description": "Секретная комната - детали интерьера"
+      "description": "Секретная комната - фото 3",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/secret-room/thumbnails/IMG_1186.webp",
+          "jpg": "/images/rooms/secret-room/thumbnails/IMG_1186.jpg",
+          "width": 640,
+          "height": 960
+        },
+        "medium": {
+          "webp": "/images/rooms/secret-room/medium/IMG_1186.webp",
+          "jpg": "/images/rooms/secret-room/medium/IMG_1186.jpg",
+          "width": 1280,
+          "height": 1920
+        },
+        "large": {
+          "webp": "/images/rooms/secret-room/large/IMG_1186.webp",
+          "jpg": "/images/rooms/secret-room/large/IMG_1186.jpg",
+          "width": 1920,
+          "height": 2880
+        }
+      }
     },
     {
       "id": "secret-room-3",
-      "src": "/images/rooms/secret-room/DSC05766.JPG",
       "category": "secret-room",
       "alt": "Секретная комната вид 4",
-      "description": "Секретная комната - уютная атмосфера"
+      "description": "Секретная комната - фото 4",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/secret-room/thumbnails/IMG_1179 copy.webp",
+          "jpg": "/images/rooms/secret-room/thumbnails/IMG_1179 copy.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/secret-room/medium/IMG_1179 copy.webp",
+          "jpg": "/images/rooms/secret-room/medium/IMG_1179 copy.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/secret-room/large/IMG_1179 copy.webp",
+          "jpg": "/images/rooms/secret-room/large/IMG_1179 copy.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "secret-room-4",
-      "src": "/images/rooms/secret-room/DSC05768.JPG",
       "category": "secret-room",
       "alt": "Секретная комната вид 5",
-      "description": "Секретная комната - романтическое освещение"
+      "description": "Секретная комната - фото 5",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/secret-room/thumbnails/DSC05778.webp",
+          "jpg": "/images/rooms/secret-room/thumbnails/DSC05778.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/secret-room/medium/DSC05778.webp",
+          "jpg": "/images/rooms/secret-room/medium/DSC05778.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/secret-room/large/DSC05778.webp",
+          "jpg": "/images/rooms/secret-room/large/DSC05778.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "secret-room-5",
-      "src": "/images/rooms/secret-room/DSC05777.JPG",
       "category": "secret-room",
       "alt": "Секретная комната вид 6",
-      "description": "Секретная комната - элегантный дизайн"
+      "description": "Секретная комната - фото 6",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/secret-room/thumbnails/DSC05777.webp",
+          "jpg": "/images/rooms/secret-room/thumbnails/DSC05777.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/secret-room/medium/DSC05777.webp",
+          "jpg": "/images/rooms/secret-room/medium/DSC05777.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/secret-room/large/DSC05777.webp",
+          "jpg": "/images/rooms/secret-room/large/DSC05777.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "secret-room-6",
-      "src": "/images/rooms/secret-room/DSC05778.JPG",
       "category": "secret-room",
       "alt": "Секретная комната вид 7",
-      "description": "Секретная комната - интимная обстановка"
+      "description": "Секретная комната - фото 7",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/secret-room/thumbnails/DSC05768.webp",
+          "jpg": "/images/rooms/secret-room/thumbnails/DSC05768.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/secret-room/medium/DSC05768.webp",
+          "jpg": "/images/rooms/secret-room/medium/DSC05768.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/secret-room/large/DSC05768.webp",
+          "jpg": "/images/rooms/secret-room/large/DSC05768.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "secret-room-7",
-      "src": "/images/rooms/secret-room/IMG_1179 copy.jpg",
       "category": "secret-room",
       "alt": "Секретная комната вид 8",
-      "description": "Секретная комната - вечерний вид"
+      "description": "Секретная комната - фото 8",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/secret-room/thumbnails/DSC05766.webp",
+          "jpg": "/images/rooms/secret-room/thumbnails/DSC05766.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/secret-room/medium/DSC05766.webp",
+          "jpg": "/images/rooms/secret-room/medium/DSC05766.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/secret-room/large/DSC05766.webp",
+          "jpg": "/images/rooms/secret-room/large/DSC05766.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "secret-room-8",
-      "src": "/images/rooms/secret-room/IMG_1186.jpg",
       "category": "secret-room",
       "alt": "Секретная комната вид 9",
-      "description": "Секретная комната - романтическая атмосфера"
+      "description": "Секретная комната - фото 9",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/secret-room/thumbnails/DSC05763.webp",
+          "jpg": "/images/rooms/secret-room/thumbnails/DSC05763.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/secret-room/medium/DSC05763.webp",
+          "jpg": "/images/rooms/secret-room/medium/DSC05763.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/secret-room/large/DSC05763.webp",
+          "jpg": "/images/rooms/secret-room/large/DSC05763.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "secret-room-9",
-      "src": "/images/rooms/secret-room/IMG_1213.jpg",
       "category": "secret-room",
       "alt": "Секретная комната вид 10",
-      "description": "Секретная комната - уютное пространство"
+      "description": "Секретная комната - фото 10",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/secret-room/thumbnails/DSC05547.webp",
+          "jpg": "/images/rooms/secret-room/thumbnails/DSC05547.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/secret-room/medium/DSC05547.webp",
+          "jpg": "/images/rooms/secret-room/medium/DSC05547.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/secret-room/large/DSC05547.webp",
+          "jpg": "/images/rooms/secret-room/large/DSC05547.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "secret-room-10",
-      "src": "/images/rooms/secret-room/IMG_4901.JPG",
       "category": "secret-room",
       "alt": "Секретная комната вид 11",
-      "description": "Секретная комната - стильный интерьер"
+      "description": "Секретная комната - фото 11",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/secret-room/thumbnails/DSC05538.webp",
+          "jpg": "/images/rooms/secret-room/thumbnails/DSC05538.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/secret-room/medium/DSC05538.webp",
+          "jpg": "/images/rooms/secret-room/medium/DSC05538.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/secret-room/large/DSC05538.webp",
+          "jpg": "/images/rooms/secret-room/large/DSC05538.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "sauna-0",
-      "src": "/images/rooms/sauna/DSC05698.JPG",
       "category": "sauna",
-      "alt": "Сауна",
-      "description": "Финская сауна с роскошным интерьером",
-      "featured": true
+      "alt": "Сауна вид 1",
+      "description": "Сауна - фото 1",
+      "featured": true,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/sauna/thumbnails/DSC05701.webp",
+          "jpg": "/images/rooms/sauna/thumbnails/DSC05701.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/sauna/medium/DSC05701.webp",
+          "jpg": "/images/rooms/sauna/medium/DSC05701.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/sauna/large/DSC05701.webp",
+          "jpg": "/images/rooms/sauna/large/DSC05701.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "sauna-1",
-      "src": "/images/rooms/sauna/DSC05700.JPG",
       "category": "sauna",
       "alt": "Сауна вид 2",
-      "description": "Расслабляющая сауна с современным дизайном"
+      "description": "Сауна - фото 2",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/sauna/thumbnails/DSC05700.webp",
+          "jpg": "/images/rooms/sauna/thumbnails/DSC05700.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/sauna/medium/DSC05700.webp",
+          "jpg": "/images/rooms/sauna/medium/DSC05700.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/sauna/large/DSC05700.webp",
+          "jpg": "/images/rooms/sauna/large/DSC05700.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "sauna-2",
-      "src": "/images/rooms/sauna/DSC05701.JPG",
       "category": "sauna",
       "alt": "Сауна вид 3",
-      "description": "Сауна - комфортная атмосфера"
+      "description": "Сауна - фото 3",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/sauna/thumbnails/DSC05698.webp",
+          "jpg": "/images/rooms/sauna/thumbnails/DSC05698.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/sauna/medium/DSC05698.webp",
+          "jpg": "/images/rooms/sauna/medium/DSC05698.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/sauna/large/DSC05698.webp",
+          "jpg": "/images/rooms/sauna/large/DSC05698.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "first-floor-0",
-      "src": "/images/rooms/first-floor/DSC05677.JPG",
       "category": "first-floor",
-      "alt": "1й этаж",
-      "description": "1й этаж - гостиная и кухня в едином пространстве",
-      "featured": true
+      "alt": "1й этаж вид 1",
+      "description": "1й этаж - фото 1",
+      "featured": true,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/first-floor/thumbnails/photo_2025-05-13_18-00-59.webp",
+          "jpg": "/images/rooms/first-floor/thumbnails/photo_2025-05-13_18-00-59.jpg",
+          "width": 640,
+          "height": 854
+        },
+        "medium": {
+          "webp": "/images/rooms/first-floor/thumbnails/photo_2025-05-13_18-00-59.webp",
+          "jpg": "/images/rooms/first-floor/thumbnails/photo_2025-05-13_18-00-59.jpg",
+          "width": 640,
+          "height": 854
+        },
+        "large": {
+          "webp": "/images/rooms/first-floor/thumbnails/photo_2025-05-13_18-00-59.webp",
+          "jpg": "/images/rooms/first-floor/thumbnails/photo_2025-05-13_18-00-59.jpg",
+          "width": 640,
+          "height": 854
+        }
+      }
     },
     {
       "id": "first-floor-1",
-      "src": "/images/rooms/first-floor/DSC05687.JPG",
       "category": "first-floor",
       "alt": "1й этаж вид 2",
-      "description": "1й этаж - современная кухня"
+      "description": "1й этаж - фото 2",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/first-floor/thumbnails/photo_2025-05-13_18-00-57.webp",
+          "jpg": "/images/rooms/first-floor/thumbnails/photo_2025-05-13_18-00-57.jpg",
+          "width": 640,
+          "height": 853
+        },
+        "medium": {
+          "webp": "/images/rooms/first-floor/thumbnails/photo_2025-05-13_18-00-57.webp",
+          "jpg": "/images/rooms/first-floor/thumbnails/photo_2025-05-13_18-00-57.jpg",
+          "width": 640,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/first-floor/thumbnails/photo_2025-05-13_18-00-57.webp",
+          "jpg": "/images/rooms/first-floor/thumbnails/photo_2025-05-13_18-00-57.jpg",
+          "width": 640,
+          "height": 853
+        }
+      }
     },
     {
       "id": "first-floor-2",
-      "src": "/images/rooms/first-floor/DSC05691.JPG",
       "category": "first-floor",
       "alt": "1й этаж вид 3",
-      "description": "1й этаж - стильная гостиная"
+      "description": "1й этаж - фото 3",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/first-floor/thumbnails/photo_2025-05-13_18-00-55.webp",
+          "jpg": "/images/rooms/first-floor/thumbnails/photo_2025-05-13_18-00-55.jpg",
+          "width": 640,
+          "height": 853
+        },
+        "medium": {
+          "webp": "/images/rooms/first-floor/thumbnails/photo_2025-05-13_18-00-55.webp",
+          "jpg": "/images/rooms/first-floor/thumbnails/photo_2025-05-13_18-00-55.jpg",
+          "width": 640,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/first-floor/thumbnails/photo_2025-05-13_18-00-55.webp",
+          "jpg": "/images/rooms/first-floor/thumbnails/photo_2025-05-13_18-00-55.jpg",
+          "width": 640,
+          "height": 853
+        }
+      }
     },
     {
       "id": "first-floor-3",
-      "src": "/images/rooms/first-floor/DSC05714.JPG",
       "category": "first-floor",
       "alt": "1й этаж вид 4",
-      "description": "1й этаж - обеденная зона"
+      "description": "1й этаж - фото 4",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/first-floor/thumbnails/IMG_4897.webp",
+          "jpg": "/images/rooms/first-floor/thumbnails/IMG_4897.jpg",
+          "width": 640,
+          "height": 853
+        },
+        "medium": {
+          "webp": "/images/rooms/first-floor/medium/IMG_4897.webp",
+          "jpg": "/images/rooms/first-floor/medium/IMG_4897.jpg",
+          "width": 1280,
+          "height": 1707
+        },
+        "large": {
+          "webp": "/images/rooms/first-floor/large/IMG_4897.webp",
+          "jpg": "/images/rooms/first-floor/large/IMG_4897.jpg",
+          "width": 1920,
+          "height": 2560
+        }
+      }
     },
     {
       "id": "first-floor-4",
-      "src": "/images/rooms/first-floor/IMG_1043.jpg",
       "category": "first-floor",
       "alt": "1й этаж вид 5",
-      "description": "1й этаж - уютная атмосфера"
+      "description": "1й этаж - фото 5",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/first-floor/thumbnails/IMG_4896.webp",
+          "jpg": "/images/rooms/first-floor/thumbnails/IMG_4896.jpg",
+          "width": 640,
+          "height": 853
+        },
+        "medium": {
+          "webp": "/images/rooms/first-floor/medium/IMG_4896.webp",
+          "jpg": "/images/rooms/first-floor/medium/IMG_4896.jpg",
+          "width": 1280,
+          "height": 1707
+        },
+        "large": {
+          "webp": "/images/rooms/first-floor/large/IMG_4896.webp",
+          "jpg": "/images/rooms/first-floor/large/IMG_4896.jpg",
+          "width": 1920,
+          "height": 2560
+        }
+      }
     },
     {
       "id": "first-floor-5",
-      "src": "/images/rooms/first-floor/IMG_1045.jpg",
       "category": "first-floor",
       "alt": "1й этаж вид 6",
-      "description": "1й этаж - детали интерьера"
+      "description": "1й этаж - фото 6",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/first-floor/thumbnails/IMG_4893.webp",
+          "jpg": "/images/rooms/first-floor/thumbnails/IMG_4893.jpg",
+          "width": 640,
+          "height": 853
+        },
+        "medium": {
+          "webp": "/images/rooms/first-floor/medium/IMG_4893.webp",
+          "jpg": "/images/rooms/first-floor/medium/IMG_4893.jpg",
+          "width": 1280,
+          "height": 1706
+        },
+        "large": {
+          "webp": "/images/rooms/first-floor/large/IMG_4893.webp",
+          "jpg": "/images/rooms/first-floor/large/IMG_4893.jpg",
+          "width": 1920,
+          "height": 2560
+        }
+      }
     },
     {
       "id": "first-floor-6",
-      "src": "/images/rooms/first-floor/IMG_1465.JPG",
       "category": "first-floor",
       "alt": "1й этаж вид 7",
-      "description": "1й этаж - панорамный вид"
+      "description": "1й этаж - фото 7",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/first-floor/thumbnails/IMG_1465.webp",
+          "jpg": "/images/rooms/first-floor/thumbnails/IMG_1465.jpg",
+          "width": 640,
+          "height": 1138
+        },
+        "medium": {
+          "webp": "/images/rooms/first-floor/medium/IMG_1465.webp",
+          "jpg": "/images/rooms/first-floor/medium/IMG_1465.jpg",
+          "width": 1280,
+          "height": 2276
+        },
+        "large": {
+          "webp": "/images/rooms/first-floor/large/IMG_1465.webp",
+          "jpg": "/images/rooms/first-floor/large/IMG_1465.jpg",
+          "width": 1920,
+          "height": 3413
+        }
+      }
     },
     {
       "id": "first-floor-7",
-      "src": "/images/rooms/first-floor/IMG_4893.JPG",
       "category": "first-floor",
       "alt": "1й этаж вид 8",
-      "description": "1й этаж - зона отдыха"
+      "description": "1й этаж - фото 8",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/first-floor/thumbnails/IMG_1045.webp",
+          "jpg": "/images/rooms/first-floor/thumbnails/IMG_1045.jpg",
+          "width": 640,
+          "height": 960
+        },
+        "medium": {
+          "webp": "/images/rooms/first-floor/medium/IMG_1045.webp",
+          "jpg": "/images/rooms/first-floor/medium/IMG_1045.jpg",
+          "width": 1280,
+          "height": 1920
+        },
+        "large": {
+          "webp": "/images/rooms/first-floor/large/IMG_1045.webp",
+          "jpg": "/images/rooms/first-floor/large/IMG_1045.jpg",
+          "width": 1920,
+          "height": 2880
+        }
+      }
     },
     {
       "id": "first-floor-8",
-      "src": "/images/rooms/first-floor/IMG_4896.JPG",
       "category": "first-floor",
       "alt": "1й этаж вид 9",
-      "description": "1й этаж - кухонная зона"
+      "description": "1й этаж - фото 9",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/first-floor/thumbnails/IMG_1043.webp",
+          "jpg": "/images/rooms/first-floor/thumbnails/IMG_1043.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/first-floor/medium/IMG_1043.webp",
+          "jpg": "/images/rooms/first-floor/medium/IMG_1043.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/first-floor/large/IMG_1043.webp",
+          "jpg": "/images/rooms/first-floor/large/IMG_1043.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "first-floor-9",
-      "src": "/images/rooms/first-floor/IMG_4897.JPG",
       "category": "first-floor",
       "alt": "1й этаж вид 10",
-      "description": "1й этаж - общее пространство"
+      "description": "1й этаж - фото 10",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/first-floor/thumbnails/DSC05714.webp",
+          "jpg": "/images/rooms/first-floor/thumbnails/DSC05714.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/first-floor/medium/DSC05714.webp",
+          "jpg": "/images/rooms/first-floor/medium/DSC05714.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/first-floor/large/DSC05714.webp",
+          "jpg": "/images/rooms/first-floor/large/DSC05714.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "first-floor-10",
-      "src": "/images/rooms/first-floor/photo_2025-05-13_18-00-55.jpg",
       "category": "first-floor",
       "alt": "1й этаж вид 11",
-      "description": "1й этаж - уютная гостиная с камином"
+      "description": "1й этаж - фото 11",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/first-floor/thumbnails/DSC05691.webp",
+          "jpg": "/images/rooms/first-floor/thumbnails/DSC05691.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/first-floor/medium/DSC05691.webp",
+          "jpg": "/images/rooms/first-floor/medium/DSC05691.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/first-floor/large/DSC05691.webp",
+          "jpg": "/images/rooms/first-floor/large/DSC05691.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "first-floor-11",
-      "src": "/images/rooms/first-floor/photo_2025-05-13_18-00-57.jpg",
       "category": "first-floor",
       "alt": "1й этаж вид 12",
-      "description": "1й этаж - элегантная кухня"
+      "description": "1й этаж - фото 12",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/first-floor/thumbnails/DSC05687.webp",
+          "jpg": "/images/rooms/first-floor/thumbnails/DSC05687.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/first-floor/medium/DSC05687.webp",
+          "jpg": "/images/rooms/first-floor/medium/DSC05687.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/first-floor/large/DSC05687.webp",
+          "jpg": "/images/rooms/first-floor/large/DSC05687.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "first-floor-12",
-      "src": "/images/rooms/first-floor/photo_2025-05-13_18-00-59.jpg",
       "category": "first-floor",
       "alt": "1й этаж вид 13",
-      "description": "1й этаж - стильная гостиная с панорамными окнами"
+      "description": "1й этаж - фото 13",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/first-floor/thumbnails/DSC05677.webp",
+          "jpg": "/images/rooms/first-floor/thumbnails/DSC05677.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/first-floor/medium/DSC05677.webp",
+          "jpg": "/images/rooms/first-floor/medium/DSC05677.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/first-floor/large/DSC05677.webp",
+          "jpg": "/images/rooms/first-floor/large/DSC05677.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "first-bathroom-0",
-      "src": "/images/rooms/first-bathroom/DSC05704.JPG",
       "category": "first-bathroom",
-      "alt": "1-ая ванная",
-      "description": "1-ая ванная комната с роскошным интерьером",
-      "featured": true
+      "alt": "1-ая ванная вид 1",
+      "description": "1-ая ванная - фото 1",
+      "featured": true,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/first-bathroom/thumbnails/DSC05708.webp",
+          "jpg": "/images/rooms/first-bathroom/thumbnails/DSC05708.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/first-bathroom/medium/DSC05708.webp",
+          "jpg": "/images/rooms/first-bathroom/medium/DSC05708.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/first-bathroom/large/DSC05708.webp",
+          "jpg": "/images/rooms/first-bathroom/large/DSC05708.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "first-bathroom-1",
-      "src": "/images/rooms/first-bathroom/DSC05706.JPG",
       "category": "first-bathroom",
       "alt": "1-ая ванная вид 2",
-      "description": "1-ая ванная - элегантный дизайн"
+      "description": "1-ая ванная - фото 2",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/first-bathroom/thumbnails/DSC05706.webp",
+          "jpg": "/images/rooms/first-bathroom/thumbnails/DSC05706.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/first-bathroom/medium/DSC05706.webp",
+          "jpg": "/images/rooms/first-bathroom/medium/DSC05706.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/first-bathroom/large/DSC05706.webp",
+          "jpg": "/images/rooms/first-bathroom/large/DSC05706.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "first-bathroom-2",
-      "src": "/images/rooms/first-bathroom/DSC05708.JPG",
       "category": "first-bathroom",
       "alt": "1-ая ванная вид 3",
-      "description": "1-ая ванная - современное оборудование"
+      "description": "1-ая ванная - фото 3",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/first-bathroom/thumbnails/DSC05704.webp",
+          "jpg": "/images/rooms/first-bathroom/thumbnails/DSC05704.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/first-bathroom/medium/DSC05704.webp",
+          "jpg": "/images/rooms/first-bathroom/medium/DSC05704.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/first-bathroom/large/DSC05704.webp",
+          "jpg": "/images/rooms/first-bathroom/large/DSC05704.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "second-bathroom-0",
-      "src": "/images/rooms/second-bathroom/DSC05575.JPG",
       "category": "second-bathroom",
-      "alt": "2-ая ванная",
-      "description": "2-ая ванная комната с изысканным интерьером",
-      "featured": true
+      "alt": "2-ая ванная вид 1",
+      "description": "2-ая ванная - фото 1",
+      "featured": true,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/second-bathroom/thumbnails/IMG_4900.webp",
+          "jpg": "/images/rooms/second-bathroom/thumbnails/IMG_4900.jpg",
+          "width": 640,
+          "height": 853
+        },
+        "medium": {
+          "webp": "/images/rooms/second-bathroom/medium/IMG_4900.webp",
+          "jpg": "/images/rooms/second-bathroom/medium/IMG_4900.jpg",
+          "width": 1280,
+          "height": 1707
+        },
+        "large": {
+          "webp": "/images/rooms/second-bathroom/large/IMG_4900.webp",
+          "jpg": "/images/rooms/second-bathroom/large/IMG_4900.jpg",
+          "width": 1920,
+          "height": 2560
+        }
+      }
     },
     {
       "id": "second-bathroom-1",
-      "src": "/images/rooms/second-bathroom/DSC05719.JPG",
       "category": "second-bathroom",
       "alt": "2-ая ванная вид 2",
-      "description": "2-ая ванная - стильный дизайн"
+      "description": "2-ая ванная - фото 2",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/second-bathroom/thumbnails/IMG_4899.webp",
+          "jpg": "/images/rooms/second-bathroom/thumbnails/IMG_4899.jpg",
+          "width": 640,
+          "height": 853
+        },
+        "medium": {
+          "webp": "/images/rooms/second-bathroom/medium/IMG_4899.webp",
+          "jpg": "/images/rooms/second-bathroom/medium/IMG_4899.jpg",
+          "width": 1280,
+          "height": 1707
+        },
+        "large": {
+          "webp": "/images/rooms/second-bathroom/large/IMG_4899.webp",
+          "jpg": "/images/rooms/second-bathroom/large/IMG_4899.jpg",
+          "width": 1920,
+          "height": 2560
+        }
+      }
     },
     {
       "id": "second-bathroom-2",
-      "src": "/images/rooms/second-bathroom/DSC05721.JPG",
       "category": "second-bathroom",
       "alt": "2-ая ванная вид 3",
-      "description": "2-ая ванная - детали интерьера"
+      "description": "2-ая ванная - фото 3",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/second-bathroom/thumbnails/IMG_4898.webp",
+          "jpg": "/images/rooms/second-bathroom/thumbnails/IMG_4898.jpg",
+          "width": 640,
+          "height": 853
+        },
+        "medium": {
+          "webp": "/images/rooms/second-bathroom/medium/IMG_4898.webp",
+          "jpg": "/images/rooms/second-bathroom/medium/IMG_4898.jpg",
+          "width": 1280,
+          "height": 1707
+        },
+        "large": {
+          "webp": "/images/rooms/second-bathroom/large/IMG_4898.webp",
+          "jpg": "/images/rooms/second-bathroom/large/IMG_4898.jpg",
+          "width": 1920,
+          "height": 2560
+        }
+      }
     },
     {
       "id": "second-bathroom-3",
-      "src": "/images/rooms/second-bathroom/IMG_4898.JPG",
       "category": "second-bathroom",
       "alt": "2-ая ванная вид 4",
-      "description": "2-ая ванная - комфортное пространство"
+      "description": "2-ая ванная - фото 4",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/second-bathroom/thumbnails/DSC05721.webp",
+          "jpg": "/images/rooms/second-bathroom/thumbnails/DSC05721.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/second-bathroom/medium/DSC05721.webp",
+          "jpg": "/images/rooms/second-bathroom/medium/DSC05721.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/second-bathroom/large/DSC05721.webp",
+          "jpg": "/images/rooms/second-bathroom/large/DSC05721.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "second-bathroom-4",
-      "src": "/images/rooms/second-bathroom/IMG_4899.JPG",
       "category": "second-bathroom",
       "alt": "2-ая ванная вид 5",
-      "description": "2-ая ванная - элегантное оформление"
+      "description": "2-ая ванная - фото 5",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/second-bathroom/thumbnails/DSC05719.webp",
+          "jpg": "/images/rooms/second-bathroom/thumbnails/DSC05719.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/second-bathroom/medium/DSC05719.webp",
+          "jpg": "/images/rooms/second-bathroom/medium/DSC05719.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/second-bathroom/large/DSC05719.webp",
+          "jpg": "/images/rooms/second-bathroom/large/DSC05719.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "second-bathroom-5",
-      "src": "/images/rooms/second-bathroom/IMG_4900.JPG",
       "category": "second-bathroom",
       "alt": "2-ая ванная вид 6",
-      "description": "2-ая ванная - современный интерьер"
+      "description": "2-ая ванная - фото 6",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/second-bathroom/thumbnails/DSC05575.webp",
+          "jpg": "/images/rooms/second-bathroom/thumbnails/DSC05575.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/second-bathroom/medium/DSC05575.webp",
+          "jpg": "/images/rooms/second-bathroom/medium/DSC05575.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/second-bathroom/large/DSC05575.webp",
+          "jpg": "/images/rooms/second-bathroom/large/DSC05575.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "terrace-0",
-      "src": "/images/rooms/terrace/IMG_4030.jpg",
       "category": "terrace",
-      "alt": "Терраса",
-      "description": "Просторная терраса с видом",
-      "featured": true
+      "alt": "Терраса вид 1",
+      "description": "Терраса - фото 1",
+      "featured": true,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/terrace/thumbnails/IMG_4074.webp",
+          "jpg": "/images/rooms/terrace/thumbnails/IMG_4074.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/terrace/medium/IMG_4074.webp",
+          "jpg": "/images/rooms/terrace/medium/IMG_4074.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/terrace/large/IMG_4074.webp",
+          "jpg": "/images/rooms/terrace/large/IMG_4074.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "terrace-1",
-      "src": "/images/rooms/terrace/IMG_4031.jpg",
       "category": "terrace",
       "alt": "Терраса вид 2",
-      "description": "Терраса с зоной отдыха"
+      "description": "Терраса - фото 2",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/terrace/thumbnails/IMG_4072.webp",
+          "jpg": "/images/rooms/terrace/thumbnails/IMG_4072.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/terrace/medium/IMG_4072.webp",
+          "jpg": "/images/rooms/terrace/medium/IMG_4072.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/terrace/large/IMG_4072.webp",
+          "jpg": "/images/rooms/terrace/large/IMG_4072.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "terrace-2",
-      "src": "/images/rooms/terrace/IMG_4033.jpg",
       "category": "terrace",
       "alt": "Терраса вид 3",
-      "description": "Терраса с комфортной мебелью"
+      "description": "Терраса - фото 3",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/terrace/thumbnails/IMG_4055.webp",
+          "jpg": "/images/rooms/terrace/thumbnails/IMG_4055.jpg",
+          "width": 640,
+          "height": 960
+        },
+        "medium": {
+          "webp": "/images/rooms/terrace/medium/IMG_4055.webp",
+          "jpg": "/images/rooms/terrace/medium/IMG_4055.jpg",
+          "width": 1280,
+          "height": 1920
+        },
+        "large": {
+          "webp": "/images/rooms/terrace/large/IMG_4055.webp",
+          "jpg": "/images/rooms/terrace/large/IMG_4055.jpg",
+          "width": 1920,
+          "height": 2880
+        }
+      }
     },
     {
       "id": "terrace-3",
-      "src": "/images/rooms/terrace/IMG_4055.jpg",
       "category": "terrace",
       "alt": "Терраса вид 4",
-      "description": "Терраса вечером"
+      "description": "Терраса - фото 4",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/terrace/thumbnails/IMG_4033.webp",
+          "jpg": "/images/rooms/terrace/thumbnails/IMG_4033.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/terrace/medium/IMG_4033.webp",
+          "jpg": "/images/rooms/terrace/medium/IMG_4033.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/terrace/large/IMG_4033.webp",
+          "jpg": "/images/rooms/terrace/large/IMG_4033.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "terrace-4",
-      "src": "/images/rooms/terrace/IMG_4072.jpg",
       "category": "terrace",
       "alt": "Терраса вид 5",
-      "description": "Уютная терраса для отдыха"
+      "description": "Терраса - фото 5",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/terrace/thumbnails/IMG_4031.webp",
+          "jpg": "/images/rooms/terrace/thumbnails/IMG_4031.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/terrace/medium/IMG_4031.webp",
+          "jpg": "/images/rooms/terrace/medium/IMG_4031.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/terrace/large/IMG_4031.webp",
+          "jpg": "/images/rooms/terrace/large/IMG_4031.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     },
     {
       "id": "terrace-5",
-      "src": "/images/rooms/terrace/IMG_4074.jpg",
       "category": "terrace",
       "alt": "Терраса вид 6",
-      "description": "Терраса с освещением"
+      "description": "Терраса - фото 6",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/terrace/thumbnails/IMG_4030.webp",
+          "jpg": "/images/rooms/terrace/thumbnails/IMG_4030.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/terrace/medium/IMG_4030.webp",
+          "jpg": "/images/rooms/terrace/medium/IMG_4030.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/terrace/large/IMG_4030.webp",
+          "jpg": "/images/rooms/terrace/large/IMG_4030.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
     }
   ],
-  "lastUpdated": "2026-01-28T21:10:00.000Z"
+  "lastUpdated": "2026-01-30T10:36:10.240Z",
+  "totalImages": 51,
+  "categories": {
+    "green-bedroom": 5,
+    "white-bedroom": 4,
+    "secret-room": 11,
+    "sauna": 3,
+    "first-floor": 13,
+    "first-bathroom": 3,
+    "second-bathroom": 6,
+    "terrace": 6
+  }
 }
