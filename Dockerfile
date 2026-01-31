@@ -14,8 +14,27 @@ RUN npm ci --only=production=false
 # Copy source code
 COPY . .
 
-# Build the application
-# Environment variables will be provided by Amvera at build time
+# Build arguments for environment variables
+ARG VITE_LOCATION_LAT=53.934202
+ARG VITE_LOCATION_LON=27.300385
+ARG VITE_LOCATION_ADDRESS="Минск, Беларусь"
+ARG VITE_BOT_USERNAME=the_secret_house_booking_bot
+ARG VITE_TELEGRAM_ADMIN=the_secret_house
+ARG VITE_TELEGRAM_CHANNEL=sekret_blr
+ARG VITE_INSTAGRAM_USERNAME=private_sekret_blr
+ARG VITE_PHONE_NUMBER=+375257908378
+
+# Convert ARG to ENV for the build process
+ENV VITE_LOCATION_LAT=$VITE_LOCATION_LAT
+ENV VITE_LOCATION_LON=$VITE_LOCATION_LON
+ENV VITE_LOCATION_ADDRESS=$VITE_LOCATION_ADDRESS
+ENV VITE_BOT_USERNAME=$VITE_BOT_USERNAME
+ENV VITE_TELEGRAM_ADMIN=$VITE_TELEGRAM_ADMIN
+ENV VITE_TELEGRAM_CHANNEL=$VITE_TELEGRAM_CHANNEL
+ENV VITE_INSTAGRAM_USERNAME=$VITE_INSTAGRAM_USERNAME
+ENV VITE_PHONE_NUMBER=$VITE_PHONE_NUMBER
+
+# Build the application with environment variables
 RUN npm run build
 
 # Stage 2: Production
