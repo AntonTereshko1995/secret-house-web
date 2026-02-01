@@ -143,6 +143,87 @@
       "featured": false,
       "images": {
         "thumbnail": {
+          "webp": "/images/rooms/white-bedroom/thumbnails/DSC05758.webp",
+          "jpg": "/images/rooms/white-bedroom/thumbnails/DSC05758.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/white-bedroom/medium/DSC05758.webp",
+          "jpg": "/images/rooms/white-bedroom/medium/DSC05758.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/white-bedroom/large/DSC05758.webp",
+          "jpg": "/images/rooms/white-bedroom/large/DSC05758.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "id": "white-bedroom-1",
+      "category": "white-bedroom",
+      "alt": "Белая спальня вид 2",
+      "description": "Белая спальня - фото 2",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/white-bedroom/thumbnails/DSC05756.webp",
+          "jpg": "/images/rooms/white-bedroom/thumbnails/DSC05756.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/white-bedroom/medium/DSC05756.webp",
+          "jpg": "/images/rooms/white-bedroom/medium/DSC05756.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/white-bedroom/large/DSC05756.webp",
+          "jpg": "/images/rooms/white-bedroom/large/DSC05756.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "id": "white-bedroom-2",
+      "category": "white-bedroom",
+      "alt": "Белая спальня вид 3",
+      "description": "Белая спальня - фото 3",
+      "featured": false,
+      "images": {
+        "thumbnail": {
+          "webp": "/images/rooms/white-bedroom/thumbnails/DSC05754.webp",
+          "jpg": "/images/rooms/white-bedroom/thumbnails/DSC05754.jpg",
+          "width": 640,
+          "height": 427
+        },
+        "medium": {
+          "webp": "/images/rooms/white-bedroom/medium/DSC05754.webp",
+          "jpg": "/images/rooms/white-bedroom/medium/DSC05754.jpg",
+          "width": 1280,
+          "height": 853
+        },
+        "large": {
+          "webp": "/images/rooms/white-bedroom/large/DSC05754.webp",
+          "jpg": "/images/rooms/white-bedroom/large/DSC05754.jpg",
+          "width": 1920,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "id": "white-bedroom-3",
+      "category": "white-bedroom",
+      "alt": "Белая спальня вид 4",
+      "description": "Белая спальня - фото 4",
+      "featured": false,
+      "images": {
+        "thumbnail": {
           "webp": "/images/rooms/white-bedroom/thumbnails/DSC05747.webp",
           "jpg": "/images/rooms/white-bedroom/thumbnails/DSC05747.jpg",
           "width": 640,
@@ -163,10 +244,10 @@
       }
     },
     {
-      "id": "white-bedroom-1",
+      "id": "white-bedroom-4",
       "category": "white-bedroom",
-      "alt": "Белая спальня вид 2",
-      "description": "Белая спальня - фото 2",
+      "alt": "Белая спальня вид 5",
+      "description": "Белая спальня - фото 5",
       "featured": false,
       "images": {
         "thumbnail": {
@@ -190,10 +271,10 @@
       }
     },
     {
-      "id": "white-bedroom-2",
+      "id": "white-bedroom-5",
       "category": "white-bedroom",
-      "alt": "Белая спальня вид 3",
-      "description": "Белая спальня - фото 3",
+      "alt": "Белая спальня вид 6",
+      "description": "Белая спальня - фото 6",
       "featured": false,
       "images": {
         "thumbnail": {
@@ -217,10 +298,10 @@
       }
     },
     {
-      "id": "white-bedroom-3",
+      "id": "white-bedroom-6",
       "category": "white-bedroom",
-      "alt": "Белая спальня вид 4",
-      "description": "Белая спальня - фото 4",
+      "alt": "Белая спальня вид 7",
+      "description": "Белая спальня - фото 7",
       "featured": true,
       "images": {
         "thumbnail": {
@@ -248,7 +329,7 @@
       "category": "secret-room",
       "alt": "Секретная комната вид 1",
       "description": "Секретная комната - фото 1",
-      "featured": false,
+      "featured": true,
       "images": {
         "thumbnail": {
           "webp": "/images/rooms/secret-room/thumbnails/IMG_4901.webp",
@@ -302,7 +383,7 @@
       "category": "secret-room",
       "alt": "Секретная комната вид 3",
       "description": "Секретная комната - фото 3",
-      "featured": true,
+      "featured": false,
       "images": {
         "thumbnail": {
           "webp": "/images/rooms/secret-room/thumbnails/IMG_1186.webp",
@@ -1378,11 +1459,11 @@
       }
     }
   ],
-  "lastUpdated": "2026-01-30T10:36:10.240Z",
-  "totalImages": 51,
+  "lastUpdated": "2026-02-01T14:58:24.321Z",
+  "totalImages": 54,
   "categories": {
     "green-bedroom": 5,
-    "white-bedroom": 4,
+    "white-bedroom": 7,
     "secret-room": 11,
     "sauna": 3,
     "first-floor": 13,
