@@ -140,7 +140,7 @@
       "category": "white-bedroom",
       "alt": "Белая спальня вид 1",
       "description": "Белая спальня - фото 1",
-      "featured": true,
+      "featured": false,
       "images": {
         "thumbnail": {
           "webp": "/images/rooms/white-bedroom/thumbnails/DSC05747.webp",
@@ -221,7 +221,7 @@
       "category": "white-bedroom",
       "alt": "Белая спальня вид 4",
       "description": "Белая спальня - фото 4",
-      "featured": false,
+      "featured": true,
       "images": {
         "thumbnail": {
           "webp": "/images/rooms/white-bedroom/thumbnails/DSC05513.webp",
@@ -248,7 +248,7 @@
       "category": "secret-room",
       "alt": "Секретная комната вид 1",
       "description": "Секретная комната - фото 1",
-      "featured": true,
+      "featured": false,
       "images": {
         "thumbnail": {
           "webp": "/images/rooms/secret-room/thumbnails/IMG_4901.webp",
@@ -302,7 +302,7 @@
       "category": "secret-room",
       "alt": "Секретная комната вид 3",
       "description": "Секретная комната - фото 3",
-      "featured": false,
+      "featured": true,
       "images": {
         "thumbnail": {
           "webp": "/images/rooms/secret-room/thumbnails/IMG_1186.webp",
