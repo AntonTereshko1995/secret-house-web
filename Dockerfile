@@ -40,20 +40,19 @@ RUN npm run build
 # Stage 2: Production
 FROM nginx:alpine
 
+# Install base64 utility (already in alpine)
 # Copy custom nginx config
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Copy SSL certificates
-# Убедитесь, что файлы certificate.pem и private.key находятся в папке ssl/
-COPY ssl/certificate.pem /etc/nginx/ssl/certificate.pem
-COPY ssl/private.key /etc/nginx/ssl/private.key
-
-# Set proper permissions for SSL certificates
-RUN chmod 644 /etc/nginx/ssl/certificate.pem && \
-    chmod 600 /etc/nginx/ssl/private.key
-
 # Copy built assets from builder stage
 COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Create SSL directory
+RUN mkdir -p /etc/nginx/ssl
+
+# Copy entrypoint script
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
 # Add healthcheck
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
@@ -62,5 +61,6 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 # Expose ports 80 (HTTP) and 443 (HTTPS)
 EXPOSE 80 443
 
-# Start nginx
+# Use custom entrypoint to setup SSL certificates from env vars
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
