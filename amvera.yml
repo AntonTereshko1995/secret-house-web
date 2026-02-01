@@ -10,4 +10,4 @@ run:
   command: null
   args: null
   persistenceMount: /data
-  containerPort: "80"
+  containerPort: "443"
