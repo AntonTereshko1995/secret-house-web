@@ -14,8 +14,12 @@
     "images:full-pipeline": "npm run images:convert-heic && npm run images:optimize && npm run images:generate-manifest"
   },
   "dependencies": {
+    "date-fns": "^4.1.0",
     "react": "^19.2.0",
+    "react-datepicker": "^9.1.0",
     "react-dom": "^19.2.0",
+    "react-dropzone": "^15.0.0",
+    "react-hook-form": "^7.71.1",
     "react-router-dom": "^7.13.0"
   },
   "devDependencies": {
@@ -23,6 +27,7 @@
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
+    "@types/react-datepicker": "^6.2.0",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
     "autoprefixer": "^10.4.23",

@@ -1,6 +1,8 @@
 import { Routes, Route, useSearchParams, useNavigate, useLocation } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import BookingRedirect from './pages/BookingRedirect'
+import BookingWizardPage from './pages/BookingWizardPage'
+import BookingSuccessPage from './pages/BookingSuccessPage'
 import FullGallery from './components/FullGallery'
 import type { RoomCategory } from './types/gallery.types'
 
@@ -34,8 +36,8 @@ function App() {
       <div className="min-h-screen bg-gray-900">
         <Routes>
           <Route path="/" element={<HomePage onOpenGallery={openGallery} />} />
-          <Route path="/book" element={<BookingRedirect />} />
-          <Route path="/booking" element={<BookingRedirect />} />
+          <Route path="/booking" element={<BookingWizardPage />} />
+          <Route path="/booking/success" element={<BookingSuccessPage />} />
           <Route path="/telegram" element={<BookingRedirect />} />
         </Routes>
       </div>
