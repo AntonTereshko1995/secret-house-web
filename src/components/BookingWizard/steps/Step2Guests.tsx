@@ -24,11 +24,11 @@ function Step2Guests({ formData, updateFormData, nextStep, prevStep }: StepProps
   const decrement = () => setGuestCount(prev => Math.max(prev - 1, 1))
 
   return (
-    <div className="bg-gray-900 p-5 sm:p-6 rounded-lg border border-yellow-600/30">
-      <h2 className="text-2xl sm:text-3xl font-bold text-luxury-gold mb-6 uppercase tracking-wider">
+    <div className="bg-gray-900 p-4 rounded-lg border border-yellow-600/30">
+      <h2 className="text-lg sm:text-xl font-bold text-luxury-gold mb-2 uppercase tracking-wider">
         Количество гостей
       </h2>
-      <p className="text-gray-400 mb-6">
+      <p className="text-gray-400 mb-3 text-sm">
         Укажите количество гостей (от 1 до 6)
       </p>
 
@@ -62,32 +62,33 @@ function Step2Guests({ formData, updateFormData, nextStep, prevStep }: StepProps
       {/* Visual representation */}
       <div className="flex justify-center gap-2 mb-6">
         {Array.from({ length: 6 }, (_, i) => i + 1).map((num) => (
-          <div
+          <button
             key={num}
+            onClick={() => setGuestCount(num)}
             className={`
-              w-10 h-10 rounded-full flex items-center justify-center transition-all
+              w-10 h-10 rounded-full flex items-center justify-center transition-all cursor-pointer
               ${num <= guestCount
                 ? 'bg-yellow-600 text-black'
-                : 'bg-gray-800 text-gray-600'}
+                : 'bg-gray-800 text-gray-600 hover:bg-gray-700 hover:text-gray-400'}
             `}
           >
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
             </svg>
-          </div>
+          </button>
         ))}
       </div>
 
       <div className="flex gap-4">
         <button
           onClick={prevStep}
-          className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-6 uppercase tracking-wider transition-all"
+          className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 uppercase tracking-wider transition-all"
         >
           Назад
         </button>
         <button
           onClick={handleNext}
-          className="flex-1 bg-yellow-600 hover:bg-yellow-500 text-black font-bold py-3 px-6 uppercase tracking-wider transition-all shadow-lg hover:shadow-xl"
+          className="flex-1 bg-yellow-600 hover:bg-yellow-500 text-black font-bold py-2 px-4 uppercase tracking-wider transition-all"
         >
           Далее
         </button>

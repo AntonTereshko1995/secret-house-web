@@ -1,31 +1,111 @@
-import { useState } from 'react'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
-import { getBookedDates, isDateBooked } from '../../../utils/booking'
+import { useState, useMemo } from 'react'
+import CustomCalendar from '../CustomCalendar'
+import TimePicker from '../TimePicker'
+import { getUnavailableCheckInSlots } from '../../../utils/booking'
 import type { BookingFormData } from '../../../types/booking.types'
+import type { BookedPeriod } from '../../../utils/booking'
 
 interface StepProps {
   formData: Partial<BookingFormData>
   updateFormData: (data: Partial<BookingFormData>) => void
   nextStep: () => void
   prevStep: () => void
+  bookedPeriods?: BookedPeriod[]
 }
 
-function Step3CheckIn({ formData, updateFormData, nextStep, prevStep }: StepProps) {
-  const [checkInDate, setCheckInDate] = useState<Date | null>(
-    formData.checkInDate || null
-  )
-  const [checkInTime, setCheckInTime] = useState(formData.checkInTime || '14:00')
+// Mon=1, Tue=2, Wed=3, Thu=4
+const WORK_ALLOWED_WEEKDAYS = [1, 2, 3, 4]
+const WORK_ALLOWED_TIMES = new Set(['11:00', '22:00'])
 
-  const bookedDates = getBookedDates()
+function Step3CheckIn({ formData, updateFormData, nextStep, prevStep, bookedPeriods = [] }: StepProps) {
+  const isWorkTariff = formData.tariff === 'work-standard' || formData.tariff === 'incognito-work'
+
+  const [checkInDate, setCheckInDate] = useState<Date | null>(formData.checkInDate || null)
+  const [checkInTime, setCheckInTime] = useState(formData.checkInTime || '')
+
+  const today = useMemo(() => {
+    const d = new Date()
+    d.setHours(0, 0, 0, 0)
+    return d
+  }, [])
+
+  const unavailableSlots = useMemo(() => {
+    if (!checkInDate) return new Set<string>()
+    const slots = getUnavailableCheckInSlots(checkInDate, bookedPeriods)
+
+    // Block past times if today is selected
+    const isToday = checkInDate.toDateString() === new Date().toDateString()
+    if (isToday) {
+      const now = new Date()
+      const nowMinutes = now.getHours() * 60 + now.getMinutes()
+      const allSlots = [
+        ...Array.from({ length: 24 }, (_, h) => `${h.toString().padStart(2, '0')}:00`),
+        '23:59',
+      ]
+      for (const slot of allSlots) {
+        const [h, m] = slot.split(':').map(Number)
+        if (h * 60 + m <= nowMinutes) slots.add(slot)
+      }
+    }
+
+    // For work tariff: only 11:00 and 22:00 allowed
+    if (isWorkTariff) {
+      const allSlots = [
+        ...Array.from({ length: 24 }, (_, h) => `${h.toString().padStart(2, '0')}:00`),
+        '23:59',
+      ]
+      for (const slot of allSlots) {
+        if (!WORK_ALLOWED_TIMES.has(slot)) slots.add(slot)
+      }
+    }
+
+    return slots
+  }, [checkInDate, bookedPeriods, isWorkTariff])
+
+  const handleDateSelect = (date: Date) => {
+    setCheckInDate(date)
+    setCheckInTime('')
+    const slots = getUnavailableCheckInSlots(date, bookedPeriods)
+
+    // Also add past times if today
+    const isToday = date.toDateString() === new Date().toDateString()
+    if (isToday) {
+      const now = new Date()
+      const nowMinutes = now.getHours() * 60 + now.getMinutes()
+      const allSlots = [
+        ...Array.from({ length: 24 }, (_, h) => `${h.toString().padStart(2, '0')}:00`),
+        '23:59',
+      ]
+      for (const slot of allSlots) {
+        const [h, m] = slot.split(':').map(Number)
+        if (h * 60 + m <= nowMinutes) slots.add(slot)
+      }
+    }
+
+    if (slots.has(checkInTime)) {
+      const candidates = [
+        ...Array.from({ length: 24 }, (_, h) => `${h.toString().padStart(2, '0')}:00`),
+        '23:59',
+      ]
+      for (const s of candidates) {
+        if (!slots.has(s)) { setCheckInTime(s); return }
+      }
+    }
+  }
+
+  const isTimeValid = checkInTime !== '' && !unavailableSlots.has(checkInTime)
 
   const handleNext = () => {
     if (!checkInDate) {
       alert('Пожалуйста, выберите дату заезда')
       return
     }
-    if (isDateBooked(checkInDate)) {
-      alert('Выбранная дата уже занята. Пожалуйста, выберите другую дату.')
+    if (!checkInTime) {
+      alert('Пожалуйста, выберите время заезда')
+      return
+    }
+    if (!isTimeValid) {
+      alert('Выбранное время заезда недоступно. Пожалуйста, выберите другое время.')
       return
     }
     updateFormData({ checkInDate, checkInTime })
@@ -33,86 +113,48 @@ function Step3CheckIn({ formData, updateFormData, nextStep, prevStep }: StepProp
   }
 
   return (
-    <div className="bg-gray-900 p-5 sm:p-6 rounded-lg border border-yellow-600/30">
-      <h2 className="text-2xl sm:text-3xl font-bold text-luxury-gold mb-6 uppercase tracking-wider">
+    <div className="bg-gray-900 p-4 rounded-lg border border-yellow-600/30">
+      <h2 className="text-lg sm:text-xl font-bold text-luxury-gold mb-2 uppercase tracking-wider">
         Дата и время заезда
       </h2>
-      <p className="text-gray-400 mb-6">
-        Выберите когда вы планируете прибыть
-      </p>
 
-      {/* Legend */}
-      <div className="flex gap-4 mb-4 text-sm">
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-yellow-600 rounded"></div>
-          <span className="text-gray-400">Доступно</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-red-500 rounded"></div>
-          <span className="text-gray-400">Занято</span>
-        </div>
-      </div>
+      <div className="mb-3">
+        <div className="flex gap-3 items-start">
+          <div className="flex-1 min-w-0">
+            <label className="block text-white font-semibold mb-1.5 uppercase text-xs tracking-wider">
+              Дата заезда
+            </label>
+            <CustomCalendar
+              selectedDate={checkInDate}
+              onDateSelect={handleDateSelect}
+              bookedPeriods={bookedPeriods}
+              minDate={today}
+              allowedWeekdays={isWorkTariff ? WORK_ALLOWED_WEEKDAYS : undefined}
+            />
+          </div>
 
-      <div className="space-y-6 mb-6">
-        {/* Date Picker */}
-        <div>
-          <label className="block text-white font-semibold mb-2 uppercase text-sm tracking-wider">
-            Дата заезда
-          </label>
-          <DatePicker
-            selected={checkInDate}
-            onChange={(date: Date | null) => setCheckInDate(date)}
-            minDate={new Date()}
-            excludeDates={bookedDates}
-            highlightDates={[{ 'booked-date': bookedDates }]}
-            dateFormat="dd.MM.yyyy"
-            placeholderText="Выберите дату"
-            className="w-full bg-black border-2 border-gray-700 focus:border-yellow-600 text-white px-4 py-3 rounded-lg outline-none transition-colors"
-            calendarClassName="bg-gray-900 border-yellow-600"
-            inline
-            monthsShown={1}
-          />
+          {checkInDate && (
+            <div>
+              <TimePicker
+                label="Время заезда"
+                value={checkInTime}
+                onChange={setCheckInTime}
+                unavailable={unavailableSlots}
+              />
+            </div>
+          )}
         </div>
 
-        {/* Time Picker */}
-        <div>
-          <label className="block text-white font-semibold mb-2 uppercase text-sm tracking-wider">
-            Время заезда
-          </label>
-          <select
-            value={checkInTime}
-            onChange={(e) => setCheckInTime(e.target.value)}
-            className="w-full bg-black border-2 border-gray-700 focus:border-yellow-600 text-white px-4 py-3 rounded-lg outline-none transition-colors"
-          >
-            {Array.from({ length: 48 }, (_, i) => {
-              const hour = Math.floor(i / 2)
-              const minute = i % 2 === 0 ? '00' : '30'
-              return `${hour.toString().padStart(2, '0')}:${minute}`
-            }).map((time) => (
-              <option key={time} value={time}>
-                {time}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Selected Preview */}
         {checkInDate && (
-          <div className="bg-yellow-600/10 border border-yellow-600/30 p-4 rounded-lg">
-            <div className="text-center">
-              <div className="text-gray-400 uppercase text-xs tracking-wider mb-1">
-                Заезд:
+          <div className="mt-3 bg-yellow-600/10 border border-yellow-600/30 p-2.5 rounded-lg">
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-gray-400 text-xs">Заезд:</div>
+              <div className="text-yellow-600 font-semibold text-sm">
+                {checkInDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}
               </div>
-              <div className="text-yellow-600 font-bold text-xl">
-                {checkInDate.toLocaleDateString('ru-RU', {
-                  weekday: 'long',
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric'
-                })}
-              </div>
-              <div className="text-white text-2xl font-bold mt-1">
+              <div className={`text-base font-bold ${isTimeValid ? 'text-white' : 'text-red-400'}`}>
                 {checkInTime}
+                {!isTimeValid && <span className="text-xs font-normal ml-1">— недоступно</span>}
               </div>
             </div>
           </div>
@@ -122,14 +164,14 @@ function Step3CheckIn({ formData, updateFormData, nextStep, prevStep }: StepProp
       <div className="flex gap-4">
         <button
           onClick={prevStep}
-          className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-6 uppercase tracking-wider transition-all"
+          className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 uppercase tracking-wider transition-all"
         >
           Назад
         </button>
         <button
           onClick={handleNext}
-          disabled={!checkInDate}
-          className="flex-1 bg-yellow-600 hover:bg-yellow-500 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed text-black font-bold py-3 px-6 uppercase tracking-wider transition-all shadow-lg hover:shadow-xl"
+          disabled={!checkInDate || !isTimeValid}
+          className="flex-1 bg-yellow-600 hover:bg-yellow-500 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed text-black font-bold py-2 px-4 uppercase tracking-wider transition-all"
         >
           Далее
         </button>

@@ -1,32 +1,33 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import StepIndicator from './StepIndicator'
 import { STEP_REGISTRY } from './stepRegistry'
 import { useConditionalNavigation, cleanIncompatibleData } from './navigationLogic'
-import { saveFormToLocalStorage, loadFormFromLocalStorage, clearFormFromLocalStorage } from '../../utils/booking'
+import { clearFormFromLocalStorage } from '../../utils/booking'
+import { useBookedPeriods } from '../../hooks/useBookedPeriods'
 import type { BookingFormData } from '../../types/booking.types'
 
 function BookingWizard() {
   const navigate = useNavigate()
 
+  // Fetch booked periods once for the whole wizard session
+  const { periods: bookedPeriods, loading: periodsLoading, error: periodsError } = useBookedPeriods()
+
   // STATE: Current step ID (not number!)
   const [currentStepId, setCurrentStepId] = useState('tariff')
 
   // STATE: Form data
-  const [formData, setFormData] = useState<Partial<BookingFormData>>(() => {
-    const saved = loadFormFromLocalStorage()
-    return saved || {
-      guestCount: 2,
-      wineSelection: [],
-      needsTransfer: false,
-      contactType: 'telegram',
-      termsAccepted: false,
-      transferPrice: 0,
-      winePrice: 0,
-      basePrice: 0,
-      totalPrice: 0,
-      durationHours: 0
-    }
+  const [formData, setFormData] = useState<Partial<BookingFormData>>({
+    guestCount: 2,
+    wineSelection: [],
+    needsTransfer: false,
+    contactType: 'telegram',
+    termsAccepted: false,
+    transferPrice: 0,
+    winePrice: 0,
+    basePrice: 0,
+    totalPrice: 0,
+    durationHours: 0
   })
 
   // NAVIGATION: Get visible steps and navigation helpers
@@ -38,19 +39,6 @@ function BookingWizard() {
     nextStepId,
     prevStepId
   } = useConditionalNavigation(STEP_REGISTRY, formData, currentStepId)
-
-  // Auto-save to localStorage every 30 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      saveFormToLocalStorage(formData)
-    }, 30000)
-    return () => clearInterval(interval)
-  }, [formData])
-
-  // Save on unmount
-  useEffect(() => {
-    return () => saveFormToLocalStorage(formData)
-  }, [formData])
 
   // UPDATE: Form data updater with tariff change detection
   const updateFormData = (data: Partial<BookingFormData>) => {
@@ -111,14 +99,14 @@ function BookingWizard() {
   }
 
   return (
-    <div className="min-h-screen bg-luxury-gradient py-8 px-4">
-      <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen bg-luxury-gradient py-4 px-4">
+      <div className="max-w-2xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl sm:text-4xl font-bold text-luxury-gold uppercase tracking-wider mb-2">
+        <div className="text-center mb-3">
+          <h1 className="text-xl sm:text-2xl font-bold text-luxury-gold uppercase tracking-wider mb-0.5">
             Бронирование
           </h1>
-          <p className="text-gray-400">Secret House</p>
+          <p className="text-gray-500 text-sm">Secret House</p>
         </div>
 
         {/* Progress Indicator - NOW USES DYNAMIC TOTAL */}
@@ -128,8 +116,24 @@ function BookingWizard() {
           stepTitle={currentStep.shortTitle}
         />
 
+        {/* Booked periods status */}
+        {periodsLoading && (
+          <div className="flex items-center gap-2 text-xs text-gray-500 mb-4 justify-center">
+            <svg className="animate-spin w-3 h-3 text-yellow-600" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+            </svg>
+            <span>Загружаем занятые даты…</span>
+          </div>
+        )}
+        {periodsError && !periodsLoading && (
+          <div className="text-xs text-yellow-700/70 mb-4 text-center">
+            Не удалось загрузить занятые даты — календарь работает без ограничений
+          </div>
+        )}
+
         {/* Current Step */}
-        <div className="mb-8">
+        <div className="mb-4">
           <CurrentStepComponent
             formData={formData}
             updateFormData={updateFormData}
@@ -137,6 +141,7 @@ function BookingWizard() {
             prevStep={prevStep}
             jumpToStep={jumpToStep}
             onSubmit={handleSubmit}
+            bookedPeriods={bookedPeriods}
           />
         </div>
 
@@ -144,7 +149,7 @@ function BookingWizard() {
         <div className="text-center">
           <button
             onClick={() => {
-              if (confirm('Вы уверены, что хотите выйти? Ваш прогресс будет сохранен.')) {
+              if (confirm('Вы уверены, что хотите выйти?')) {
                 navigate('/')
               }
             }}

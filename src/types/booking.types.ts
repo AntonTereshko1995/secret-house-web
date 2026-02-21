@@ -133,6 +133,31 @@ export interface StepProps {
   prevStep: () => void
   jumpToStep?: (index: number) => void
   onSubmit?: () => void
+  /** Live booked periods fetched from the API (replaces mock data) */
+  bookedPeriods?: import('../utils/booking').BookedPeriod[]
+}
+
+export interface TariffConfig {
+  id: TariffType
+  /** Numeric ID used by the booking bot */
+  botTariffId: number
+  durationHours: number
+  price: number
+  saunaPrice: number
+  secretRoomPrice: number
+  extraBedroomPrice: number
+  extraHourPrice: number
+  /** Extra charge per additional guest beyond base (0 = no extra charge) */
+  extraPeoplePrice: number
+  photoshootPrice: number
+  maxPeople: number
+  isCheckInTimeLimit: boolean
+  /** Whether the photoshoot step is offered for this tariff */
+  hasPhotoshoot: boolean
+  /** Whether the transfer step is offered for this tariff */
+  hasTransfer: boolean
+  /** Lookup table: number of days → total price. Empty for non-daily tariffs. */
+  multiDayPrices: Record<number, number>
 }
 
 export interface StepConfig {

@@ -16,7 +16,7 @@ function Step6Promocode({ formData, updateFormData, nextStep, prevStep }: StepPr
     valid: boolean
     discount: number
     message: string
-  } | null>(formData.promocodeValid !== undefined ? {
+  } | null>(formData.promocode && formData.promocodeValid !== undefined ? {
     valid: formData.promocodeValid,
     discount: formData.promocodeDiscount || 0,
     message: formData.promocodeValid ? `Скидка ${formData.promocodeDiscount} BYN` : 'Промокод недействителен'
@@ -50,11 +50,11 @@ function Step6Promocode({ formData, updateFormData, nextStep, prevStep }: StepPr
   }
 
   return (
-    <div className="bg-gray-900 p-5 sm:p-6 rounded-lg border border-yellow-600/30">
-      <h2 className="text-2xl sm:text-3xl font-bold text-luxury-gold mb-6 uppercase tracking-wider">
+    <div className="bg-gray-900 p-4 rounded-lg border border-yellow-600/30">
+      <h2 className="text-lg sm:text-xl font-bold text-luxury-gold mb-2 uppercase tracking-wider">
         Промокод
       </h2>
-      <p className="text-gray-400 mb-6">
+      <p className="text-gray-400 mb-3 text-sm">
         Если у вас есть промокод, введите его для получения скидки (необязательно)
       </p>
 
@@ -112,38 +112,18 @@ function Step6Promocode({ formData, updateFormData, nextStep, prevStep }: StepPr
           </div>
         )}
 
-        {/* Available Promo Codes Hint */}
-        {!validationResult && (
-          <div className="bg-gray-800 p-4 rounded-lg">
-            <div className="text-gray-400 text-sm mb-2">💡 Доступные промокоды:</div>
-            <div className="flex flex-wrap gap-2">
-              {['SECRET10', 'WELCOME', 'VIP20', 'PROMO50'].map((code) => (
-                <button
-                  key={code}
-                  onClick={() => setPromocode(code)}
-                  className="text-xs bg-gray-700 hover:bg-yellow-600 hover:text-black text-yellow-600 px-3 py-1 rounded-full font-mono transition-all"
-                >
-                  {code}
-                </button>
-              ))}
-            </div>
-            <div className="text-gray-500 text-xs mt-2">
-              (Для демонстрации - в продакшене будут настоящие промокоды)
-            </div>
-          </div>
-        )}
       </div>
 
       <div className="flex gap-4">
         <button
           onClick={prevStep}
-          className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-6 uppercase tracking-wider transition-all"
+          className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 uppercase tracking-wider transition-all"
         >
           Назад
         </button>
         <button
           onClick={handleNext}
-          className="flex-1 bg-yellow-600 hover:bg-yellow-500 text-black font-bold py-3 px-6 uppercase tracking-wider transition-all shadow-lg hover:shadow-xl"
+          className="flex-1 bg-yellow-600 hover:bg-yellow-500 text-black font-bold py-2 px-4 uppercase tracking-wider transition-all"
         >
           {validationResult?.valid ? 'Далее со скидкой' : 'Далее'}
         </button>

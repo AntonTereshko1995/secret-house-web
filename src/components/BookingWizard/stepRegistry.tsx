@@ -72,6 +72,32 @@ export const STEP_REGISTRY: StepConfig[] = [
     }
   },
   {
+    id: 'wine',
+    type: 'wine',
+    component: Step7Wine,
+    title: 'Выбор вина',
+    shortTitle: 'Вино',
+    shouldShow: (data) => {
+      const tariff = data.tariff
+      return tariff === 'incognito-daily' ||
+             tariff === 'incognito-12h' ||
+             tariff === 'incognito-work'
+    }
+  },
+  {
+    id: 'transfer',
+    type: 'transfer',
+    component: Step8Transfer,
+    title: 'Трансфер',
+    shortTitle: 'Трансфер',
+    shouldShow: (data) => {
+      const tariff = data.tariff
+      return tariff === 'incognito-daily' ||
+             tariff === 'incognito-12h' ||
+             tariff === 'incognito-work'
+    }
+  },
+  {
     id: 'sauna',
     type: 'sauna',
     component: Step6Sauna,
@@ -138,34 +164,6 @@ export const STEP_REGISTRY: StepConfig[] = [
     title: 'Промокод',
     shortTitle: 'Промокод',
     shouldShow: () => true  // Always show
-  },
-  {
-    id: 'wine',
-    type: 'wine',
-    component: Step7Wine,
-    title: 'Выбор вина',
-    shortTitle: 'Вино',
-    shouldShow: (data) => {
-      const tariff = data.tariff
-      // Only for Incognito tariffs
-      return tariff === 'incognito-daily' ||
-             tariff === 'incognito-12h' ||
-             tariff === 'incognito-work'
-    }
-  },
-  {
-    id: 'transfer',
-    type: 'transfer',
-    component: Step8Transfer,
-    title: 'Трансфер',
-    shortTitle: 'Трансфер',
-    shouldShow: (data) => {
-      const tariff = data.tariff
-      // Only for Incognito tariffs
-      return tariff === 'incognito-daily' ||
-             tariff === 'incognito-12h' ||
-             tariff === 'incognito-work'
-    }
   },
   {
     id: 'summary',

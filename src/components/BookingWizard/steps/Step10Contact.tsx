@@ -43,11 +43,11 @@ function Step10Contact({ formData, updateFormData, nextStep, prevStep }: StepPro
   }
 
   return (
-    <div className="bg-gray-900 p-5 sm:p-6 rounded-lg border border-yellow-600/30">
-      <h2 className="text-2xl sm:text-3xl font-bold text-luxury-gold mb-6 uppercase tracking-wider">
+    <div className="bg-gray-900 p-4 rounded-lg border border-yellow-600/30">
+      <h2 className="text-lg sm:text-xl font-bold text-luxury-gold mb-2 uppercase tracking-wider">
         Контактная информация
       </h2>
-      <p className="text-gray-400 mb-6">
+      <p className="text-gray-400 mb-3 text-sm">
         Как нам с вами связаться?
       </p>
 
@@ -139,7 +139,7 @@ function Step10Contact({ formData, updateFormData, nextStep, prevStep }: StepPro
       <div className="flex gap-4">
         <button
           onClick={prevStep}
-          className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-6 uppercase tracking-wider transition-all"
+          className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 uppercase tracking-wider transition-all"
         >
           Назад
         </button>
@@ -150,7 +150,7 @@ function Step10Contact({ formData, updateFormData, nextStep, prevStep }: StepPro
               ? !telegram || !validateTelegramUsername(telegram)
               : !phone || !validatePhoneNumber(phone)
           }
-          className="flex-1 bg-yellow-600 hover:bg-yellow-500 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed text-black font-bold py-3 px-6 uppercase tracking-wider transition-all shadow-lg hover:shadow-xl"
+          className="flex-1 bg-yellow-600 hover:bg-yellow-500 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed text-black font-bold py-2 px-4 uppercase tracking-wider transition-all"
         >
           Далее
         </button>

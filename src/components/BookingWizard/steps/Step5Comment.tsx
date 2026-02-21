@@ -18,11 +18,11 @@ function Step5Comment({ formData, updateFormData, nextStep, prevStep }: StepProp
   }
 
   return (
-    <div className="bg-gray-900 p-5 sm:p-6 rounded-lg border border-yellow-600/30">
-      <h2 className="text-2xl sm:text-3xl font-bold text-luxury-gold mb-6 uppercase tracking-wider">
+    <div className="bg-gray-900 p-4 rounded-lg border border-yellow-600/30">
+      <h2 className="text-lg sm:text-xl font-bold text-luxury-gold mb-2 uppercase tracking-wider">
         Комментарий
       </h2>
-      <p className="text-gray-400 mb-6">
+      <p className="text-gray-400 mb-3 text-sm">
         Расскажите о своих пожеланиях или особых требованиях (необязательно)
       </p>
 
@@ -44,39 +44,17 @@ function Step5Comment({ formData, updateFormData, nextStep, prevStep }: StepProp
         </div>
       </div>
 
-      {/* Example suggestions */}
-      {comment.length === 0 && (
-        <div className="bg-gray-800 p-4 rounded-lg mb-6">
-          <div className="text-gray-400 text-sm mb-2">Примеры пожеланий:</div>
-          <div className="flex flex-wrap gap-2">
-            {[
-              'Хотим романтический ужин',
-              'Отмечаем годовщину',
-              'Нужны дополнительные подушки',
-              'Приедем с маленьким ребенком'
-            ].map((suggestion) => (
-              <button
-                key={suggestion}
-                onClick={() => setComment(suggestion)}
-                className="text-xs bg-gray-700 hover:bg-yellow-600 hover:text-black text-gray-300 px-3 py-1 rounded-full transition-all"
-              >
-                {suggestion}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
 
       <div className="flex gap-4">
         <button
           onClick={prevStep}
-          className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-6 uppercase tracking-wider transition-all"
+          className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 uppercase tracking-wider transition-all"
         >
           Назад
         </button>
         <button
           onClick={handleNext}
-          className="flex-1 bg-yellow-600 hover:bg-yellow-500 text-black font-bold py-3 px-6 uppercase tracking-wider transition-all shadow-lg hover:shadow-xl"
+          className="flex-1 bg-yellow-600 hover:bg-yellow-500 text-black font-bold py-2 px-4 uppercase tracking-wider transition-all"
         >
           {comment.length > 0 ? 'Далее' : 'Пропустить'}
         </button>
