@@ -188,8 +188,7 @@ export const STEP_REGISTRY: StepConfig[] = [
     type: 'receipt',
     component: Step11Receipt,
     title: 'Подтверждение оплаты',
-    shortTitle: 'Оплата',
+    shortTitle: 'Чек',
     shouldShow: () => true,  // Always show
-    requiredFields: ['receiptFile']
-  }
+  },
 ]

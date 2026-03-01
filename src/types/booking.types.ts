@@ -60,6 +60,8 @@ export interface BookingFormData {
 
   // Step 4: Guests
   guestCount: number
+  /** Extra charge for guests beyond the free limit (0 if all guests are included) */
+  guestPrice: number
 
   // Step 5: Photoshoot
   hasPhotoshoot?: boolean
@@ -132,7 +134,7 @@ export interface StepProps {
   nextStep: () => void
   prevStep: () => void
   jumpToStep?: (index: number) => void
-  onSubmit?: () => void
+  onSubmit?: (extraData?: Partial<BookingFormData>) => Promise<void> | void
   /** Live booked periods fetched from the API (replaces mock data) */
   bookedPeriods?: import('../utils/booking').BookedPeriod[]
 }

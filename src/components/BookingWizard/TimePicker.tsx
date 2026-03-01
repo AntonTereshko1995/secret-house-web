@@ -19,8 +19,8 @@ export default function TimePicker({ value, onChange, unavailable, label }: Time
           {label}
         </label>
       )}
-      {/* 5 cols × 5 rows = 25 slots; h-[282px] mirrors calendar height exactly */}
-      <div className="grid grid-cols-5 grid-rows-5 gap-1.5 bg-gray-900 border border-gray-700 rounded-lg p-2 h-[282px]">
+      {/* Mobile: 5-col auto-height grid with tall tap targets; Desktop: fixed 282px */}
+      <div className="grid grid-cols-5 gap-1.5 bg-zinc-900 border border-zinc-700 rounded-lg p-2 sm:grid-rows-5 sm:h-[282px]">
         {ALL_SLOTS.map(slot => {
           const isUnavailable = unavailable.has(slot)
           const isSelected = slot === value
@@ -32,12 +32,12 @@ export default function TimePicker({ value, onChange, unavailable, label }: Time
               disabled={isUnavailable}
               title={isUnavailable ? 'Недоступно' : slot}
               className={[
-                'h-full rounded text-xs font-medium transition-all',
+                'h-10 sm:h-full rounded text-xs font-medium transition-all',
                 isSelected
-                  ? 'bg-yellow-600 text-black font-bold'
+                  ? 'bg-amber-400 text-black font-bold'
                   : isUnavailable
                     ? 'bg-red-900/15 text-red-700/50 cursor-not-allowed line-through'
-                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer',
+                    : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-white cursor-pointer',
               ].join(' ')}
             >
               {slot}

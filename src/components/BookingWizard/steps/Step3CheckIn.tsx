@@ -13,13 +13,7 @@ interface StepProps {
   bookedPeriods?: BookedPeriod[]
 }
 
-// Mon=1, Tue=2, Wed=3, Thu=4
-const WORK_ALLOWED_WEEKDAYS = [1, 2, 3, 4]
-const WORK_ALLOWED_TIMES = new Set(['11:00', '22:00'])
-
 function Step3CheckIn({ formData, updateFormData, nextStep, prevStep, bookedPeriods = [] }: StepProps) {
-  const isWorkTariff = formData.tariff === 'work-standard' || formData.tariff === 'incognito-work'
-
   const [checkInDate, setCheckInDate] = useState<Date | null>(formData.checkInDate || null)
   const [checkInTime, setCheckInTime] = useState(formData.checkInTime || '')
 
@@ -48,19 +42,8 @@ function Step3CheckIn({ formData, updateFormData, nextStep, prevStep, bookedPeri
       }
     }
 
-    // For work tariff: only 11:00 and 22:00 allowed
-    if (isWorkTariff) {
-      const allSlots = [
-        ...Array.from({ length: 24 }, (_, h) => `${h.toString().padStart(2, '0')}:00`),
-        '23:59',
-      ]
-      for (const slot of allSlots) {
-        if (!WORK_ALLOWED_TIMES.has(slot)) slots.add(slot)
-      }
-    }
-
     return slots
-  }, [checkInDate, bookedPeriods, isWorkTariff])
+  }, [checkInDate, bookedPeriods])
 
   const handleDateSelect = (date: Date) => {
     setCheckInDate(date)
@@ -108,18 +91,27 @@ function Step3CheckIn({ formData, updateFormData, nextStep, prevStep, bookedPeri
       alert('Выбранное время заезда недоступно. Пожалуйста, выберите другое время.')
       return
     }
-    updateFormData({ checkInDate, checkInTime })
+    // If check-in date or time changed, clear the previously selected checkout
+    // so Step4 starts fresh rather than inheriting a potentially invalid checkout time
+    const checkInChanged =
+      checkInDate.getTime() !== formData.checkInDate?.getTime() ||
+      checkInTime !== formData.checkInTime
+    if (checkInChanged) {
+      updateFormData({ checkInDate, checkInTime, checkOutDate: undefined, checkOutTime: undefined, durationHours: 0, basePrice: 0 })
+    } else {
+      updateFormData({ checkInDate, checkInTime })
+    }
     nextStep()
   }
 
   return (
-    <div className="bg-gray-900 p-4 rounded-lg border border-yellow-600/30">
-      <h2 className="text-lg sm:text-xl font-bold text-luxury-gold mb-2 uppercase tracking-wider">
+    <div className="bg-zinc-900 p-4 rounded-xl border border-zinc-800 shadow-2xl">
+      <h2 className="text-lg sm:text-xl font-bold text-white mb-2 uppercase tracking-wider">
         Дата и время заезда
       </h2>
 
       <div className="mb-3">
-        <div className="flex gap-3 items-start">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
           <div className="flex-1 min-w-0">
             <label className="block text-white font-semibold mb-1.5 uppercase text-xs tracking-wider">
               Дата заезда
@@ -129,7 +121,6 @@ function Step3CheckIn({ formData, updateFormData, nextStep, prevStep, bookedPeri
               onDateSelect={handleDateSelect}
               bookedPeriods={bookedPeriods}
               minDate={today}
-              allowedWeekdays={isWorkTariff ? WORK_ALLOWED_WEEKDAYS : undefined}
             />
           </div>
 
@@ -146,10 +137,10 @@ function Step3CheckIn({ formData, updateFormData, nextStep, prevStep, bookedPeri
         </div>
 
         {checkInDate && (
-          <div className="mt-3 bg-yellow-600/10 border border-yellow-600/30 p-2.5 rounded-lg">
+          <div className="mt-3 bg-zinc-800/60 border border-zinc-700 p-2.5 rounded-lg">
             <div className="flex items-center justify-between gap-2">
               <div className="text-gray-400 text-xs">Заезд:</div>
-              <div className="text-yellow-600 font-semibold text-sm">
+              <div className="text-amber-400 font-semibold text-sm">
                 {checkInDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}
               </div>
               <div className={`text-base font-bold ${isTimeValid ? 'text-white' : 'text-red-400'}`}>
@@ -164,14 +155,14 @@ function Step3CheckIn({ formData, updateFormData, nextStep, prevStep, bookedPeri
       <div className="flex gap-4">
         <button
           onClick={prevStep}
-          className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 uppercase tracking-wider transition-all"
+          className="flex-1 border border-zinc-600 bg-transparent hover:bg-zinc-800/50 text-zinc-300 font-bold py-2 px-4 rounded-xl uppercase tracking-wider transition-all"
         >
           Назад
         </button>
         <button
           onClick={handleNext}
           disabled={!checkInDate || !isTimeValid}
-          className="flex-1 bg-yellow-600 hover:bg-yellow-500 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed text-black font-bold py-2 px-4 uppercase tracking-wider transition-all"
+          className="flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 disabled:opacity-40 disabled:cursor-not-allowed text-black font-bold py-2 px-4 rounded-xl uppercase tracking-wider transition-all"
         >
           Далее
         </button>

@@ -144,3 +144,20 @@ export async function submitBooking(
 ): Promise<BookingCreateResponse> {
   return apiPost<BookingCreateResponse>('/api/bookings', payload)
 }
+
+/**
+ * Upload payment receipt file and notify admin via Telegram.
+ */
+export async function uploadReceipt(bookingId: number, file: File): Promise<void> {
+  const formData = new FormData()
+  formData.append('file', file)
+
+  const response = await fetch(`${API_BASE}/api/bookings/${bookingId}/receipt`, {
+    method: 'POST',
+    body: formData,
+  })
+
+  if (!response.ok) {
+    throw new Error(`Receipt upload failed: ${response.status}`)
+  }
+}

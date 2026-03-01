@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { calculateTotalPrice, TARIFF_OPTIONS, WINE_OPTIONS, BEDROOM_OPTIONS, calculatePrepayment, getHolidayName } from '../../../utils/booking'
+import { calculateTotalPrice, getTariffConfig, getBasePriceBreakdown, getDatePriceOverride, TARIFF_OPTIONS, WINE_OPTIONS, BEDROOM_OPTIONS, calculatePrepayment, getHolidayName } from '../../../utils/booking'
 import type { StepProps } from '../../../types/booking.types'
 
 function fmt(date: Date | string | undefined, time?: string): string {
@@ -25,7 +25,7 @@ function PriceRow({ label, value, highlight }: { label: string; value: string; h
   return (
     <div className="flex justify-between items-baseline py-1">
       <span className={highlight ? 'text-white font-bold uppercase tracking-wider' : 'text-gray-300 text-sm'}>{label}</span>
-      <span className={highlight ? 'text-yellow-600 font-bold text-2xl' : 'text-white text-sm font-semibold'}>{value}</span>
+      <span className={highlight ? 'text-amber-400 font-bold text-2xl' : 'text-white text-sm font-semibold'}>{value}</span>
     </div>
   )
 }
@@ -35,6 +35,15 @@ function Step9Summary({ formData, updateFormData, nextStep, prevStep }: StepProp
 
   const pricing = calculateTotalPrice(formData)
   const tariffName = TARIFF_OPTIONS.find(t => t.id === formData.tariff)?.name ?? '—'
+  const tariffConfig = formData.tariff ? getTariffConfig(formData.tariff) : undefined
+  const dateOverride = formData.checkInDate ? getDatePriceOverride(new Date(formData.checkInDate)) : null
+  // Extra-hours breakdown is only relevant when no special date price override is in effect
+  const basePriceBreakdown = (!dateOverride && formData.tariff && formData.durationHours)
+    ? getBasePriceBreakdown(formData.tariff, formData.durationHours)
+    : null
+  const extraGuests = tariffConfig && formData.guestCount
+    ? Math.max(0, formData.guestCount - tariffConfig.maxPeople)
+    : 0
   const wineName = formData.wineSelection?.[0]
     ? WINE_OPTIONS.find(w => w.id === formData.wineSelection![0])?.name
     : null
@@ -53,13 +62,13 @@ function Step9Summary({ formData, updateFormData, nextStep, prevStep }: StepProp
   }
 
   return (
-    <div className="bg-gray-900 p-4 rounded-lg border border-yellow-600/30">
-      <h2 className="text-lg font-bold text-luxury-gold mb-3 uppercase tracking-wider">
+    <div className="bg-zinc-900 p-4 rounded-xl border border-zinc-800 shadow-2xl">
+      <h2 className="text-lg font-bold text-white mb-3 uppercase tracking-wider">
         Итог бронирования
       </h2>
 
       {/* Details */}
-      <div className="bg-gray-800/50 rounded-lg px-3 py-1 mb-3">
+      <div className="bg-zinc-800/40 rounded-lg px-3 py-1 mb-3">
         <Row label="Тариф" value={tariffName} />
         <Row label="Гостей" value={`${formData.guestCount ?? '—'}`} />
         <Row label="Заезд" value={fmt(formData.checkInDate, formData.checkInTime)} />
@@ -78,8 +87,37 @@ function Step9Summary({ formData, updateFormData, nextStep, prevStep }: StepProp
       </div>
 
       {/* Pricing */}
-      <div className="bg-black border border-yellow-600/30 rounded-lg px-3 py-2 mb-3">
+      <div className="bg-black/60 border border-zinc-800 rounded-lg px-3 py-2 mb-3">
         <PriceRow label="Проживание" value={`${pricing.basePrice} BYN`} />
+        {/* Special date pricing note */}
+        {dateOverride && (
+          <div className="text-amber-400/80 text-xs py-0.5 pl-2">
+            🎄 {dateOverride.description} — фиксированная цена
+          </div>
+        )}
+        {/* Extra hours breakdown note (only when no date override) */}
+        {basePriceBreakdown?.extraHours !== undefined && basePriceBreakdown.extraHours > 0 && (
+          <div className="flex justify-between items-baseline py-0.5 pl-2">
+            <span className="text-gray-500 text-xs">
+              в т.ч. доп. {basePriceBreakdown.extraHours} ч × {basePriceBreakdown.extraHourPrice} BYN
+            </span>
+            <span className="text-gray-500 text-xs">+{basePriceBreakdown.extraPrice} BYN</span>
+          </div>
+        )}
+        {basePriceBreakdown?.remainderHours !== undefined && basePriceBreakdown.remainderHours > 0 && (
+          <div className="flex justify-between items-baseline py-0.5 pl-2">
+            <span className="text-gray-500 text-xs">
+              в т.ч. доп. {basePriceBreakdown.remainderHours} ч × {basePriceBreakdown.extraHourPrice} BYN
+            </span>
+            <span className="text-gray-500 text-xs">+{basePriceBreakdown.remainderPrice} BYN</span>
+          </div>
+        )}
+        {pricing.guestPrice > 0 && (
+          <PriceRow
+            label={`Доп. ${extraGuests} ${extraGuests === 1 ? 'гость' : extraGuests < 5 ? 'гостя' : 'гостей'}`}
+            value={`+${pricing.guestPrice} BYN`}
+          />
+        )}
         {formData.hasPhotoshoot && pricing.photoshootPrice > 0 && (
           <PriceRow label="Фотосессия" value={`+${pricing.photoshootPrice} BYN`} />
         )}
@@ -95,10 +133,10 @@ function Step9Summary({ formData, updateFormData, nextStep, prevStep }: StepProp
         {pricing.discount > 0 && (
           <PriceRow label={`Скидка (${formData.promocode})`} value={`−${pricing.discount} BYN`} />
         )}
-        <div className="border-t border-yellow-600/30 mt-1 pt-2">
+        <div className="border-t border-zinc-800 mt-1 pt-2">
           <PriceRow label="Итого" value={`${pricing.totalPrice} BYN`} highlight />
           {holidayName && (
-            <div className="text-yellow-600 text-xs mt-1">🎉 {holidayName} — полная предоплата</div>
+            <div className="text-amber-400 text-xs mt-1">🎉 {holidayName} — полная предоплата</div>
           )}
           <PriceRow label={`Предоплата (${isFullPayment ? '100%' : '50%'})`} value={`${prepayment} BYN`} highlight />
         </div>
@@ -114,23 +152,23 @@ function Step9Summary({ formData, updateFormData, nextStep, prevStep }: StepProp
         />
         <span className="text-xs text-gray-400">
           Принимаю{' '}
-          <a href="#" className="text-yellow-600 hover:underline">условия бронирования</a>
+          <a href="#" className="text-amber-400 hover:underline">условия бронирования</a>
           {' '}и{' '}
-          <a href="#" className="text-yellow-600 hover:underline">политику конфиденциальности</a>
+          <a href="#" className="text-amber-400 hover:underline">политику конфиденциальности</a>
         </span>
       </label>
 
       <div className="flex gap-4">
         <button
           onClick={prevStep}
-          className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 uppercase tracking-wider transition-all"
+          className="flex-1 border border-zinc-600 bg-transparent hover:bg-zinc-800/50 text-zinc-300 font-bold py-2 px-4 rounded-xl uppercase tracking-wider transition-all"
         >
           Назад
         </button>
         <button
           onClick={handleNext}
           disabled={!termsAccepted}
-          className="flex-1 bg-yellow-600 hover:bg-yellow-500 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed text-black font-bold py-2 px-4 uppercase tracking-wider transition-all"
+          className="flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 disabled:opacity-40 disabled:cursor-not-allowed text-black font-bold py-2 px-4 rounded-xl uppercase tracking-wider transition-all"
         >
           Подтвердить
         </button>

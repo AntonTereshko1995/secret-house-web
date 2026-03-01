@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import type { GalleryItem, RoomCategory, GalleryManifest } from '../../types/gallery.types'
 
 interface FullGalleryProps {
@@ -96,6 +96,24 @@ function FullGallery({ isOpen, onClose, initialCategory }: FullGalleryProps) {
       }
     }
   }, [isOpen])
+
+  const touchStartX = useRef<number | null>(null)
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }, [])
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (touchStartX.current === null) return
+    const delta = touchStartX.current - e.changedTouches[0].clientX
+    touchStartX.current = null
+    if (Math.abs(delta) < 50) return
+    if (delta > 0) {
+      setCurrentIndex(prev => Math.min(filteredImages.length - 1, prev + 1))
+    } else {
+      setCurrentIndex(prev => Math.max(0, prev - 1))
+    }
+  }, [filteredImages.length])
 
   const openLightbox = useCallback((index: number) => {
     setCurrentIndex(index)
@@ -214,6 +232,8 @@ function FullGallery({ isOpen, onClose, initialCategory }: FullGalleryProps) {
         <div
           className="fixed inset-0 z-50 bg-black flex items-center justify-center"
           onClick={closeLightbox}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
         >
           {/* Close button */}
           <button

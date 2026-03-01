@@ -17,6 +17,13 @@ export interface BookedPeriod {
 export const MIN_BOOKING_HOURS = 3
 
 /**
+ * Cleaning buffer in hours required between bookings.
+ * After a booking ends, the house is closed for 2 hours for cleaning.
+ * Before a booking starts, 2 hours must be reserved for the previous guest's checkout + cleaning.
+ */
+export const CLEANING_BUFFER_HOURS = 2
+
+/**
  * Mock booked periods with exact check-in/check-out times.
  * Replace with API call in production.
  */
@@ -80,13 +87,29 @@ export function getUnavailableCheckInSlots(
   periods: BookedPeriod[]
 ): Set<string> {
   const unavailable = new Set<string>()
+  const minDurationMs = MIN_BOOKING_HOURS * 3600000
+  const cleaningBufferMs = CLEANING_BUFFER_HOURS * 3600000
   const slots = [
     ...Array.from({ length: 24 }, (_, h) => ({ h, m: 0, str: `${h.toString().padStart(2, '0')}:00` })),
     { h: 23, m: 59, str: '23:59' },
   ]
   for (const { h, m, str } of slots) {
     const slot = new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, m)
+    // Block if slot falls within an existing booking
     if (periods.some(p => slot >= p.checkIn && slot < p.checkOut)) {
+      unavailable.add(str)
+      continue
+    }
+    // Block if slot is within the 2-hour cleaning window after a booking ends
+    // (the house needs time to be cleaned before the next guests arrive)
+    if (periods.some(p => slot >= p.checkOut && slot.getTime() - p.checkOut.getTime() < cleaningBufferMs)) {
+      unavailable.add(str)
+      continue
+    }
+    // Block if the next booking starts before slot + MIN_BOOKING_HOURS,
+    // leaving no valid checkout slot
+    const minCheckOut = new Date(slot.getTime() + minDurationMs)
+    if (periods.some(p => p.checkIn > slot && p.checkIn <= minCheckOut)) {
       unavailable.add(str)
     }
   }
@@ -103,6 +126,7 @@ export function getUnavailableCheckOutSlots(
   periods: BookedPeriod[]
 ): Set<string> {
   const minDurationMs = MIN_BOOKING_HOURS * 3600000
+  const cleaningBufferMs = CLEANING_BUFFER_HOURS * 3600000
   const unavailable = new Set<string>()
   const slots = [
     ...Array.from({ length: 24 }, (_, h) => ({ h, m: 0, str: `${h.toString().padStart(2, '0')}:00` })),
@@ -116,7 +140,13 @@ export function getUnavailableCheckOutSlots(
       continue
     }
     // Would overlap an existing booking
-    if (periods.some(p => p.checkIn < slot && p.checkOut > checkInDateTime)) {
+    if (periods.some(p => p.checkIn <= slot && p.checkOut > checkInDateTime)) {
+      unavailable.add(str)
+      continue
+    }
+    // The next booking starts within 2 hours of this checkout — not enough time to clean
+    // (p.checkIn > slot ensures we only look at bookings AFTER the proposed checkout)
+    if (periods.some(p => p.checkIn > slot && p.checkIn.getTime() - slot.getTime() < cleaningBufferMs)) {
       unavailable.add(str)
     }
   }
@@ -468,6 +498,51 @@ export function getTariffConfig(tariffId: TariffType | string, sale = false): Ta
   return map[tariffId as TariffType]
 }
 
+// ─── Date-specific pricing rules ─────────────────────────────────────────────
+// Mirrors the bot's src/config/date_pricing_rules.json.
+// When the booking's check-in date falls within a rule's date range,
+// priceOverride replaces the standard base-price calculation entirely.
+const DATE_PRICING_RULES: Array<{
+  ruleId: string
+  /** Inclusive start date YYYY-MM-DD */
+  startDate: string
+  /** Inclusive end date YYYY-MM-DD */
+  endDate: string
+  /** Flat base price in BYN (replaces tariff calculation) */
+  priceOverride: number
+  isActive: boolean
+  description: string
+}> = [
+  {
+    ruleId: 'new_year_2025',
+    startDate: '2025-12-31',
+    endDate: '2026-01-02',
+    priceOverride: 3000,
+    isActive: true,
+    description: 'Новогодние праздники',
+  },
+]
+
+/**
+ * Returns a base-price override when the check-in date falls within a special
+ * pricing period. Mirrors DatePricingService.get_price_override() from the bot.
+ * The override replaces the entire base-price calculation (tariff + extra hours).
+ */
+export function getDatePriceOverride(
+  checkInDate: Date
+): { price: number; description: string } | null {
+  const y = checkInDate.getFullYear()
+  const mm = String(checkInDate.getMonth() + 1).padStart(2, '0')
+  const dd = String(checkInDate.getDate()).padStart(2, '0')
+  const dateStr = `${y}-${mm}-${dd}`
+  for (const rule of DATE_PRICING_RULES) {
+    if (rule.isActive && dateStr >= rule.startDate && dateStr <= rule.endDate) {
+      return { price: rule.priceOverride, description: rule.description }
+    }
+  }
+  return null
+}
+
 /**
  * Tariff options with pricing
  */
@@ -546,6 +621,17 @@ export const WINE_OPTIONS: WineOption[] = [
 ]
 
 /**
+ * Calculate extra guest charge for guests beyond the tariff's included limit.
+ * Formula mirrors the bot: (guestCount - maxPeople) * extraPeoplePrice
+ */
+export function calculateExtraGuestPrice(tariff: string, guestCount: number, sale = false): number {
+  const config = getTariffConfig(tariff, sale)
+  if (!config || config.extraPeoplePrice === 0) return 0
+  const extra = Math.max(0, guestCount - config.maxPeople)
+  return extra * config.extraPeoplePrice
+}
+
+/**
  * Calculate duration in hours between two dates
  */
 export function calculateDuration(checkIn: Date, checkOut: Date): number {
@@ -554,23 +640,87 @@ export function calculateDuration(checkIn: Date, checkOut: Date): number {
 }
 
 /**
- * Calculate base price based on tariff and duration.
- * Daily tariffs use the multi-day price lookup table from the bot config.
+ * Extra-hours price breakdown for a given duration.
+ * Mirrors the bot's calculation_rate_service.py algorithm.
  */
-export function calculateBasePrice(tariff: string, durationHours: number, sale = false): number {
-  if (tariff === 'gift-certificate') return 0
+export interface BasePriceBreakdown {
+  basePrice: number
+  /** For daily tariffs with extra hours: number of full days (after rounding rule) */
+  days?: number
+  /** Price from the multi-day lookup table for those days */
+  dayPrice?: number
+  /** Remaining hours beyond full days (0 = rounded up to next day) */
+  remainderHours?: number
+  /** Cost of the remaining hours */
+  remainderPrice?: number
+  /** For fixed tariffs: the session's included hours */
+  includedHours?: number
+  /** Extra hours beyond the included session */
+  extraHours?: number
+  /** Price per extra hour (set when extra hours apply) */
+  extraHourPrice?: number
+  /** Total cost of extra hours */
+  extraPrice?: number
+}
 
+/**
+ * Returns a detailed breakdown of the base price.
+ * Mirrors the bot's calculation_rate_service.py algorithm exactly:
+ *   extra_hours = duration - tariff.duration
+ *   if extra_hours <= 0: price = tariff.price
+ *   daily tariffs: floor(h/24) days + remainder; if remainder > 15 h round up to next day
+ *   fixed tariffs: base_price + extra_hours * extra_hour_price
+ */
+export function getBasePriceBreakdown(tariff: string, durationHours: number, sale = false): BasePriceBreakdown | null {
+  if (tariff === 'gift-certificate') return { basePrice: 0 }
   const config = getTariffConfig(tariff, sale)
-  if (!config) return 0
+  if (!config) return null
 
-  // Daily tariffs: use the multi-day price table (includes bulk discounts)
-  if (Object.keys(config.multiDayPrices).length > 0) {
-    const days = Math.max(1, Math.ceil(durationHours / 24))
-    return config.multiDayPrices[days] ?? days * config.price
+  const extraHours = durationHours - config.durationHours
+
+  // Within the included session duration — just the base price
+  if (extraHours <= 0) {
+    return { basePrice: config.price }
   }
 
-  // Fixed-duration tariffs (12h, work): single session price
-  return config.price
+  // Daily tariffs: multi-day price table + remainder hours
+  if (Object.keys(config.multiDayPrices).length > 0) {
+    let totalDays = Math.floor(durationHours / 24)
+    let remainderHours = durationHours % 24
+    // Bot rule: remainder > 15 h rounds up to a full extra day
+    if (remainderHours > 15) {
+      totalDays += 1
+      remainderHours = 0
+    }
+    const dayPrice = config.multiDayPrices[totalDays] ?? totalDays * config.price
+    const remainderPrice = remainderHours * config.extraHourPrice
+    return {
+      basePrice: dayPrice + remainderPrice,
+      days: totalDays,
+      dayPrice,
+      remainderHours,
+      remainderPrice,
+      extraHourPrice: config.extraHourPrice,
+    }
+  }
+
+  // Fixed-duration tariffs (12h, work): base price + extra hours
+  const extraPrice = extraHours * config.extraHourPrice
+  return {
+    basePrice: config.price + extraPrice,
+    includedHours: config.durationHours,
+    extraHours,
+    extraHourPrice: config.extraHourPrice,
+    extraPrice,
+  }
+}
+
+/**
+ * Calculate base price based on tariff and duration.
+ * Delegates to getBasePriceBreakdown which mirrors the bot's algorithm exactly.
+ */
+export function calculateBasePrice(tariff: string, durationHours: number, sale = false): number {
+  return getBasePriceBreakdown(tariff, durationHours, sale)?.basePrice ?? 0
 }
 
 /**
@@ -666,6 +816,7 @@ export const BEDROOM_OPTIONS: { id: 'white' | 'green'; name: string; description
  */
 export function calculateTotalPrice(formData: Partial<BookingFormData>): {
   basePrice: number
+  guestPrice: number
   winePrice: number
   transferPrice: number
   photoshootPrice: number
@@ -676,6 +827,7 @@ export function calculateTotalPrice(formData: Partial<BookingFormData>): {
   totalPrice: number
 } {
   const basePrice = formData.basePrice || 0
+  const guestPrice = formData.guestPrice || 0
   const winePrice = formData.winePrice || 0
   const transferPrice = formData.transferPrice || 0
   const photoshootPrice = formData.photoshootPrice || 0
@@ -686,6 +838,7 @@ export function calculateTotalPrice(formData: Partial<BookingFormData>): {
 
   const totalPrice =
     basePrice +
+    guestPrice +
     winePrice +
     transferPrice +
     photoshootPrice +
@@ -696,6 +849,7 @@ export function calculateTotalPrice(formData: Partial<BookingFormData>): {
 
   return {
     basePrice,
+    guestPrice,
     winePrice,
     transferPrice,
     photoshootPrice,

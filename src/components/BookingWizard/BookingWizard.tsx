@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import StepIndicator from './StepIndicator'
 import { STEP_REGISTRY } from './stepRegistry'
 import { useConditionalNavigation, cleanIncompatibleData } from './navigationLogic'
-import { clearFormFromLocalStorage } from '../../utils/booking'
+import { clearFormFromLocalStorage, submitBookingForm } from '../../utils/booking'
+import { uploadReceipt } from '../../services/api'
 import { useBookedPeriods } from '../../hooks/useBookedPeriods'
-import type { BookingFormData } from '../../types/booking.types'
+import type { BookingFormData, StepProps } from '../../types/booking.types'
 
 function BookingWizard() {
   const navigate = useNavigate()
@@ -19,6 +20,7 @@ function BookingWizard() {
   // STATE: Form data
   const [formData, setFormData] = useState<Partial<BookingFormData>>({
     guestCount: 2,
+    guestPrice: 0,
     wineSelection: [],
     needsTransfer: false,
     contactType: 'telegram',
@@ -76,13 +78,17 @@ function BookingWizard() {
     }
   }
 
-  // SUBMIT: Handle final submission
-  const handleSubmit = async () => {
+  // SUBMIT: Handle final submission from Step11Receipt
+  const handleSubmit: StepProps['onSubmit'] = async (extraData) => {
     try {
-      console.log('Submitting booking:', formData)
+      const finalData = { ...formData, ...extraData } as BookingFormData
+      const { bookingId } = await submitBookingForm(finalData)
+      if (finalData.receiptFile) {
+        await uploadReceipt(bookingId, finalData.receiptFile)
+      }
       clearFormFromLocalStorage()
       navigate('/booking/success', {
-        state: { booking: formData },
+        state: { booking: finalData, bookingId },
         replace: true
       })
     } catch (error) {
@@ -99,11 +105,11 @@ function BookingWizard() {
   }
 
   return (
-    <div className="min-h-screen bg-luxury-gradient py-4 px-4">
+    <div className="min-h-screen bg-zinc-950 py-4 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-3">
-          <h1 className="text-xl sm:text-2xl font-bold text-luxury-gold uppercase tracking-wider mb-0.5">
+          <h1 className="text-xl sm:text-2xl font-bold text-amber-400 uppercase tracking-wider mb-0.5">
             Бронирование
           </h1>
           <p className="text-gray-500 text-sm">Secret House</p>

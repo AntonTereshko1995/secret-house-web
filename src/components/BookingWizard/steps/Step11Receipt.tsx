@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { generateBookingId, calculatePrepayment, getHolidayName } from '../../../utils/booking'
+import { calculatePrepayment, getHolidayName } from '../../../utils/booking'
 import type { BookingFormData, StepProps } from '../../../types/booking.types'
 
 function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepProps) {
@@ -45,28 +45,23 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
     }
     setIsSubmitting(true)
     try {
-      const bookingId = generateBookingId()
-      const finalData: Partial<BookingFormData> = {
-        ...formData,
+      const receiptData: Partial<BookingFormData> = {
         receiptFile,
         receiptPreview: receiptPreview || undefined,
-        bookingId,
-        submittedAt: new Date()
+        submittedAt: new Date(),
       }
-      updateFormData(finalData)
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      onSubmit?.()
+      updateFormData(receiptData)
+      await onSubmit?.(receiptData)
     } catch (error) {
       console.error('Submission error:', error)
       alert('Ошибка при отправке бронирования. Пожалуйста, попробуйте еще раз.')
-    } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <div className="bg-gray-900 p-4 rounded-lg border border-yellow-600/30">
-      <h2 className="text-lg font-bold text-luxury-gold mb-1 uppercase tracking-wider">
+    <div className="bg-zinc-900 p-4 rounded-xl border border-zinc-800 shadow-2xl">
+      <h2 className="text-lg font-bold text-white mb-1 uppercase tracking-wider">
         Загрузка чека
       </h2>
       <p className="text-gray-400 mb-3 text-sm">
@@ -74,9 +69,9 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
       </p>
 
       {/* Price */}
-      <div className="bg-black border border-yellow-600/30 rounded-lg px-4 py-2 mb-3">
+      <div className="bg-black/60 border border-zinc-800 rounded-lg px-4 py-2 mb-3">
         {holidayName && (
-          <div className="text-yellow-600 text-xs mb-1.5">
+          <div className="text-amber-400 text-xs mb-1.5">
             🎉 {holidayName} — требуется полная предоплата
           </div>
         )}
@@ -88,7 +83,7 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
           <span className="text-gray-400 text-sm">
             Предоплата ({isFullPayment ? '100%' : '50%'}):
           </span>
-          <span className="text-yellow-600 font-bold text-xl">{prepayment} BYN</span>
+          <span className="text-amber-400 font-bold text-xl">{prepayment} BYN</span>
         </div>
       </div>
 
@@ -98,10 +93,10 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
         className={`
           border-2 border-dashed rounded-lg p-5 mb-3 cursor-pointer transition-all text-center
           ${isDragActive
-            ? 'border-yellow-600 bg-yellow-600/10'
+            ? 'border-amber-400 bg-amber-400/10'
             : receiptFile
             ? 'border-green-500 bg-green-500/10'
-            : 'border-gray-700 hover:border-yellow-600/50 bg-gray-800'}
+            : 'border-gray-700 hover:border-zinc-500 bg-gray-800'}
         `}
       >
         <input {...getInputProps()} />
@@ -131,14 +126,14 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
         <button
           onClick={prevStep}
           disabled={isSubmitting}
-          className="flex-1 bg-gray-800 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-2 px-4 uppercase tracking-wider transition-all"
+          className="flex-1 border border-zinc-600 bg-transparent hover:bg-zinc-800/50 disabled:opacity-50 disabled:cursor-not-allowed text-zinc-300 font-bold py-2 px-4 rounded-xl uppercase tracking-wider transition-all"
         >
           Назад
         </button>
         <button
           onClick={handleSubmit}
           disabled={!receiptFile || isSubmitting}
-          className="flex-1 bg-yellow-600 hover:bg-yellow-500 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed text-black font-bold py-2 px-4 uppercase tracking-wider transition-all"
+          className="flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 disabled:opacity-40 disabled:cursor-not-allowed text-black font-bold py-2 px-4 rounded-xl uppercase tracking-wider transition-all"
         >
           {isSubmitting ? 'Отправка...' : 'Отправить'}
         </button>

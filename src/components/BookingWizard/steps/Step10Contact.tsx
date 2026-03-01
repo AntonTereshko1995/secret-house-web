@@ -9,7 +9,7 @@ interface StepProps {
   prevStep: () => void
 }
 
-function Step10Contact({ formData, updateFormData, nextStep, prevStep }: StepProps) {
+function Step10Contact({ formData, updateFormData, prevStep, nextStep }: StepProps) {
   const [contactType, setContactType] = useState<ContactType>(
     formData.contactType || 'telegram'
   )
@@ -23,28 +23,20 @@ function Step10Contact({ formData, updateFormData, nextStep, prevStep }: StepPro
         alert('Пожалуйста, введите корректный Telegram username (5-32 символа, буквы, цифры, подчеркивания)')
         return
       }
-      updateFormData({
-        contactType,
-        telegram: cleanTelegram,
-        phone: undefined
-      })
+      updateFormData({ contactType, telegram: cleanTelegram, phone: undefined })
     } else {
       if (!validatePhoneNumber(phone)) {
         alert('Пожалуйста, введите корректный номер телефона в формате +375XXXXXXXXX')
         return
       }
-      updateFormData({
-        contactType,
-        phone,
-        telegram: undefined
-      })
+      updateFormData({ contactType, phone, telegram: undefined })
     }
     nextStep()
   }
 
   return (
-    <div className="bg-gray-900 p-4 rounded-lg border border-yellow-600/30">
-      <h2 className="text-lg sm:text-xl font-bold text-luxury-gold mb-2 uppercase tracking-wider">
+    <div className="bg-zinc-900 p-4 rounded-xl border border-zinc-800 shadow-2xl">
+      <h2 className="text-lg sm:text-xl font-bold text-white mb-2 uppercase tracking-wider">
         Контактная информация
       </h2>
       <p className="text-gray-400 mb-3 text-sm">
@@ -58,8 +50,8 @@ function Step10Contact({ formData, updateFormData, nextStep, prevStep }: StepPro
           className={`
             p-6 border-2 rounded-lg font-bold uppercase tracking-wider transition-all
             ${contactType === 'telegram'
-              ? 'border-yellow-600 bg-yellow-600/10 text-white'
-              : 'border-gray-700 text-gray-400 hover:border-yellow-600/50'}
+              ? 'border-amber-400 bg-amber-400/10 text-white'
+              : 'border-zinc-700 text-zinc-400 hover:border-zinc-500'}
           `}
         >
           <div className="text-3xl mb-2">📱</div>
@@ -70,8 +62,8 @@ function Step10Contact({ formData, updateFormData, nextStep, prevStep }: StepPro
           className={`
             p-6 border-2 rounded-lg font-bold uppercase tracking-wider transition-all
             ${contactType === 'phone'
-              ? 'border-yellow-600 bg-yellow-600/10 text-white'
-              : 'border-gray-700 text-gray-400 hover:border-yellow-600/50'}
+              ? 'border-amber-400 bg-amber-400/10 text-white'
+              : 'border-zinc-700 text-zinc-400 hover:border-zinc-500'}
           `}
         >
           <div className="text-3xl mb-2">📞</div>
@@ -94,7 +86,7 @@ function Step10Contact({ formData, updateFormData, nextStep, prevStep }: StepPro
               value={telegram}
               onChange={(e) => setTelegram(e.target.value.replace('@', ''))}
               placeholder="username"
-              className="w-full bg-black border-2 border-gray-700 focus:border-yellow-600 text-white px-4 py-3 pl-10 rounded-lg outline-none transition-colors"
+              className="w-full bg-black border-2 border-gray-700 focus:border-amber-400 text-white px-4 py-3 pl-10 rounded-lg outline-none transition-colors"
             />
           </div>
           <div className="mt-2 text-gray-400 text-sm">
@@ -116,7 +108,7 @@ function Step10Contact({ formData, updateFormData, nextStep, prevStep }: StepPro
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="+375XXXXXXXXX"
-            className="w-full bg-black border-2 border-gray-700 focus:border-yellow-600 text-white px-4 py-3 rounded-lg outline-none transition-colors"
+            className="w-full bg-black border-2 border-gray-700 focus:border-amber-400 text-white px-4 py-3 rounded-lg outline-none transition-colors"
           />
           <div className="mt-2 text-gray-400 text-sm">
             Формат: +375 + 9 цифр (например, +375291234567)
@@ -129,17 +121,10 @@ function Step10Contact({ formData, updateFormData, nextStep, prevStep }: StepPro
         </div>
       )}
 
-      {/* Info Box */}
-      <div className="bg-gray-800 p-4 rounded-lg mb-6">
-        <div className="text-gray-400 text-sm">
-          💡 Мы свяжемся с вами {contactType === 'telegram' ? 'в Telegram' : 'по телефону'} в течение 15 минут для подтверждения бронирования.
-        </div>
-      </div>
-
       <div className="flex gap-4">
         <button
           onClick={prevStep}
-          className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 uppercase tracking-wider transition-all"
+          className="flex-1 border border-zinc-600 bg-transparent hover:bg-zinc-800/50 text-zinc-300 font-bold py-2 px-4 rounded-xl uppercase tracking-wider transition-all"
         >
           Назад
         </button>
@@ -150,7 +135,7 @@ function Step10Contact({ formData, updateFormData, nextStep, prevStep }: StepPro
               ? !telegram || !validateTelegramUsername(telegram)
               : !phone || !validatePhoneNumber(phone)
           }
-          className="flex-1 bg-yellow-600 hover:bg-yellow-500 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed text-black font-bold py-2 px-4 uppercase tracking-wider transition-all"
+          className="flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 disabled:opacity-40 disabled:cursor-not-allowed text-black font-bold py-2 px-4 rounded-xl uppercase tracking-wider transition-all"
         >
           Далее
         </button>

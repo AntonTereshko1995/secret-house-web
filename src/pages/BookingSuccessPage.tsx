@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
-import { TARIFF_OPTIONS, calculatePrepayment, getHolidayName } from '../utils/booking'
+import { TARIFF_OPTIONS } from '../utils/booking'
 import type { BookingFormData } from '../types/booking.types'
 
 function BookingSuccessPage() {
@@ -8,17 +8,15 @@ function BookingSuccessPage() {
   const navigate = useNavigate()
   const booking = location.state?.booking as Partial<BookingFormData> | undefined
 
-  const checkInDate = booking?.checkInDate ? new Date(booking.checkInDate) : null
-  const totalPrice = booking?.totalPrice ?? 0
-  const prepayment = checkInDate ? calculatePrepayment(totalPrice, checkInDate) : Math.round(totalPrice * 0.5)
-  const holidayName = checkInDate ? getHolidayName(checkInDate) : null
-  const isFullPayment = prepayment === totalPrice
-
   useEffect(() => {
     if (!booking) navigate('/', { replace: true })
   }, [booking, navigate])
 
   if (!booking) return null
+
+  const contact = booking.contactType === 'telegram'
+    ? `@${booking.telegram}`
+    : booking.phone
 
   return (
     <div className="min-h-screen bg-luxury-gradient flex items-center justify-center p-4">
@@ -32,14 +30,14 @@ function BookingSuccessPage() {
         </div>
 
         <h1 className="text-2xl font-bold text-luxury-gold mb-1 uppercase tracking-wider">
-          Поздравляем!
+          Заявка отправлена!
         </h1>
         <p className="text-gray-400 text-sm mb-4">
-          Бронирование успешно отправлено
+          Администратор получил ваш чек и свяжется с вами для подтверждения
         </p>
 
         {/* Booking Details */}
-        <div className="bg-black/50 border border-yellow-600/30 rounded-lg px-4 py-2 mb-3 text-left">
+        <div className="bg-black/50 border border-yellow-600/30 rounded-lg px-4 py-2 mb-4 text-left">
           {booking.tariff && (
             <div className="flex justify-between py-1.5 border-b border-gray-800">
               <span className="text-gray-400 text-sm">Тариф</span>
@@ -64,37 +62,22 @@ function BookingSuccessPage() {
               </span>
             </div>
           )}
-          {(booking.telegram || booking.phone) && (
+          {contact && (
             <div className="flex justify-between py-1.5 border-b border-gray-800">
               <span className="text-gray-400 text-sm">Контакт</span>
-              <span className="text-white text-sm font-semibold">
-                {booking.contactType === 'telegram' ? `@${booking.telegram}` : booking.phone}
-              </span>
-            </div>
-          )}
-          <div className="flex justify-between py-1.5 border-b border-gray-800">
-            <span className="text-gray-400 text-sm">Итого</span>
-            <span className="text-white text-sm font-semibold">{totalPrice} BYN</span>
-          </div>
-          {holidayName && (
-            <div className="py-1.5 border-b border-gray-800">
-              <span className="text-yellow-600 text-xs">🎉 {holidayName} — полная предоплата</span>
+              <span className="text-white text-sm font-semibold">{contact}</span>
             </div>
           )}
           <div className="flex justify-between py-1.5">
-            <span className="text-gray-400 text-sm font-bold">Предоплата ({isFullPayment ? '100%' : '50%'})</span>
-            <span className="text-yellow-600 font-bold text-lg">{prepayment} BYN</span>
+            <span className="text-gray-400 text-sm">Итого</span>
+            <span className="text-white text-sm font-semibold">{booking.totalPrice ?? 0} BYN</span>
           </div>
         </div>
 
-        {/* Next Steps */}
         <div className="bg-gray-800 rounded-lg px-4 py-3 mb-4 text-left">
-          <p className="text-gray-400 text-xs mb-2 uppercase tracking-wider">Что дальше</p>
-          <ol className="text-gray-300 text-sm space-y-1">
-            <li className="flex gap-2"><span className="text-yellow-600 font-bold">1.</span><span>Проверяем детали бронирования</span></li>
-            <li className="flex gap-2"><span className="text-yellow-600 font-bold">2.</span><span>Менеджер свяжется с вами в течение <strong>15 минут</strong></span></li>
-            <li className="flex gap-2"><span className="text-yellow-600 font-bold">3.</span><span>Вы получите финальные инструкции</span></li>
-          </ol>
+          <p className="text-gray-300 text-sm">
+            Администратор проверит оплату и свяжется с вами по <strong>{contact}</strong> в течение <strong>15 минут</strong>.
+          </p>
         </div>
 
         <button

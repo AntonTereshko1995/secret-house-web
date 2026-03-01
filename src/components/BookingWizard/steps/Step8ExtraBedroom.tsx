@@ -16,8 +16,8 @@ function Step8ExtraBedroom({ formData, updateFormData, nextStep, prevStep }: Ste
   }
 
   return (
-    <div className="bg-gray-900 p-4 rounded-lg border border-yellow-600/30">
-      <h2 className="text-lg sm:text-xl font-bold text-luxury-gold mb-2 uppercase tracking-wider">
+    <div className="bg-zinc-900 p-4 rounded-xl border border-zinc-800 shadow-2xl">
+      <h2 className="text-lg sm:text-xl font-bold text-white mb-2 uppercase tracking-wider">
         Дополнительная спальня
       </h2>
       <p className="text-gray-400 mb-3 text-sm">
@@ -31,8 +31,8 @@ function Step8ExtraBedroom({ formData, updateFormData, nextStep, prevStep }: Ste
           className={`
             p-6 border-2 rounded-lg font-bold uppercase tracking-wider transition-all
             ${!hasExtraBedroom
-              ? 'border-yellow-600 bg-yellow-600/10 text-white'
-              : 'border-gray-700 text-gray-400 hover:border-yellow-600/50'}
+              ? 'border-amber-400 bg-amber-400/10 text-white'
+              : 'border-zinc-700 text-zinc-400 hover:border-zinc-500'}
           `}
         >
           <div className="text-2xl mb-2">❌</div>
@@ -43,8 +43,8 @@ function Step8ExtraBedroom({ formData, updateFormData, nextStep, prevStep }: Ste
           className={`
             p-6 border-2 rounded-lg font-bold uppercase tracking-wider transition-all
             ${hasExtraBedroom
-              ? 'border-yellow-600 bg-yellow-600/10 text-white'
-              : 'border-gray-700 text-gray-400 hover:border-yellow-600/50'}
+              ? 'border-amber-400 bg-amber-400/10 text-white'
+              : 'border-zinc-700 text-zinc-400 hover:border-zinc-500'}
           `}
         >
           <div className="text-2xl mb-2">🛏️</div>
@@ -53,10 +53,10 @@ function Step8ExtraBedroom({ formData, updateFormData, nextStep, prevStep }: Ste
       </div>
 
       {/* Extra Bedroom Details — always visible */}
-      <div className="bg-yellow-600/10 border border-yellow-600/30 p-4 rounded-lg mb-6">
+      <div className="bg-zinc-800/60 border border-zinc-700 p-4 rounded-lg mb-6">
         <div className="text-center">
           <div className="text-gray-400 text-sm mb-1">Стоимость дополнительной спальни:</div>
-          <div className="text-yellow-600 font-bold text-3xl">
+          <div className="text-amber-400 font-bold text-3xl">
             {extraBedroomPrice} BYN
           </div>
           <div className="text-gray-400 text-xs mt-3">
@@ -68,13 +68,13 @@ function Step8ExtraBedroom({ formData, updateFormData, nextStep, prevStep }: Ste
       <div className="flex gap-4">
         <button
           onClick={prevStep}
-          className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 uppercase tracking-wider transition-all"
+          className="flex-1 border border-zinc-600 bg-transparent hover:bg-zinc-800/50 text-zinc-300 font-bold py-2 px-4 rounded-xl uppercase tracking-wider transition-all"
         >
           Назад
         </button>
         <button
           onClick={handleNext}
-          className="flex-1 bg-yellow-600 hover:bg-yellow-500 text-black font-bold py-2 px-4 uppercase tracking-wider transition-all"
+          className="flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-black font-bold py-2 px-4 rounded-xl uppercase tracking-wider transition-all"
         >
           Далее
         </button>

@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import type { BookedPeriod } from '../../utils/booking'
-import { getOccupiedRangesForDay, MIN_BOOKING_HOURS } from '../../utils/booking'
+import { getOccupiedRangesForDay, MIN_BOOKING_HOURS, CLEANING_BUFFER_HOURS } from '../../utils/booking'
 
 const MONTHS = [
   'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
@@ -29,14 +29,27 @@ function buildGrid(year: number, month: number): (Date | null)[] {
   return cells
 }
 
+/** Slot minutes matching TimePicker: whole hours 00:00–23:00 plus 23:59 */
+const PICKER_SLOT_MINUTES = [
+  ...Array.from({ length: 24 }, (_, h) => h * 60),
+  23 * 60 + 59,
+]
+
 /** True if the day has at least one time slot available for check-in */
-function hasFreeCheckInSlot(date: Date, periods: BookedPeriod[], minDT?: Date): boolean {
-  for (let h = 0; h < 24; h++) {
-    for (const m of [0, 30]) {
-      const slot = new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, m)
-      if (minDT && slot < minDT) continue
-      if (!periods.some(p => slot >= p.checkIn && slot < p.checkOut)) return true
-    }
+function hasFreeCheckInSlot(date: Date, periods: BookedPeriod[], minDT?: Date, slots = PICKER_SLOT_MINUTES): boolean {
+  const minDurationMs = MIN_BOOKING_HOURS * 3600000
+  const cleaningBufferMs = CLEANING_BUFFER_HOURS * 3600000
+  for (const minutes of slots) {
+    const h = Math.floor(minutes / 60)
+    const m = minutes % 60
+    const slot = new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, m)
+    if (minDT && slot < minDT) continue
+    if (periods.some(p => slot >= p.checkIn && slot < p.checkOut)) continue
+    // 2-hour cleaning buffer after a booking ends
+    if (periods.some(p => slot >= p.checkOut && slot.getTime() - p.checkOut.getTime() < cleaningBufferMs)) continue
+    const minCheckOut = new Date(slot.getTime() + minDurationMs)
+    if (periods.some(p => p.checkIn > slot && p.checkIn <= minCheckOut)) continue
+    return true
   }
   return false
 }
@@ -44,12 +57,12 @@ function hasFreeCheckInSlot(date: Date, periods: BookedPeriod[], minDT?: Date): 
 /** True if the day has at least one valid check-out slot given checkInDT */
 function hasFreeCheckOutSlot(date: Date, checkInDT: Date, periods: BookedPeriod[]): boolean {
   const minMs = MIN_BOOKING_HOURS * 3600000
-  for (let h = 0; h < 24; h++) {
-    for (const m of [0, 30]) {
-      const slot = new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, m)
-      if (slot.getTime() - checkInDT.getTime() < minMs) continue
-      if (!periods.some(p => p.checkIn < slot && p.checkOut > checkInDT)) return true
-    }
+  for (const minutes of PICKER_SLOT_MINUTES) {
+    const h = Math.floor(minutes / 60)
+    const m = minutes % 60
+    const slot = new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, m)
+    if (slot.getTime() - checkInDT.getTime() < minMs) continue
+    if (!periods.some(p => p.checkIn <= slot && p.checkOut > checkInDT)) return true
   }
   return false
 }
@@ -64,6 +77,8 @@ interface CustomCalendarProps {
   checkInDateTime?: Date
   /** If set, only these weekdays are selectable (0=Sun, 1=Mon … 6=Sat) */
   allowedWeekdays?: number[]
+  /** If set, a check-in day is only selectable when at least one of these times is free */
+  allowedCheckInTimes?: string[]
 }
 
 export default function CustomCalendar({
@@ -73,8 +88,18 @@ export default function CustomCalendar({
   minDate,
   checkInDateTime,
   allowedWeekdays,
+  allowedCheckInTimes,
 }: CustomCalendarProps) {
   const today = useMemo(() => toDateOnly(new Date()), [])
+
+  /** Slot minutes to use for check-in availability test — filtered to allowed times when provided */
+  const checkInSlotMinutes = useMemo(() => {
+    if (!allowedCheckInTimes) return PICKER_SLOT_MINUTES
+    return allowedCheckInTimes.map(t => {
+      const [h, m] = t.split(':').map(Number)
+      return h * 60 + m
+    })
+  }, [allowedCheckInTimes])
   // In checkout mode always open on the check-in date's month so the user
   // sees their stay starting point and can pick a nearby checkout date.
   const initial = checkInDateTime
@@ -100,14 +125,14 @@ export default function CustomCalendar({
   }
 
   return (
-    <div className="bg-gray-900 border border-yellow-600/30 rounded-lg overflow-hidden select-none">
+    <div className="bg-zinc-900 border border-zinc-700 rounded-lg overflow-hidden select-none">
 
       {/* Month navigation */}
-      <div className="flex items-center justify-between px-2 py-1 bg-black/30 border-b border-yellow-600/20">
+      <div className="flex items-center justify-between px-2 py-1 bg-black/30 border-b border-zinc-800">
         <button
           onClick={goPrev}
           disabled={!canPrev}
-          className="w-6 h-6 flex items-center justify-center rounded text-xl leading-none text-yellow-600 hover:bg-gray-800 hover:text-yellow-400 disabled:text-gray-700 disabled:cursor-not-allowed transition-all"
+          className="w-6 h-6 flex items-center justify-center rounded text-xl leading-none text-amber-400 hover:bg-zinc-800 hover:text-amber-300 disabled:text-zinc-700 disabled:cursor-not-allowed transition-all"
           aria-label="Предыдущий месяц"
         >
           ‹
@@ -117,7 +142,7 @@ export default function CustomCalendar({
         </span>
         <button
           onClick={goNext}
-          className="w-6 h-6 flex items-center justify-center rounded text-xl leading-none text-yellow-600 hover:bg-gray-800 hover:text-yellow-400 transition-all"
+          className="w-6 h-6 flex items-center justify-center rounded text-xl leading-none text-amber-400 hover:bg-zinc-800 hover:text-amber-300 transition-all"
           aria-label="Следующий месяц"
         >
           ›
@@ -125,7 +150,7 @@ export default function CustomCalendar({
       </div>
 
       {/* Weekday headers */}
-      <div className="grid grid-cols-7 border-b border-yellow-600/10">
+      <div className="grid grid-cols-7 border-b border-zinc-800">
         {WEEKDAYS.map(d => (
           <div key={d} className="py-0.5 text-center text-[10px] text-gray-600 font-medium uppercase">
             {d}
@@ -155,7 +180,7 @@ export default function CustomCalendar({
             if (minDate && toDateOnly(date) < toDateOnly(minDate)) {
               selectable = false
             } else {
-              selectable = hasFreeCheckInSlot(date, bookedPeriods, minDate)
+              selectable = hasFreeCheckInSlot(date, bookedPeriods, minDate, checkInSlotMinutes)
             }
           }
 
@@ -172,33 +197,37 @@ export default function CustomCalendar({
                 'h-8 rounded-sm pt-0.5 text-[11px] font-medium',
                 'transition-all duration-100',
                 isSelected
-                  ? 'bg-yellow-600 text-black font-bold ring-1 ring-yellow-400 ring-offset-1 ring-offset-gray-900'
+                  ? 'bg-amber-400 text-black font-bold ring-1 ring-amber-300 ring-offset-1 ring-offset-zinc-900'
                   : selectable
                     ? [
                         'cursor-pointer',
                         hasOccupation
-                          ? 'bg-red-950/30 text-red-100 hover:bg-red-900/40'
-                          : 'text-white hover:bg-gray-700',
-                        isToday ? 'ring-1 ring-yellow-600/50' : '',
+                          ? 'bg-red-800/40 text-red-100 hover:bg-red-700/50'
+                          : 'text-white hover:bg-zinc-700',
+                        isToday ? 'ring-1 ring-amber-400/50' : '',
                       ].filter(Boolean).join(' ')
-                    : 'text-gray-600 cursor-not-allowed bg-red-950/50',
+                    : 'text-red-800/70 cursor-not-allowed bg-red-900/55',
               ].filter(Boolean).join(' ')}
             >
               <span className="leading-none">{date.getDate()}</span>
 
-              {/* Occupation bar */}
-              {hasOccupation && (
-                <div className="absolute bottom-0.5 left-0.5 right-0.5 h-[3px] rounded-full overflow-hidden bg-gray-900">
-                  {occupied.map((r, ri) => (
-                    <div
-                      key={ri}
-                      className="absolute h-full bg-red-500"
-                      style={{
-                        left: `${(r.start / 24) * 100}%`,
-                        width: `${((r.end - r.start) / 24) * 100}%`,
-                      }}
-                    />
-                  ))}
+              {/* Occupation bar — full red when blocked, proportional when partially occupied */}
+              {(!selectable || hasOccupation) && (
+                <div className="absolute bottom-0.5 left-0.5 right-0.5 h-[5px] rounded-full overflow-hidden bg-zinc-950">
+                  {!selectable ? (
+                    <div className="absolute inset-0 bg-red-500" />
+                  ) : (
+                    occupied.map((r, ri) => (
+                      <div
+                        key={ri}
+                        className="absolute h-full bg-red-500"
+                        style={{
+                          left: `${(r.start / 24) * 100}%`,
+                          width: `${((r.end - r.start) / 24) * 100}%`,
+                        }}
+                      />
+                    ))
+                  )}
                 </div>
               )}
             </button>
@@ -207,19 +236,19 @@ export default function CustomCalendar({
       </div>
 
       {/* Legend */}
-      <div className="flex items-center gap-3 px-2 py-1 border-t border-yellow-600/10 text-[10px] text-gray-500">
+      <div className="flex items-center gap-3 px-2 py-1 border-t border-zinc-800 text-[10px] text-zinc-500">
         <div className="flex items-center gap-1">
-          <div className="w-2.5 h-2.5 rounded-sm bg-red-950/40" />
+          <div className="w-2.5 h-2.5 rounded-sm bg-red-800/40" />
           <span>Частично занято</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-4 h-[3px] rounded-full overflow-hidden bg-gray-900 relative">
+          <div className="w-4 h-[5px] rounded-full overflow-hidden bg-zinc-950 relative">
             <div className="absolute inset-0 bg-red-500" />
           </div>
           <span>Занятые часы</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-2.5 h-2.5 rounded-sm bg-red-950/60" />
+          <div className="w-2.5 h-2.5 rounded-sm bg-red-900/55" />
           <span>Недоступно</span>
         </div>
       </div>

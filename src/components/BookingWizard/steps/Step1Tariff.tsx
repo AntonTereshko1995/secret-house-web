@@ -29,8 +29,8 @@ function Step1Tariff({ formData, updateFormData, nextStep }: StepProps) {
   }
 
   return (
-    <div className="bg-gray-900 p-4 rounded-lg border border-yellow-600/30">
-      <h2 className="text-lg sm:text-xl font-bold text-luxury-gold mb-3 uppercase tracking-wider">
+    <div className="bg-zinc-900 p-4 rounded-xl border border-zinc-800 shadow-2xl">
+      <h2 className="text-lg sm:text-xl font-bold text-white mb-3 uppercase tracking-wider">
         Выберите тариф
       </h2>
 
@@ -42,8 +42,8 @@ function Step1Tariff({ formData, updateFormData, nextStep }: StepProps) {
             className={`
               p-3 border rounded-lg cursor-pointer transition-all duration-200 flex flex-col justify-between
               ${selected === tariff.id
-                ? 'border-yellow-600 bg-yellow-600/10'
-                : 'border-gray-700 hover:border-yellow-600/40 hover:bg-gray-800'}
+                ? 'border-amber-400 bg-amber-400/10'
+                : 'border-gray-700 hover:border-zinc-600 hover:bg-zinc-800'}
             `}
           >
             <div className="flex justify-between items-start gap-1 mb-1">
@@ -51,7 +51,7 @@ function Step1Tariff({ formData, updateFormData, nextStep }: StepProps) {
               <div
                 className={`
                   w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0
-                  ${selected === tariff.id ? 'border-yellow-600 bg-yellow-600' : 'border-gray-600'}
+                  ${selected === tariff.id ? 'border-amber-400 bg-amber-400' : 'border-gray-600'}
                 `}
               >
                 {selected === tariff.id && (
@@ -59,14 +59,14 @@ function Step1Tariff({ formData, updateFormData, nextStep }: StepProps) {
                 )}
               </div>
             </div>
-            <p className="text-yellow-600 font-bold text-sm">{tariff.unit}</p>
+            <p className="text-amber-400 font-bold text-sm">{tariff.unit}</p>
           </div>
         ))}
       </div>
 
       {/* Gift Certificate Code Input */}
       {selected === 'gift-certificate' && (
-        <div className="mb-4 bg-yellow-600/10 border border-yellow-600/30 p-3 rounded-lg">
+        <div className="mb-4 bg-zinc-800/60 border border-zinc-700 p-3 rounded-lg">
           <label className="block text-white font-semibold mb-1.5 uppercase text-xs tracking-wider">
             Код сертификата *
           </label>
@@ -75,7 +75,7 @@ function Step1Tariff({ formData, updateFormData, nextStep }: StepProps) {
             value={giftCode}
             onChange={(e) => setGiftCode(e.target.value.toUpperCase())}
             placeholder="XXXXX-XXXXX-XXXXX"
-            className="w-full bg-black border border-gray-700 focus:border-yellow-600 text-white px-3 py-2 rounded outline-none transition-colors uppercase tracking-wider font-mono text-center text-sm"
+            className="w-full bg-black border border-gray-700 focus:border-amber-400 text-white px-3 py-2 rounded outline-none transition-colors uppercase tracking-wider font-mono text-center text-sm"
             maxLength={20}
           />
         </div>
@@ -84,7 +84,7 @@ function Step1Tariff({ formData, updateFormData, nextStep }: StepProps) {
       <button
         onClick={handleNext}
         disabled={!selected || (selected === 'gift-certificate' && !giftCode.trim())}
-        className="w-full bg-yellow-600 hover:bg-yellow-500 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed text-black font-bold py-2 px-4 uppercase tracking-wider transition-all"
+        className="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 disabled:opacity-40 disabled:cursor-not-allowed text-black font-bold py-2 px-4 rounded-xl uppercase tracking-wider transition-all"
       >
         Далее
       </button>

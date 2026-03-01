@@ -17,8 +17,8 @@ function Step7Bedroom({ formData, updateFormData, nextStep, prevStep }: StepProp
   }
 
   return (
-    <div className="bg-gray-900 p-4 rounded-lg border border-yellow-600/30">
-      <h2 className="text-lg sm:text-xl font-bold text-luxury-gold mb-2 uppercase tracking-wider">
+    <div className="bg-zinc-900 p-4 rounded-xl border border-zinc-800 shadow-2xl">
+      <h2 className="text-lg sm:text-xl font-bold text-white mb-2 uppercase tracking-wider">
         Выбор спальни
       </h2>
       <p className="text-gray-400 mb-3 text-sm">
@@ -33,8 +33,8 @@ function Step7Bedroom({ formData, updateFormData, nextStep, prevStep }: StepProp
             className={`
               p-6 border-2 rounded-lg cursor-pointer transition-all duration-300
               ${bedroomType === bedroom.id
-                ? 'border-yellow-600 bg-yellow-600/10 shadow-lg shadow-yellow-600/20'
-                : 'border-gray-700 hover:border-yellow-600/50 hover:bg-gray-800'}
+                ? 'border-amber-400 bg-amber-400/10 shadow-lg shadow-amber-400/20'
+                : 'border-gray-700 hover:border-zinc-500 hover:bg-zinc-800'}
             `}
           >
             <div className="flex justify-between items-start mb-3">
@@ -42,7 +42,7 @@ function Step7Bedroom({ formData, updateFormData, nextStep, prevStep }: StepProp
               <div
                 className={`
                   w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all
-                  ${bedroomType === bedroom.id ? 'border-yellow-600 bg-yellow-600' : 'border-gray-600'}
+                  ${bedroomType === bedroom.id ? 'border-amber-400 bg-amber-400' : 'border-gray-600'}
                 `}
               >
                 {bedroomType === bedroom.id && (
@@ -58,14 +58,14 @@ function Step7Bedroom({ formData, updateFormData, nextStep, prevStep }: StepProp
       <div className="flex gap-4">
         <button
           onClick={prevStep}
-          className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 uppercase tracking-wider transition-all"
+          className="flex-1 border border-zinc-600 bg-transparent hover:bg-zinc-800/50 text-zinc-300 font-bold py-2 px-4 rounded-xl uppercase tracking-wider transition-all"
         >
           Назад
         </button>
         <button
           onClick={handleNext}
           disabled={!bedroomType}
-          className="flex-1 bg-yellow-600 hover:bg-yellow-500 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed text-black font-bold py-2 px-4 uppercase tracking-wider transition-all"
+          className="flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 disabled:opacity-40 disabled:cursor-not-allowed text-black font-bold py-2 px-4 rounded-xl uppercase tracking-wider transition-all"
         >
           Далее
         </button>

@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { validatePromocode } from '../../../utils/booking'
+import { useState, useMemo } from 'react'
+import { validatePromocode, calculateTotalPrice } from '../../../utils/booking'
 import type { BookingFormData } from '../../../types/booking.types'
 
 interface StepProps {
@@ -15,24 +15,41 @@ function Step6Promocode({ formData, updateFormData, nextStep, prevStep }: StepPr
   const [validationResult, setValidationResult] = useState<{
     valid: boolean
     discount: number
+    discountPercentage: number
     message: string
   } | null>(formData.promocode && formData.promocodeValid !== undefined ? {
     valid: formData.promocodeValid,
     discount: formData.promocodeDiscount || 0,
+    discountPercentage: 0,
     message: formData.promocodeValid ? `Скидка ${formData.promocodeDiscount} BYN` : 'Промокод недействителен'
   } : null)
+
+  // Current total before discount (all add-ons already selected by this step)
+  const currentTotal = useMemo(() => {
+    const pricing = calculateTotalPrice({ ...formData, promocodeDiscount: 0 })
+    return pricing.totalPrice
+  }, [formData])
 
   const handleValidate = async () => {
     if (!promocode.trim()) return
 
     setIsValidating(true)
     try {
-      const result = await validatePromocode(promocode)
-      setValidationResult(result)
+      const result = await validatePromocode(
+        promocode,
+        formData.checkInDate ? new Date(formData.checkInDate) : undefined,
+        formData.tariff,
+      )
+      // Compute the actual BYN discount from the percentage and current total
+      const discountAmount = result.valid && result.discountPercentage > 0
+        ? Math.round(currentTotal * result.discountPercentage / 100)
+        : result.discount
+      setValidationResult({ ...result, discount: discountAmount })
     } catch {
       setValidationResult({
         valid: false,
         discount: 0,
+        discountPercentage: 0,
         message: 'Ошибка проверки промокода'
       })
     } finally {
@@ -50,8 +67,8 @@ function Step6Promocode({ formData, updateFormData, nextStep, prevStep }: StepPr
   }
 
   return (
-    <div className="bg-gray-900 p-4 rounded-lg border border-yellow-600/30">
-      <h2 className="text-lg sm:text-xl font-bold text-luxury-gold mb-2 uppercase tracking-wider">
+    <div className="bg-zinc-900 p-4 rounded-xl border border-zinc-800 shadow-2xl">
+      <h2 className="text-lg sm:text-xl font-bold text-white mb-2 uppercase tracking-wider">
         Промокод
       </h2>
       <p className="text-gray-400 mb-3 text-sm">
@@ -59,7 +76,7 @@ function Step6Promocode({ formData, updateFormData, nextStep, prevStep }: StepPr
       </p>
 
       <div className="mb-6">
-        <div className="flex gap-2 mb-4">
+        <div className="flex flex-col sm:flex-row gap-2 mb-4">
           <input
             type="text"
             value={promocode}
@@ -68,13 +85,13 @@ function Step6Promocode({ formData, updateFormData, nextStep, prevStep }: StepPr
               setValidationResult(null)
             }}
             placeholder="ВВЕДИТЕ ПРОМОКОД"
-            className="flex-1 bg-black border-2 border-gray-700 focus:border-yellow-600 text-white px-4 py-3 rounded-lg outline-none transition-colors uppercase tracking-wider"
+            className="flex-1 bg-black border-2 border-gray-700 focus:border-amber-400 text-white px-4 py-3 rounded-lg outline-none transition-colors uppercase tracking-wider"
             disabled={isValidating}
           />
           <button
             onClick={handleValidate}
             disabled={!promocode.trim() || isValidating}
-            className="bg-gray-800 hover:bg-yellow-600 hover:text-black disabled:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed text-white font-bold px-6 py-3 rounded-lg uppercase tracking-wider transition-all"
+            className="w-full sm:w-auto bg-gray-800 hover:bg-amber-400 hover:text-black disabled:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed text-white font-bold px-6 py-3 rounded-lg uppercase tracking-wider transition-all"
           >
             {isValidating ? 'Проверка...' : 'Применить'}
           </button>
@@ -104,9 +121,21 @@ function Step6Promocode({ formData, updateFormData, nextStep, prevStep }: StepPr
                 {validationResult.message}
               </div>
               {validationResult.valid && (
-                <div className="text-gray-400 text-sm mt-1">
-                  Промокод "{promocode}" успешно применен
-                </div>
+                <>
+                  <div className="text-gray-400 text-sm mt-1">
+                    Промокод «{promocode}» успешно применён
+                  </div>
+                  {validationResult.discountPercentage > 0 && (
+                    <div className="flex items-center gap-3 mt-2">
+                      <span className="text-gray-500 text-xs uppercase tracking-wider">
+                        Скидка {validationResult.discountPercentage}%
+                      </span>
+                      <span className="text-green-400 font-bold text-lg">
+                        −{validationResult.discount} BYN
+                      </span>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>
@@ -117,13 +146,13 @@ function Step6Promocode({ formData, updateFormData, nextStep, prevStep }: StepPr
       <div className="flex gap-4">
         <button
           onClick={prevStep}
-          className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 uppercase tracking-wider transition-all"
+          className="flex-1 border border-zinc-600 bg-transparent hover:bg-zinc-800/50 text-zinc-300 font-bold py-2 px-4 rounded-xl uppercase tracking-wider transition-all"
         >
           Назад
         </button>
         <button
           onClick={handleNext}
-          className="flex-1 bg-yellow-600 hover:bg-yellow-500 text-black font-bold py-2 px-4 uppercase tracking-wider transition-all"
+          className="flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-black font-bold py-2 px-4 rounded-xl uppercase tracking-wider transition-all"
         >
           {validationResult?.valid ? 'Далее со скидкой' : 'Далее'}
         </button>
