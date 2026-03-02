@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import StepIndicator from './StepIndicator'
 import { STEP_REGISTRY } from './stepRegistry'
@@ -6,6 +6,7 @@ import { useConditionalNavigation, cleanIncompatibleData } from './navigationLog
 import { clearFormFromLocalStorage, submitBookingForm } from '../../utils/booking'
 import { uploadReceipt } from '../../services/api'
 import { useBookedPeriods } from '../../hooks/useBookedPeriods'
+import { logger } from '../../services/logger'
 import type { BookingFormData, StepProps } from '../../types/booking.types'
 
 function BookingWizard() {
@@ -41,6 +42,16 @@ function BookingWizard() {
     nextStepId,
     prevStepId
   } = useConditionalNavigation(STEP_REGISTRY, formData, currentStepId)
+
+  // Log step changes
+  useEffect(() => {
+    logger.info('booking_step', {
+      stepId: currentStepId,
+      stepIndex: currentStepIndex + 1,
+      totalSteps,
+      tariff: formData.tariff,
+    })
+  }, [currentStepId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // UPDATE: Form data updater with tariff change detection
   const updateFormData = (data: Partial<BookingFormData>) => {
@@ -87,11 +98,18 @@ function BookingWizard() {
         await uploadReceipt(bookingId, finalData.receiptFile)
       }
       clearFormFromLocalStorage()
+      logger.info('booking_flow_complete', { bookingId })
       navigate('/booking/success', {
         state: { booking: finalData, bookingId },
         replace: true
       })
     } catch (error) {
+      logger.error('booking_submission_error', {
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        stepId: currentStepId,
+        tariff: formData.tariff,
+      })
       console.error('Booking submission error:', error)
       alert('Ошибка при отправке бронирования. Пожалуйста, попробуйте еще раз.')
     }
@@ -156,6 +174,7 @@ function BookingWizard() {
           <button
             onClick={() => {
               if (confirm('Вы уверены, что хотите выйти?')) {
+                logger.info('booking_wizard_exit', { stepId: currentStepId, tariff: formData.tariff })
                 navigate('/')
               }
             }}

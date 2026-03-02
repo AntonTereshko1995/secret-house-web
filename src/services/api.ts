@@ -3,6 +3,8 @@
  * Base URL is configured via VITE_API_URL environment variable.
  */
 
+import { logger } from './logger'
+
 const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
 
 // ---------------------------------------------------------------------------
@@ -69,14 +71,19 @@ async function apiGet<T>(path: string, params?: Record<string, string>): Promise
   if (params) {
     Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v))
   }
+  logger.debug('api_request', { method: 'GET', path })
   const response = await fetch(url.toString())
   if (!response.ok) {
-    throw new Error(`API error ${response.status}: ${await response.text()}`)
+    const text = await response.text()
+    logger.error('api_error', { method: 'GET', path, status: response.status, body: text })
+    throw new Error(`API error ${response.status}: ${text}`)
   }
+  logger.debug('api_response', { method: 'GET', path, status: response.status })
   return response.json() as Promise<T>
 }
 
 async function apiPost<T>(path: string, body: unknown): Promise<T> {
+  logger.debug('api_request', { method: 'POST', path })
   const response = await fetch(`${API_BASE}${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -84,8 +91,11 @@ async function apiPost<T>(path: string, body: unknown): Promise<T> {
   })
   if (!response.ok) {
     const detail = await response.json().catch(() => ({ detail: response.statusText }))
-    throw new Error(detail?.detail ?? `API error ${response.status}`)
+    const message = detail?.detail ?? `API error ${response.status}`
+    logger.error('api_error', { method: 'POST', path, status: response.status, detail: message })
+    throw new Error(message)
   }
+  logger.debug('api_response', { method: 'POST', path, status: response.status })
   return response.json() as Promise<T>
 }
 
@@ -102,10 +112,12 @@ export async function fetchBookedPeriods(
   fromDate: string,
   toDate: string,
 ): Promise<BookedPeriodDTO[]> {
-  return apiGet<BookedPeriodDTO[]>('/api/bookings/periods', {
+  const result = await apiGet<BookedPeriodDTO[]>('/api/bookings/periods', {
     from_date: fromDate,
     to_date: toDate,
   })
+  logger.info('booked_periods_loaded', { count: result.length, fromDate, toDate })
+  return result
 }
 
 /**
@@ -115,10 +127,16 @@ export async function checkAvailability(
   startDatetime: Date,
   endDatetime: Date,
 ): Promise<AvailabilityResponse> {
-  return apiPost<AvailabilityResponse>('/api/bookings/check-availability', {
+  const result = await apiPost<AvailabilityResponse>('/api/bookings/check-availability', {
     startDatetime: startDatetime.toISOString(),
     endDatetime: endDatetime.toISOString(),
   })
+  logger.info('availability_checked', {
+    available: result.available,
+    checkIn: startDatetime.toISOString(),
+    checkOut: endDatetime.toISOString(),
+  })
+  return result
 }
 
 /**
@@ -129,11 +147,17 @@ export async function validatePromocodeApi(
   bookingDate: string,
   tariff: string,
 ): Promise<PromoValidateResponse> {
-  return apiPost<PromoValidateResponse>('/api/promocodes/validate', {
+  const result = await apiPost<PromoValidateResponse>('/api/promocodes/validate', {
     code,
     bookingDate,
     tariff,
   })
+  logger.info('promocode_validated', {
+    valid: result.valid,
+    discount: result.discount,
+    tariff,
+  })
+  return result
 }
 
 /**
@@ -142,13 +166,27 @@ export async function validatePromocodeApi(
 export async function submitBooking(
   payload: BookingCreatePayload,
 ): Promise<BookingCreateResponse> {
-  return apiPost<BookingCreateResponse>('/api/bookings', payload)
+  logger.info('booking_submit', {
+    tariff: payload.tariff,
+    guestCount: payload.guestCount,
+    totalPrice: payload.totalPrice,
+    hasPhotoshoot: payload.hasPhotoshoot,
+    hasSauna: payload.hasSauna,
+    hasExtraBedroom: payload.hasExtraBedroom,
+    hasSecretRoom: payload.hasSecretRoom,
+    needsTransfer: payload.needsTransfer,
+    contactType: payload.contactType,
+  })
+  const result = await apiPost<BookingCreateResponse>('/api/bookings', payload)
+  logger.info('booking_created', { bookingId: result.bookingId })
+  return result
 }
 
 /**
  * Upload payment receipt file and notify admin via Telegram.
  */
 export async function uploadReceipt(bookingId: number, file: File): Promise<void> {
+  logger.info('receipt_upload_start', { bookingId, fileSize: file.size, fileType: file.type })
   const formData = new FormData()
   formData.append('file', file)
 
@@ -158,6 +196,9 @@ export async function uploadReceipt(bookingId: number, file: File): Promise<void
   })
 
   if (!response.ok) {
+    logger.error('receipt_upload_error', { bookingId, status: response.status })
     throw new Error(`Receipt upload failed: ${response.status}`)
   }
+
+  logger.info('receipt_upload_success', { bookingId })
 }

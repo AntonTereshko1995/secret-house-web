@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { fetchBookedPeriods, type BookedPeriodDTO } from '../services/api'
+import { logger } from '../services/logger'
 import type { BookedPeriod } from '../utils/booking'
 
 /**
@@ -53,7 +54,7 @@ export function useBookedPeriods(): UseBookedPeriodsResult {
         if (cancelled) return
         const message = err instanceof Error ? err.message : 'Ошибка загрузки занятых дат'
         setError(message)
-        console.error('[useBookedPeriods]', message)
+        logger.error('booked_periods_fetch_error', { message })
         // Keep periods empty — calendar remains functional, just shows nothing booked
         setPeriods([])
       })
