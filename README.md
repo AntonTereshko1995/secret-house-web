@@ -41,13 +41,13 @@ VITE_LOCATION_LON=27.300385
 VITE_LOCATION_ADDRESS=Минск, Беларусь
 
 # Telegram bot username (without @)
-VITE_BOT_USERNAME=the_secret_house_booking_bot
+VITE_BOT_USERNAME=BOT
 
 # Social media and contacts
-VITE_TELEGRAM_ADMIN=the_secret_house
-VITE_TELEGRAM_CHANNEL=sekret_blr
+VITE_TELEGRAM_ADMIN=admin-chanel
+VITE_TELEGRAM_CHANNEL=test_chanel
 VITE_INSTAGRAM_USERNAME=private_sekret_blr
-VITE_PHONE_NUMBER=+375257908378
+VITE_PHONE_NUMBER=+3751111111
 ```
 
 See `.env.example` for a template.
