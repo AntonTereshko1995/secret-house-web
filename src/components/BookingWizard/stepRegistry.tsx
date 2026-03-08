@@ -105,11 +105,13 @@ export const STEP_REGISTRY: StepConfig[] = [
     shortTitle: 'Сауна',
     shouldShow: (data) => {
       const tariff = data.tariff
-      // Show for daily-couple, daily-3plus, 12h-standard, work-standard
-      return tariff === 'daily-couple' ||
+      const supportsSauna = tariff === 'daily-couple' ||
              tariff === 'daily-3plus' ||
              tariff === '12h-standard' ||
              tariff === 'work-standard'
+      // Skip if option is already covered by the gift certificate
+      if (data.giftId && data.giftHasSauna) return false
+      return supportsSauna
     }
   },
   {
@@ -120,8 +122,10 @@ export const STEP_REGISTRY: StepConfig[] = [
     shortTitle: 'Спальня',
     shouldShow: (data) => {
       const tariff = data.tariff
-      // Show only for 12h-standard and work-standard
-      return tariff === '12h-standard' || tariff === 'work-standard'
+      if (!tariff || (tariff !== '12h-standard' && tariff !== 'work-standard')) return false
+      // Skip if gift certificate already includes both bedrooms
+      if (data.giftId && data.giftHasAdditionalBedroom) return false
+      return true
     },
     requiredFields: ['bedroomType']
   },
@@ -133,8 +137,10 @@ export const STEP_REGISTRY: StepConfig[] = [
     shortTitle: 'Доп спальня',
     shouldShow: (data) => {
       const tariff = data.tariff
-      // Show only for 12h-standard and work-standard
-      return tariff === '12h-standard' || tariff === 'work-standard'
+      const supportsExtraBedroom = tariff === '12h-standard' || tariff === 'work-standard'
+      // Skip if option is already covered by the gift certificate
+      if (data.giftId && data.giftHasAdditionalBedroom) return false
+      return supportsExtraBedroom
     }
   },
   {
@@ -145,8 +151,10 @@ export const STEP_REGISTRY: StepConfig[] = [
     shortTitle: 'Секрет',
     shouldShow: (data) => {
       const tariff = data.tariff
-      // Show only for 12h-standard and work-standard
-      return tariff === '12h-standard' || tariff === 'work-standard'
+      const supportsSecretRoom = tariff === '12h-standard' || tariff === 'work-standard'
+      // Skip if option is already covered by the gift certificate
+      if (data.giftId && data.giftHasSecretRoom) return false
+      return supportsSecretRoom
     }
   },
   {
@@ -163,7 +171,7 @@ export const STEP_REGISTRY: StepConfig[] = [
     component: Step6Promocode,
     title: 'Промокод',
     shortTitle: 'Промокод',
-    shouldShow: () => true  // Always show
+    shouldShow: (data) => !data.giftId
   },
   {
     id: 'summary',
@@ -189,6 +197,12 @@ export const STEP_REGISTRY: StepConfig[] = [
     component: Step11Receipt,
     title: 'Подтверждение оплаты',
     shortTitle: 'Чек',
-    shouldShow: () => true,  // Always show
+    shouldShow: (data) => {
+      if (!data.giftId) return true
+      // Hide receipt if gift fully covers the booking
+      const totalPrice = data.totalPrice ?? 0
+      const giftPrice = data.giftPrice ?? 0
+      return totalPrice > giftPrice
+    },
   },
 ]

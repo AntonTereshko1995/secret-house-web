@@ -1,6 +1,6 @@
 import { Logtail } from '@logtail/browser'
 
-const SOURCE_TOKEN = 'E9KJcD2hEDXpbG2y5ipUxRhH'
+const SOURCE_TOKEN = import.meta.env.VITE_SOURCE_TOKEN as string
 const APP_ID = 'tsh_web'
 const isDev = import.meta.env.DEV
 

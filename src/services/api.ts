@@ -38,11 +38,23 @@ export interface BookingCreateResponse {
 // Request types
 // ---------------------------------------------------------------------------
 
+export interface GiftValidateResponse {
+  valid: boolean
+  message: string
+  giftId?: number
+  tariff?: string
+  hasSauna?: boolean
+  hasSecretRoom?: boolean
+  hasAdditionalBedroom?: boolean
+  price?: number
+}
+
 export interface BookingCreatePayload {
   checkInDate: string         // ISO datetime
   checkOutDate: string        // ISO datetime
   tariff: string
   giftCertificateCode?: string
+  giftId?: number
   guestCount: number
   hasPhotoshoot: boolean
   hasSauna: boolean
@@ -180,6 +192,13 @@ export async function submitBooking(
   const result = await apiPost<BookingCreateResponse>('/api/bookings', payload)
   logger.info('booking_created', { bookingId: result.bookingId })
   return result
+}
+
+/**
+ * Validate a gift certificate code.
+ */
+export async function validateGiftCode(code: string): Promise<GiftValidateResponse> {
+  return apiGet<GiftValidateResponse>('/api/gifts/validate', { code })
 }
 
 /**

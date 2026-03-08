@@ -144,8 +144,8 @@ export function getUnavailableCheckOutSlots(
       unavailable.add(str)
       continue
     }
-    // The next booking starts within 2 hours of this checkout — not enough time to clean
-    // (p.checkIn > slot ensures we only look at bookings AFTER the proposed checkout)
+    // The next booking starts within cleaning buffer (2h) of this checkout — block it.
+    // Last available checkout = next booking start - 2h (matches bot logic).
     if (periods.some(p => p.checkIn > slot && p.checkIn.getTime() - slot.getTime() < cleaningBufferMs)) {
       unavailable.add(str)
     }
@@ -907,6 +907,7 @@ export async function submitBookingForm(
     ).toISOString(),
     tariff: formData.tariff,
     giftCertificateCode: formData.giftCertificateCode,
+    giftId: formData.giftId,
     guestCount: formData.guestCount,
     hasPhotoshoot: formData.hasPhotoshoot ?? false,
     hasSauna: formData.hasSauna ?? false,
@@ -919,6 +920,9 @@ export async function submitBookingForm(
     needsTransfer: formData.needsTransfer ?? false,
     transferAddress: formData.transferAddress,
     totalPrice: formData.totalPrice,
+    prepaymentPrice: formData.giftId
+      ? Math.max(0, (formData.totalPrice ?? 0) - (formData.giftPrice ?? 0))
+      : undefined,
     contactType: formData.contactType,
     telegram: formData.telegram,
     phone: formData.phone,

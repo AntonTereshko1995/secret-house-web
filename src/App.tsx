@@ -6,6 +6,7 @@ import BookingRedirect from './pages/BookingRedirect'
 import BookingWizardPage from './pages/BookingWizardPage'
 import BookingSuccessPage from './pages/BookingSuccessPage'
 import FullGallery from './components/FullGallery'
+import LoadingOverlay from './components/LoadingOverlay/LoadingOverlay'
 import type { RoomCategory } from './types/gallery.types'
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
 
   return (
     <>
+      <LoadingOverlay />
       <div className="min-h-screen bg-gray-900">
         <Routes>
           <Route path="/" element={<HomePage onOpenGallery={openGallery} />} />

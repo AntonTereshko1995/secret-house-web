@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
 import { logger } from './services/logger'
+import { LoadingProvider } from './context/LoadingContext'
 
 // Global error handlers
 window.addEventListener('error', (event) => {
@@ -33,7 +34,9 @@ logger.info('app_start', { url: window.location.href })
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <LoadingProvider>
+        <App />
+      </LoadingProvider>
     </BrowserRouter>
   </StrictMode>,
 )

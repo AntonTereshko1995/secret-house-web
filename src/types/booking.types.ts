@@ -49,6 +49,15 @@ export interface BookingFormData {
   // Step 1: Tariff
   tariff: TariffType
   giftCertificateCode?: string
+  /** DB id of the validated gift certificate */
+  giftId?: number
+  /** Actual tariff encoded in the certificate */
+  giftTariff?: TariffType
+  /** Price already paid for the certificate (used to compute doplate) */
+  giftPrice?: number
+  giftHasSauna?: boolean
+  giftHasSecretRoom?: boolean
+  giftHasAdditionalBedroom?: boolean
 
   // Step 2: Check-in
   checkInDate: Date

@@ -10,9 +10,13 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
 
   const checkInDate = formData.checkInDate ? new Date(formData.checkInDate) : null
   const totalPrice = formData.totalPrice ?? 0
-  const prepayment = checkInDate ? calculatePrepayment(totalPrice, checkInDate) : Math.round(totalPrice * 0.5)
   const holidayName = checkInDate ? getHolidayName(checkInDate) : null
-  const isFullPayment = prepayment === totalPrice
+  const giftCovered = formData.giftId && formData.giftPrice !== undefined ? formData.giftPrice : 0
+  const prepayment = giftCovered > 0
+    ? Math.max(0, totalPrice - giftCovered)
+    : checkInDate ? calculatePrepayment(totalPrice, checkInDate) : Math.round(totalPrice * 0.5)
+  const isFullyCoveredByGift = giftCovered > 0 && prepayment === 0
+  const isFullPayment = isFullyCoveredByGift || prepayment === totalPrice
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
@@ -39,7 +43,7 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
   })
 
   const handleSubmit = async () => {
-    if (!receiptFile) {
+    if (!receiptFile && !isFullyCoveredByGift) {
       alert('Пожалуйста, загрузите чек или документ об оплате')
       return
     }
@@ -70,7 +74,7 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
 
       {/* Price */}
       <div className="bg-black/60 border border-zinc-800 rounded-lg px-4 py-2 mb-3">
-        {holidayName && (
+        {holidayName && !isFullyCoveredByGift && (
           <div className="text-amber-400 text-xs mb-1.5">
             🎉 {holidayName} — требуется полная предоплата
           </div>
@@ -79,12 +83,24 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
           <span className="text-gray-400 text-sm">Итого:</span>
           <span className="text-gray-300 text-sm font-semibold">{totalPrice} BYN</span>
         </div>
-        <div className="flex justify-between items-center mt-1">
-          <span className="text-gray-400 text-sm">
-            Предоплата ({isFullPayment ? '100%' : '50%'}):
-          </span>
-          <span className="text-amber-400 font-bold text-xl">{prepayment} BYN</span>
-        </div>
+        {giftCovered > 0 && (
+          <div className="flex justify-between items-center mt-1">
+            <span className="text-gray-400 text-sm">Сертификат покрывает:</span>
+            <span className="text-green-400 text-sm font-semibold">−{giftCovered} BYN</span>
+          </div>
+        )}
+        {isFullyCoveredByGift ? (
+          <div className="mt-2 text-green-400 text-sm font-semibold text-center">
+            ✓ Бронирование полностью покрыто сертификатом
+          </div>
+        ) : (
+          <div className="flex justify-between items-center mt-1">
+            <span className="text-gray-400 text-sm">
+              {giftCovered > 0 ? 'Доплата:' : `Предоплата (${isFullPayment ? '100%' : '50%'}):`}
+            </span>
+            <span className="text-amber-400 font-bold text-xl">{prepayment} BYN</span>
+          </div>
+        )}
       </div>
 
       {/* Dropzone */}
@@ -132,7 +148,7 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
         </button>
         <button
           onClick={handleSubmit}
-          disabled={!receiptFile || isSubmitting}
+          disabled={(!receiptFile && !isFullyCoveredByGift) || isSubmitting}
           className="flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 disabled:opacity-40 disabled:cursor-not-allowed text-black font-bold py-2 px-4 rounded-xl uppercase tracking-wider transition-all"
         >
           {isSubmitting ? 'Отправка...' : 'Отправить'}

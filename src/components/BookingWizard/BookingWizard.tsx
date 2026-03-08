@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import StepIndicator from './StepIndicator'
 import { STEP_REGISTRY } from './stepRegistry'
@@ -7,6 +7,7 @@ import { clearFormFromLocalStorage, submitBookingForm } from '../../utils/bookin
 import { uploadReceipt } from '../../services/api'
 import { useBookedPeriods } from '../../hooks/useBookedPeriods'
 import { logger } from '../../services/logger'
+import { useLoading } from '../../context/LoadingContext'
 import type { BookingFormData, StepProps } from '../../types/booking.types'
 
 function BookingWizard() {
@@ -14,6 +15,7 @@ function BookingWizard() {
 
   // Fetch booked periods once for the whole wizard session
   const { periods: bookedPeriods, loading: periodsLoading, error: periodsError } = useBookedPeriods()
+  const { setLoading } = useLoading()
 
   // STATE: Current step ID (not number!)
   const [currentStepId, setCurrentStepId] = useState('tariff')
@@ -53,23 +55,34 @@ function BookingWizard() {
     })
   }, [currentStepId]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Always-current snapshot of formData for use in async callbacks
+  const formDataRef = useRef(formData)
+  useEffect(() => { formDataRef.current = formData }, [formData])
+
   // UPDATE: Form data updater with tariff change detection
   const updateFormData = (data: Partial<BookingFormData>) => {
     setFormData(prev => {
       // If tariff changed, clean incompatible data
       if (data.tariff && data.tariff !== prev.tariff) {
         const cleaned = cleanIncompatibleData(prev, data.tariff)
-        return { ...cleaned, ...data }
+        const next = { ...cleaned, ...data }
+        formDataRef.current = next
+        return next
       }
-      return { ...prev, ...data }
+      const next = { ...prev, ...data }
+      formDataRef.current = next
+      return next
     })
   }
 
-  // NAVIGATION: Move to next step
+  // NAVIGATION: Move to next step (auto-submit when no next step remains)
   const nextStep = () => {
     if (nextStepId) {
       setCurrentStepId(nextStepId)
       window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      // No more steps — submit using the latest formData from ref
+      handleSubmit(formDataRef.current)
     }
   }
 
@@ -89,10 +102,11 @@ function BookingWizard() {
     }
   }
 
-  // SUBMIT: Handle final submission from Step11Receipt
+  // SUBMIT: Handle final submission (from Step11Receipt or auto when last step is skipped)
   const handleSubmit: StepProps['onSubmit'] = async (extraData) => {
+    setLoading(true)
     try {
-      const finalData = { ...formData, ...extraData } as BookingFormData
+      const finalData = { ...formDataRef.current, ...extraData } as BookingFormData
       const { bookingId } = await submitBookingForm(finalData)
       if (finalData.receiptFile) {
         await uploadReceipt(bookingId, finalData.receiptFile)
@@ -112,6 +126,8 @@ function BookingWizard() {
       })
       console.error('Booking submission error:', error)
       alert('Ошибка при отправке бронирования. Пожалуйста, попробуйте еще раз.')
+    } finally {
+      setLoading(false)
     }
   }
 

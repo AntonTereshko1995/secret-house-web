@@ -48,9 +48,14 @@ function Step9Summary({ formData, updateFormData, nextStep, prevStep }: StepProp
     ? WINE_OPTIONS.find(w => w.id === formData.wineSelection![0])?.name
     : null
   const checkInDate = formData.checkInDate ? new Date(formData.checkInDate) : null
-  const prepayment = checkInDate ? calculatePrepayment(pricing.totalPrice, checkInDate) : Math.round(pricing.totalPrice * 0.5)
   const holidayName = checkInDate ? getHolidayName(checkInDate) : null
-  const isFullPayment = prepayment === pricing.totalPrice
+  // Gift certificate: user pays the difference (doplate) beyond the certificate value
+  const giftCovered = formData.giftId && formData.giftPrice !== undefined ? formData.giftPrice : 0
+  const doplate = giftCovered > 0 ? Math.max(0, pricing.totalPrice - giftCovered) : null
+  const prepayment = doplate !== null
+    ? doplate
+    : checkInDate ? calculatePrepayment(pricing.totalPrice, checkInDate) : Math.round(pricing.totalPrice * 0.5)
+  const isFullPayment = doplate !== null ? true : prepayment === pricing.totalPrice
 
   const handleNext = () => {
     if (!termsAccepted) {
@@ -135,10 +140,19 @@ function Step9Summary({ formData, updateFormData, nextStep, prevStep }: StepProp
         )}
         <div className="border-t border-zinc-800 mt-1 pt-2">
           <PriceRow label="Итого" value={`${pricing.totalPrice} BYN`} highlight />
-          {holidayName && (
+          {giftCovered > 0 && (
+            <PriceRow label="Сертификат покрывает" value={`−${giftCovered} BYN`} />
+          )}
+          {holidayName && !doplate && (
             <div className="text-amber-400 text-xs mt-1">🎉 {holidayName} — полная предоплата</div>
           )}
-          <PriceRow label={`Предоплата (${isFullPayment ? '100%' : '50%'})`} value={`${prepayment} BYN`} highlight />
+          {doplate !== null ? (
+            doplate === 0
+              ? <div className="text-green-400 text-sm font-semibold mt-1">✓ Полностью покрыто сертификатом</div>
+              : <PriceRow label="Доплата" value={`${doplate} BYN`} highlight />
+          ) : (
+            <PriceRow label={`Предоплата (${isFullPayment ? '100%' : '50%'})`} value={`${prepayment} BYN`} highlight />
+          )}
         </div>
       </div>
 
