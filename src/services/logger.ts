@@ -4,11 +4,11 @@ import { getEnv } from '../utils/env'
 const APP_ID = 'tsh_web'
 const isDev = import.meta.env.DEV
 
-let _logtail: Logtail | null | undefined = undefined
+let _logtail: Logtail | null = null
 function getLogtail(): Logtail | null {
-  if (_logtail === undefined) {
+  if (!_logtail) {
     const token = getEnv('VITE_SOURCE_TOKEN')
-    _logtail = token ? new Logtail(token) : null
+    if (token) _logtail = new Logtail(token)
   }
   return _logtail
 }
