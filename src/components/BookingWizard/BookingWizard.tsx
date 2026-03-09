@@ -8,7 +8,7 @@ import { uploadReceipt } from '../../services/api'
 import { useBookedPeriods } from '../../hooks/useBookedPeriods'
 import { logger } from '../../services/logger'
 import { useLoading } from '../../context/LoadingContext'
-import type { BookingFormData, StepProps } from '../../types/booking.types'
+import type { BookingFormData } from '../../types/booking.types'
 
 function BookingWizard() {
   const navigate = useNavigate()
@@ -103,7 +103,7 @@ function BookingWizard() {
   }
 
   // SUBMIT: Handle final submission (from Step11Receipt or auto when last step is skipped)
-  const handleSubmit = async (extraData) => {
+  const handleSubmit = async (extraData?: Partial<BookingFormData>) => {
     setLoading(true)
     try {
       const finalData = { ...formDataRef.current, ...extraData } as BookingFormData
