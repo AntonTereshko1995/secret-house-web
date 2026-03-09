@@ -1,7 +1,12 @@
 import { Routes, Route, useSearchParams, useNavigate, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
+import { logger } from './services/logger'
 import HomePage from './pages/HomePage'
 import BookingRedirect from './pages/BookingRedirect'
+import BookingWizardPage from './pages/BookingWizardPage'
+import BookingSuccessPage from './pages/BookingSuccessPage'
 import FullGallery from './components/FullGallery'
+import LoadingOverlay from './components/LoadingOverlay/LoadingOverlay'
 import type { RoomCategory } from './types/gallery.types'
 
 function App() {
@@ -13,7 +18,13 @@ function App() {
   const categoryParam = searchParams.get('category')
   const initialCategory = categoryParam as RoomCategory | undefined
 
+  // Log route changes
+  useEffect(() => {
+    logger.info('page_view', { path: location.pathname })
+  }, [location.pathname])
+
   const openGallery = (category?: RoomCategory) => {
+    logger.info('gallery_open', { category: category ?? 'all' })
     const params = new URLSearchParams()
     params.set('gallery', 'open')
     if (category) {
@@ -23,6 +34,7 @@ function App() {
   }
 
   const closeGallery = () => {
+    logger.info('gallery_close')
     navigate('/', { replace: false })
   }
 
@@ -31,11 +43,12 @@ function App() {
 
   return (
     <>
+      <LoadingOverlay />
       <div className="min-h-screen bg-gray-900">
         <Routes>
           <Route path="/" element={<HomePage onOpenGallery={openGallery} />} />
-          <Route path="/book" element={<BookingRedirect />} />
-          <Route path="/booking" element={<BookingRedirect />} />
+          <Route path="/booking" element={<BookingWizardPage />} />
+          <Route path="/booking/success" element={<BookingSuccessPage />} />
           <Route path="/telegram" element={<BookingRedirect />} />
         </Routes>
       </div>
