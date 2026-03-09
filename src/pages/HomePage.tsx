@@ -1,4 +1,5 @@
 import Hero from '../components/Hero'
+import { getEnv } from '../utils/env'
 import GalleryPreview from '../components/GalleryPreview'
 import Amenities from '../components/Amenities'
 import Pricing from '../components/Pricing'
@@ -30,7 +31,7 @@ function HomePage({ onOpenGallery }: HomePageProps) {
               {/* Telegram Admin */}
               <div className="flex flex-col items-center gap-2">
                 <a
-                  href={`https://t.me/${import.meta.env.VITE_TELEGRAM_ADMIN}`}
+                  href={`https://t.me/${getEnv('VITE_TELEGRAM_ADMIN')}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex items-center justify-center w-14 h-14 border-2 border-yellow-600/50 hover:border-yellow-600 hover:bg-yellow-600/10 transition-all duration-300"
@@ -46,7 +47,7 @@ function HomePage({ onOpenGallery }: HomePageProps) {
               {/* Telegram Channel */}
               <div className="flex flex-col items-center gap-2">
                 <a
-                  href={`https://t.me/${import.meta.env.VITE_TELEGRAM_CHANNEL}`}
+                  href={`https://t.me/${getEnv('VITE_TELEGRAM_CHANNEL')}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex items-center justify-center w-14 h-14 border-2 border-yellow-600/50 hover:border-yellow-600 hover:bg-yellow-600/10 transition-all duration-300"
@@ -94,7 +95,7 @@ function HomePage({ onOpenGallery }: HomePageProps) {
               {/* Phone */}
               <div className="flex flex-col items-center gap-2">
                 <a
-                  href={`tel:${import.meta.env.VITE_PHONE_NUMBER}`}
+                  href={`tel:${getEnv('VITE_PHONE_NUMBER')}`}
                   className="group flex items-center justify-center w-14 h-14 border-2 border-yellow-600/50 hover:border-yellow-600 hover:bg-yellow-600/10 transition-all duration-300"
                   aria-label="Позвонить"
                 >
@@ -109,10 +110,10 @@ function HomePage({ onOpenGallery }: HomePageProps) {
             {/* Contact Info */}
             <div className="text-center mb-6">
               <a
-                href={`tel:${import.meta.env.VITE_PHONE_NUMBER}`}
+                href={`tel:${getEnv('VITE_PHONE_NUMBER')}`}
                 className="text-yellow-600 hover:text-yellow-500 text-lg font-light tracking-wider transition-colors"
               >
-                {import.meta.env.VITE_PHONE_NUMBER}
+                {getEnv('VITE_PHONE_NUMBER')}
               </a>
             </div>
 

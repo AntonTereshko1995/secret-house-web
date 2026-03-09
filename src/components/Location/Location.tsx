@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react'
+import { getEnv } from '../../utils/env'
 
 function Location() {
-  const lat = import.meta.env.VITE_LOCATION_LAT || '55.7558'
-  const lon = import.meta.env.VITE_LOCATION_LON || '37.6173'
-  const address = import.meta.env.VITE_LOCATION_ADDRESS || 'Moscow, Russia'
+  const lat = getEnv('VITE_LOCATION_LAT')
+  const lon = getEnv('VITE_LOCATION_LON')
+  const address = getEnv('VITE_LOCATION_ADDRESS')
 
   const yandexMapsUrl = 'https://yandex.by/maps/-/CHs9n8po'
   const googleMapsUrl = 'https://maps.app.goo.gl/XiRGji5EBjxRVbP58'

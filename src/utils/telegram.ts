@@ -3,8 +3,10 @@
  * @param room - Room category (living-room, bedroom, kitchen, exterior)
  * @returns Telegram bot link with start parameter
  */
+import { getEnv } from './env'
+
 export function getTelegramLink(room?: string): string {
-  const botUsername = import.meta.env.VITE_BOT_USERNAME
+  const botUsername = getEnv('VITE_BOT_USERNAME')
 
   if (!botUsername) {
     console.warn('VITE_BOT_USERNAME not set in .env file')

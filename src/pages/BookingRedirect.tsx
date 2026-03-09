@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
+import { getEnv } from '../utils/env'
 
 function BookingRedirect() {
   useEffect(() => {
-    const botUsername = import.meta.env.VITE_BOT_USERNAME || 'the_secret_house_booking_bot'
+    const botUsername = getEnv('VITE_BOT_USERNAME')
     const telegramUrl = `https://t.me/${botUsername}`
 
     // Redirect immediately

@@ -4,8 +4,9 @@
  */
 
 import { logger } from './logger'
+import { getEnv } from '../utils/env'
 
-const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
+const getApiBase = () => getEnv('VITE_API_URL')
 
 // ---------------------------------------------------------------------------
 // Response types (mirror backend Pydantic schemas)
@@ -79,7 +80,7 @@ export interface BookingCreatePayload {
 // ---------------------------------------------------------------------------
 
 async function apiGet<T>(path: string, params?: Record<string, string>): Promise<T> {
-  const url = new URL(`${API_BASE}${path}`)
+  const url = new URL(`${getApiBase()}${path}`)
   if (params) {
     Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v))
   }
@@ -96,7 +97,7 @@ async function apiGet<T>(path: string, params?: Record<string, string>): Promise
 
 async function apiPost<T>(path: string, body: unknown): Promise<T> {
   logger.debug('api_request', { method: 'POST', path })
-  const response = await fetch(`${API_BASE}${path}`, {
+  const response = await fetch(`${getApiBase()}${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -209,7 +210,7 @@ export async function uploadReceipt(bookingId: number, file: File): Promise<void
   const formData = new FormData()
   formData.append('file', file)
 
-  const response = await fetch(`${API_BASE}/api/bookings/${bookingId}/receipt`, {
+  const response = await fetch(`${getApiBase()}/api/bookings/${bookingId}/receipt`, {
     method: 'POST',
     body: formData,
   })
