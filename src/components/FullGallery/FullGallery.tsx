@@ -196,7 +196,7 @@ function FullGallery({ isOpen, onClose, initialCategory }: FullGalleryProps) {
                         type="image/webp"
                       />
                       <img
-                        src={image.images.thumbnail.jpg}
+                        src={image.images.thumbnail.webp}
                         alt={image.alt}
                         width={image.images.thumbnail.width}
                         height={image.images.thumbnail.height}
@@ -288,7 +288,7 @@ function FullGallery({ isOpen, onClose, initialCategory }: FullGalleryProps) {
               />
               <source
                 media="(max-width: 768px)"
-                srcSet={filteredImages[currentIndex].images.medium.jpg}
+                srcSet={filteredImages[currentIndex].images.medium.webp}
               />
 
               {/* Desktop: large size (1920px) */}
@@ -299,12 +299,12 @@ function FullGallery({ isOpen, onClose, initialCategory }: FullGalleryProps) {
               />
               <source
                 media="(min-width: 769px)"
-                srcSet={filteredImages[currentIndex].images.large.jpg}
+                srcSet={filteredImages[currentIndex].images.large.webp}
               />
 
               {/* Fallback */}
               <img
-                src={filteredImages[currentIndex].images.large.jpg}
+                src={filteredImages[currentIndex].images.large.webp}
                 alt={filteredImages[currentIndex].alt}
                 className="w-full h-full sm:w-auto sm:h-auto object-contain sm:max-h-[80vh]"
                 onClick={(e) => e.stopPropagation()}

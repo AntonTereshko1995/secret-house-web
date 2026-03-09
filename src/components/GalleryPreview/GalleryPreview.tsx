@@ -91,7 +91,7 @@ function GalleryPreview({ onOpenFullGallery }: GalleryPreviewProps) {
                         type="image/webp"
                       />
                       <img
-                        src={image.images.thumbnail.jpg}
+                        src={image.images.thumbnail.webp}
                         alt={image.alt}
                         width={image.images.thumbnail.width}
                         height={image.images.thumbnail.height}
