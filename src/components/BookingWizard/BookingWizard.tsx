@@ -103,7 +103,7 @@ function BookingWizard() {
   }
 
   // SUBMIT: Handle final submission (from Step11Receipt or auto when last step is skipped)
-  const handleSubmit: StepProps['onSubmit'] = async (extraData) => {
+  const handleSubmit = async (extraData) => {
     setLoading(true)
     try {
       const finalData = { ...formDataRef.current, ...extraData } as BookingFormData

@@ -50,7 +50,7 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
     setIsSubmitting(true)
     try {
       const receiptData: Partial<BookingFormData> = {
-        receiptFile,
+        receiptFile: receiptFile ?? undefined,
         receiptPreview: receiptPreview || undefined,
         submittedAt: new Date(),
       }
