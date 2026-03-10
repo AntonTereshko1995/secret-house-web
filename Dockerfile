@@ -20,8 +20,8 @@ RUN npm run build
 # Stage 2: Production
 FROM nginx:alpine
 
-# Copy custom nginx config
-COPY nginx.conf /etc/nginx/nginx.conf
+# Copy nginx config as template (API_PROXY_URL substituted at runtime via env-config.sh)
+COPY nginx.conf /etc/nginx/nginx.conf.template
 
 # Runtime env injection script
 COPY env-config.sh /docker-entrypoint.d/40-env-config.sh

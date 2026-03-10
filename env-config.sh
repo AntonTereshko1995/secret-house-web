@@ -1,4 +1,7 @@
 #!/bin/sh
+# Substitute API_PROXY_URL into nginx config (other $ expressions are left untouched)
+envsubst '${API_PROXY_URL}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
+
 cat > /usr/share/nginx/html/env-config.js << EOF
 window.__env__ = {
   "VITE_API_URL": "${VITE_API_URL}",

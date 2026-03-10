@@ -6,7 +6,7 @@
 import { logger } from './logger'
 import { getEnv } from '../utils/env'
 
-const getApiBase = () => getEnv('VITE_API_URL')
+const getApiBase = () => getEnv('VITE_API_URL').trim()
 
 // ---------------------------------------------------------------------------
 // Response types (mirror backend Pydantic schemas)
@@ -80,7 +80,7 @@ export interface BookingCreatePayload {
 // ---------------------------------------------------------------------------
 
 async function apiGet<T>(path: string, params?: Record<string, string>): Promise<T> {
-  const url = new URL(`${getApiBase()}${path}`)
+  const url = new URL(`${getApiBase()}${path}`, window.location.origin)
   if (params) {
     Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v))
   }
