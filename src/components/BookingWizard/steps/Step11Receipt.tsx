@@ -59,6 +59,7 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
     } catch (error) {
       console.error('Submission error:', error)
       alert('Ошибка при отправке бронирования. Пожалуйста, попробуйте еще раз.')
+    } finally {
       setIsSubmitting(false)
     }
   }
