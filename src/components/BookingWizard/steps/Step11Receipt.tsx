@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { calculatePrepayment, getHolidayName } from '../../../utils/booking'
+import { getEnv } from '../../../utils/env'
 import type { BookingFormData, StepProps } from '../../../types/booking.types'
 
 function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepProps) {
@@ -17,6 +18,8 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
     : checkInDate ? calculatePrepayment(totalPrice, checkInDate) : Math.round(totalPrice * 0.5)
   const isFullyCoveredByGift = giftCovered > 0 && prepayment === 0
   const isFullPayment = isFullyCoveredByGift || prepayment === totalPrice
+
+  const bankCardNumber = getEnv('VITE_BANK_CARD_NUMBER')
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
@@ -103,6 +106,22 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
           </div>
         )}
       </div>
+
+      {/* Payment details */}
+      {!isFullyCoveredByGift && bankCardNumber && (
+        <div className="bg-black/60 border border-zinc-700 rounded-lg px-4 py-3 mb-3">
+          <div className="text-amber-400 text-xs font-bold uppercase tracking-wider mb-2">
+            📌 Способы оплаты (BSB-Bank)
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-400 text-sm">💳 По номеру карты:</span>
+            <span className="text-white text-sm font-bold tracking-widest">{bankCardNumber}</span>
+          </div>
+          <div className="text-gray-500 text-xs mt-2">
+            💡 Предоплата не возвращается при отмене, но вы можете перенести бронь на другую дату.
+          </div>
+        </div>
+      )}
 
       {/* Dropzone */}
       <div
