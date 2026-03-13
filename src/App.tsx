@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage'
 import BookingRedirect from './pages/BookingRedirect'
 import BookingWizardPage from './pages/BookingWizardPage'
 import BookingSuccessPage from './pages/BookingSuccessPage'
+import AvailabilityPage from './pages/AvailabilityPage'
 import FullGallery from './components/FullGallery'
 import LoadingOverlay from './components/LoadingOverlay/LoadingOverlay'
 import type { RoomCategory } from './types/gallery.types'
@@ -50,6 +51,7 @@ function App() {
           <Route path="/booking" element={<BookingWizardPage />} />
           <Route path="/booking/success" element={<BookingSuccessPage />} />
           <Route path="/telegram" element={<BookingRedirect />} />
+          <Route path="/availability" element={<AvailabilityPage />} />
         </Routes>
       </div>
 

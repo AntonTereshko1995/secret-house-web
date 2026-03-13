@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { openTelegramBot } from '../../utils/telegram'
 import { scrollToElement } from '../../utils/scroll'
 
@@ -35,11 +36,11 @@ function Hero() {
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+        <div className="flex flex-col sm:flex-row gap-6 justify-center items-stretch">
           {/* Primary CTA - In-App Booking */}
           <button
             onClick={() => navigate('/booking')}
-            className="group relative w-full sm:w-auto bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-5 px-8 sm:px-12 rounded-none transition-all duration-500 shadow-luxury hover:shadow-luxury-hover hover:scale-105 uppercase tracking-widest text-sm"
+            className="group relative w-full sm:w-auto flex items-center justify-center bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-5 px-8 sm:px-12 rounded-none transition-all duration-500 shadow-luxury hover:shadow-luxury-hover hover:scale-105 uppercase tracking-widest text-sm"
           >
             <span className="relative z-10">Забронировать</span>
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
@@ -48,7 +49,7 @@ function Hero() {
           {/* Secondary CTA - Telegram Booking */}
           <button
             onClick={() => openTelegramBot()}
-            className="w-full sm:w-auto bg-transparent border border-yellow-600 text-yellow-600 hover:bg-yellow-600 hover:text-black font-semibold py-5 px-8 sm:px-12 rounded-none transition-all duration-500 uppercase tracking-widest text-sm hover:scale-105"
+            className="w-full sm:w-auto flex items-center justify-center bg-transparent border border-yellow-600 text-yellow-600 hover:bg-yellow-600 hover:text-black font-semibold py-5 px-8 sm:px-12 rounded-none transition-all duration-500 uppercase tracking-widest text-sm hover:scale-105"
           >
             Забронировать через Telegram
           </button>
@@ -56,10 +57,18 @@ function Hero() {
           {/* Tertiary CTA - View Gallery */}
           <button
             onClick={() => scrollToElement('gallery-preview')}
-            className="w-full sm:w-auto bg-transparent text-white font-semibold py-5 px-8 sm:px-12 rounded-none transition-all duration-500 border border-white/30 hover:border-white hover:bg-white/10 uppercase tracking-widest text-sm hover:scale-105"
+            className="w-full sm:w-auto flex items-center justify-center bg-transparent border border-yellow-600 text-yellow-600 hover:bg-yellow-600 hover:text-black font-semibold py-5 px-8 sm:px-12 rounded-none transition-all duration-500 uppercase tracking-widest text-sm hover:scale-105"
           >
             Интерьер
           </button>
+
+          {/* Calendar CTA */}
+          <Link
+            to="/availability"
+            className="w-full sm:w-auto flex items-center justify-center bg-transparent border border-yellow-600 text-yellow-600 hover:bg-yellow-600 hover:text-black font-semibold py-5 px-8 sm:px-12 rounded-none transition-all duration-500 uppercase tracking-widest text-sm hover:scale-105"
+          >
+            Свободные даты
+          </Link>
         </div>
 
         {/* Scroll indicator */}
