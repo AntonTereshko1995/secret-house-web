@@ -10,15 +10,15 @@ import { ErrorBoundary } from './components/ErrorBoundary'
 // Global error handlers
 window.addEventListener('error', (event) => {
   const isCrossOrigin = !event.filename && event.lineno === 0
+  if (isCrossOrigin) return // browser extensions or cross-origin scripts — not actionable
   logger.error('uncaught_error', {
     error_message: event.message || '(no message)',
-    error_name: event.error?.name ?? (isCrossOrigin ? 'CrossOriginError' : 'UnknownError'),
-    source: event.filename || '(cross-origin or extension)',
+    error_name: event.error?.name ?? 'UnknownError',
+    source: event.filename,
     lineno: event.lineno,
     colno: event.colno,
-    stack: event.error?.stack ?? '(no stack — likely cross-origin script)',
+    stack: event.error?.stack,
     page_url: window.location.href,
-    is_cross_origin: isCrossOrigin,
   })
 })
 
