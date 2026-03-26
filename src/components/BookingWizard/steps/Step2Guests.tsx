@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { getTariffConfig } from '../../../utils/booking'
+import { logger } from '../../../services/logger'
 import type { BookingFormData } from '../../../types/booking.types'
 
 interface StepProps {
@@ -27,6 +28,7 @@ function Step2Guests({ formData, updateFormData, nextStep, prevStep }: StepProps
       alert('Количество гостей должно быть от 1 до 6')
       return
     }
+    logger.info('booking_select', { step: 'guests', guestCount, guestPrice, tariff: formData.tariff })
     updateFormData({ guestCount, guestPrice })
     nextStep()
   }

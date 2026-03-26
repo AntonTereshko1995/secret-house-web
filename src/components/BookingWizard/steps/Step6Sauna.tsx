@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { getTariffConfig } from '../../../utils/booking'
+import { logger } from '../../../services/logger'
 import type { StepProps } from '../../../types/booking.types'
 
 function Step6Sauna({ formData, updateFormData, nextStep, prevStep }: StepProps) {
@@ -8,6 +9,7 @@ function Step6Sauna({ formData, updateFormData, nextStep, prevStep }: StepProps)
   const saunaPrice = getTariffConfig(formData.tariff ?? '')?.saunaPrice ?? 0
 
   const handleNext = () => {
+    logger.info('booking_select', { step: 'sauna', hasSauna, saunaPrice: hasSauna ? saunaPrice : 0, tariff: formData.tariff })
     updateFormData({
       hasSauna,
       saunaPrice: hasSauna ? saunaPrice : 0

@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import CustomCalendar from '../CustomCalendar'
 import TimePicker from '../TimePicker'
 import { getUnavailableCheckInSlots } from '../../../utils/booking'
+import { logger } from '../../../services/logger'
 import type { BookingFormData } from '../../../types/booking.types'
 import type { BookedPeriod } from '../../../utils/booking'
 
@@ -101,6 +102,7 @@ function Step3CheckIn({ formData, updateFormData, nextStep, prevStep, bookedPeri
     } else {
       updateFormData({ checkInDate, checkInTime })
     }
+    logger.info('booking_select', { step: 'check_in', checkInDate: checkInDate.toISOString().slice(0, 10), checkInTime })
     nextStep()
   }
 

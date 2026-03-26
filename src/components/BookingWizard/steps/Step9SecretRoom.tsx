@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { getTariffConfig } from '../../../utils/booking'
+import { logger } from '../../../services/logger'
 import type { StepProps } from '../../../types/booking.types'
 
 function Step9SecretRoom({ formData, updateFormData, nextStep, prevStep }: StepProps) {
@@ -8,6 +9,7 @@ function Step9SecretRoom({ formData, updateFormData, nextStep, prevStep }: StepP
   const secretRoomPrice = getTariffConfig(formData.tariff ?? '')?.secretRoomPrice ?? 0
 
   const handleNext = () => {
+    logger.info('booking_select', { step: 'secret_room', hasSecretRoom, secretRoomPrice: hasSecretRoom ? secretRoomPrice : 0, tariff: formData.tariff })
     updateFormData({
       hasSecretRoom,
       secretRoomPrice: hasSecretRoom ? secretRoomPrice : 0

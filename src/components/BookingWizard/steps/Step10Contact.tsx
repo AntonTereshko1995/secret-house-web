@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { validateTelegramUsername, validatePhoneNumber } from '../../../utils/booking'
+import { logger } from '../../../services/logger'
 import type { BookingFormData, ContactType } from '../../../types/booking.types'
 
 interface StepProps {
@@ -31,6 +32,7 @@ function Step10Contact({ formData, updateFormData, prevStep, nextStep }: StepPro
       }
       updateFormData({ contactType, phone, telegram: undefined })
     }
+    logger.info('booking_select', { step: 'contact', contactType })
     nextStep()
   }
 

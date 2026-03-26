@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { logger } from '../../../services/logger'
 import type { BookingFormData } from '../../../types/booking.types'
 
 interface StepProps {
@@ -38,6 +39,7 @@ function Step8Transfer({ formData, updateFormData, nextStep, prevStep }: StepPro
       return
     }
 
+    logger.info('booking_select', { step: 'transfer', needsTransfer, tariff: formData.tariff })
     updateFormData({
       needsTransfer,
       transferAddress: needsTransfer ? transferAddress.trim() : undefined,

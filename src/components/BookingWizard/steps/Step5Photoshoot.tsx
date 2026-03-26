@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { getTariffConfig } from '../../../utils/booking'
+import { logger } from '../../../services/logger'
 import type { StepProps } from '../../../types/booking.types'
 
 function Step5Photoshoot({ formData, updateFormData, nextStep, prevStep }: StepProps) {
@@ -9,6 +10,7 @@ function Step5Photoshoot({ formData, updateFormData, nextStep, prevStep }: StepP
   const isIncluded = photoshootPrice === 0
 
   const handleNext = () => {
+    logger.info('booking_select', { step: 'photoshoot', hasPhotoshoot, photoshootPrice: hasPhotoshoot ? photoshootPrice : 0, tariff: formData.tariff })
     updateFormData({
       hasPhotoshoot,
       photoshootPrice: hasPhotoshoot ? photoshootPrice : 0

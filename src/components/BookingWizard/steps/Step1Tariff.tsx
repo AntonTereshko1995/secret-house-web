@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { TARIFF_OPTIONS } from '../../../utils/booking'
 import { validateGiftCode } from '../../../services/api'
 import { useLoading } from '../../../context/LoadingContext'
+import { logger } from '../../../services/logger'
 import type { BookingFormData, TariffType } from '../../../types/booking.types'
 
 interface StepProps {
@@ -25,6 +26,7 @@ function Step1Tariff({ formData, updateFormData, nextStep }: StepProps) {
   const { setLoading } = useLoading()
 
   const handleTariffSelect = (id: string) => {
+    logger.info('booking_select', { step: 'tariff', tariff: id })
     setSelected(id)
     setGiftError(null)
     setGiftSuccess(null)
@@ -50,9 +52,11 @@ function Step1Tariff({ formData, updateFormData, nextStep }: StepProps) {
     try {
       const res = await validateGiftCode(giftCode.trim())
       if (!res.valid || !res.giftId || !res.tariff) {
+        logger.warn('gift_validation_invalid', { message: res.message })
         setGiftError(res.message)
         return
       }
+      logger.info('gift_validation_success', { giftId: res.giftId, tariff: res.tariff })
       setGiftSuccess('✓ Сертификат действителен')
       // Pre-fill gift data into formData (tariff = actual gift tariff)
       updateFormData({
@@ -68,7 +72,10 @@ function Step1Tariff({ formData, updateFormData, nextStep }: StepProps) {
         hasSecretRoom: res.hasSecretRoom ? true : undefined,
         hasExtraBedroom: res.hasAdditionalBedroom ? true : undefined,
       })
-    } catch {
+    } catch (error) {
+      logger.error('gift_validation_error', {
+        message: error instanceof Error ? error.message : String(error),
+      })
       setGiftError('Не удалось проверить сертификат. Попробуйте ещё раз.')
     } finally {
       setGiftValidating(false)

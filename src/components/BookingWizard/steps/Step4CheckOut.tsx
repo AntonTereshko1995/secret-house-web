@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import CustomCalendar from '../CustomCalendar'
 import TimePicker from '../TimePicker'
+import { logger } from '../../../services/logger'
 import {
   calculateDuration,
   calculateBasePrice,
@@ -171,6 +172,7 @@ function Step4CheckOut({ formData, updateFormData, nextStep, prevStep, bookedPer
         return
       }
     }
+    logger.info('booking_select', { step: 'check_out', checkOutDate: checkOutDate.toISOString().slice(0, 10), checkOutTime, durationHours: duration, basePrice, tariff: formData.tariff })
     updateFormData({ checkOutDate, checkOutTime, durationHours: duration, basePrice })
     nextStep()
   }

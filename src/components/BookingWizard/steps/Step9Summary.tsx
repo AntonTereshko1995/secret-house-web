@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { calculateTotalPrice, getTariffConfig, getBasePriceBreakdown, getDatePriceOverride, TARIFF_OPTIONS, WINE_OPTIONS, BEDROOM_OPTIONS, calculatePrepayment, getHolidayName } from '../../../utils/booking'
+import { logger } from '../../../services/logger'
 import type { StepProps } from '../../../types/booking.types'
 
 function fmt(date: Date | string | undefined, time?: string): string {
@@ -62,6 +63,7 @@ function Step9Summary({ formData, updateFormData, nextStep, prevStep }: StepProp
       alert('Пожалуйста, примите условия бронирования')
       return
     }
+    logger.info('booking_select', { step: 'summary', totalPrice: pricing.totalPrice, prepayment, tariff: formData.tariff })
     updateFormData({ ...pricing, termsAccepted })
     nextStep()
   }

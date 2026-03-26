@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { WINE_OPTIONS } from '../../../utils/booking'
+import { logger } from '../../../services/logger'
 import type { BookingFormData } from '../../../types/booking.types'
 
 interface StepProps {
@@ -15,6 +16,7 @@ function Step7Wine({ formData, updateFormData, nextStep, prevStep }: StepProps) 
   )
 
   const handleNext = () => {
+    logger.info('booking_select', { step: 'wine', wineSelection: selected, tariff: formData.tariff })
     updateFormData({
       wineSelection: selected === 'none' ? [] : [selected],
       winePrice: 0

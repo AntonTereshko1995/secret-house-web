@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { getTariffConfig } from '../../../utils/booking'
+import { logger } from '../../../services/logger'
 import type { StepProps } from '../../../types/booking.types'
 
 function Step8ExtraBedroom({ formData, updateFormData, nextStep, prevStep }: StepProps) {
@@ -8,6 +9,7 @@ function Step8ExtraBedroom({ formData, updateFormData, nextStep, prevStep }: Ste
   const extraBedroomPrice = getTariffConfig(formData.tariff ?? '')?.extraBedroomPrice ?? 0
 
   const handleNext = () => {
+    logger.info('booking_select', { step: 'extra_bedroom', hasExtraBedroom, extraBedroomPrice: hasExtraBedroom ? extraBedroomPrice : 0, tariff: formData.tariff })
     updateFormData({
       hasExtraBedroom,
       extraBedroomPrice: hasExtraBedroom ? extraBedroomPrice : 0

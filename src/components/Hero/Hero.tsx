@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { openTelegramBot } from '../../utils/telegram'
 import { scrollToElement } from '../../utils/scroll'
+import { logger } from '../../services/logger'
 
 function Hero() {
   const navigate = useNavigate()
@@ -39,7 +40,7 @@ function Hero() {
         <div className="flex flex-col sm:flex-row gap-6 justify-center items-stretch">
           {/* Primary CTA - In-App Booking */}
           <button
-            onClick={() => navigate('/booking')}
+            onClick={() => { logger.info('cta_click', { button: 'book_online' }); navigate('/booking') }}
             className="group relative w-full sm:w-auto flex items-center justify-center bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-5 px-8 sm:px-12 rounded-none transition-all duration-500 shadow-luxury hover:shadow-luxury-hover hover:scale-105 uppercase tracking-widest text-sm"
           >
             <span className="relative z-10">Забронировать</span>
@@ -48,7 +49,7 @@ function Hero() {
 
           {/* Secondary CTA - Telegram Booking */}
           <button
-            onClick={() => openTelegramBot()}
+            onClick={() => { logger.info('cta_click', { button: 'book_telegram' }); openTelegramBot() }}
             className="w-full sm:w-auto flex items-center justify-center bg-transparent border border-yellow-600 text-yellow-600 hover:bg-yellow-600 hover:text-black font-semibold py-5 px-8 sm:px-12 rounded-none transition-all duration-500 uppercase tracking-widest text-sm hover:scale-105"
           >
             Забронировать через Telegram
@@ -56,7 +57,7 @@ function Hero() {
 
           {/* Tertiary CTA - View Gallery */}
           <button
-            onClick={() => scrollToElement('gallery-preview')}
+            onClick={() => { logger.info('cta_click', { button: 'view_gallery' }); scrollToElement('gallery-preview') }}
             className="w-full sm:w-auto flex items-center justify-center bg-transparent border border-yellow-600 text-yellow-600 hover:bg-yellow-600 hover:text-black font-semibold py-5 px-8 sm:px-12 rounded-none transition-all duration-500 uppercase tracking-widest text-sm hover:scale-105"
           >
             Интерьер
@@ -65,6 +66,7 @@ function Hero() {
           {/* Calendar CTA */}
           <Link
             to="/availability"
+            onClick={() => logger.info('cta_click', { button: 'availability' })}
             className="w-full sm:w-auto flex items-center justify-center bg-transparent border border-yellow-600 text-yellow-600 hover:bg-yellow-600 hover:text-black font-semibold py-5 px-8 sm:px-12 rounded-none transition-all duration-500 uppercase tracking-widest text-sm hover:scale-105"
           >
             Свободные даты

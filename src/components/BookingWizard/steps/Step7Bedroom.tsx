@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { BEDROOM_OPTIONS } from '../../../utils/booking'
+import { logger } from '../../../services/logger'
 import type { StepProps, BedroomType } from '../../../types/booking.types'
 
 function Step7Bedroom({ formData, updateFormData, nextStep, prevStep }: StepProps) {
@@ -12,6 +13,7 @@ function Step7Bedroom({ formData, updateFormData, nextStep, prevStep }: StepProp
       alert('Пожалуйста, выберите спальню')
       return
     }
+    logger.info('booking_select', { step: 'bedroom', bedroomType, tariff: formData.tariff })
     updateFormData({ bedroomType })
     nextStep()
   }

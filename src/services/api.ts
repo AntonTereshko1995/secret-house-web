@@ -199,7 +199,13 @@ export async function submitBooking(
  * Validate a gift certificate code.
  */
 export async function validateGiftCode(code: string): Promise<GiftValidateResponse> {
-  return apiGet<GiftValidateResponse>('/api/gifts/validate', { code })
+  const result = await apiGet<GiftValidateResponse>('/api/gifts/validate', { code })
+  if (result.valid) {
+    logger.info('gift_code_validated', { giftId: result.giftId, tariff: result.tariff })
+  } else {
+    logger.warn('gift_code_invalid', { message: result.message })
+  }
+  return result
 }
 
 /**

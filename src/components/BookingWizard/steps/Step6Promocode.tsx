@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { validatePromocode, calculateTotalPrice } from '../../../utils/booking'
+import { logger } from '../../../services/logger'
 import type { BookingFormData } from '../../../types/booking.types'
 
 interface StepProps {
@@ -44,8 +45,18 @@ function Step6Promocode({ formData, updateFormData, nextStep, prevStep }: StepPr
       const discountAmount = result.valid && result.discountPercentage > 0
         ? Math.round(currentTotal * result.discountPercentage / 100)
         : result.discount
+      if (result.valid) {
+        logger.info('promocode_applied', { promocode, discount: discountAmount, discountPercentage: result.discountPercentage, tariff: formData.tariff })
+      } else {
+        logger.warn('promocode_invalid', { promocode, message: result.message, tariff: formData.tariff })
+      }
       setValidationResult({ ...result, discount: discountAmount })
-    } catch {
+    } catch (error) {
+      logger.error('promocode_validation_error', {
+        promocode,
+        message: error instanceof Error ? error.message : String(error),
+        tariff: formData.tariff,
+      })
       setValidationResult({
         valid: false,
         discount: 0,

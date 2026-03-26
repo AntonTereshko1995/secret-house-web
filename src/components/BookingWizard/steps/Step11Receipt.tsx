@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { calculatePrepayment, getHolidayName } from '../../../utils/booking'
 import { getEnv } from '../../../utils/env'
+import { logger } from '../../../services/logger'
 import type { BookingFormData, StepProps } from '../../../types/booking.types'
 
 function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepProps) {
@@ -60,7 +61,12 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
       updateFormData(receiptData)
       await onSubmit?.(receiptData)
     } catch (error) {
-      console.error('Submission error:', error)
+      logger.error('receipt_submission_error', {
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        hasReceipt: !!receiptFile,
+        totalPrice: formData.totalPrice,
+      })
       alert('Ошибка при отправке бронирования. Пожалуйста, попробуйте еще раз.')
     } finally {
       setIsSubmitting(false)
