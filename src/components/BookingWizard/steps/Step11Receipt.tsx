@@ -42,7 +42,7 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
       'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp'],
       'application/pdf': ['.pdf']
     },
-    maxSize: 5242880,
+    maxSize: 10485760,
     multiple: false
   })
 
@@ -159,7 +159,7 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
             <div className="text-white text-sm font-bold mb-1">
               {isDragActive ? 'Отпустите файл' : 'Перетащите или нажмите'}
             </div>
-            <div className="text-gray-500 text-xs">JPG, PNG, PDF · макс. 5 МБ</div>
+            <div className="text-gray-500 text-xs">JPG, PNG, PDF · макс. 10 МБ</div>
           </>
         )}
       </div>
