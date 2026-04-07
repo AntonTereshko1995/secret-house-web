@@ -236,10 +236,9 @@ export default function AvailabilityPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
-      <div className="max-w-3xl mx-auto px-4 py-8">
-
-        {/* Back link */}
+    <div className="min-h-screen bg-luxury-gradient text-white">
+      {/* Back link */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         <Link
           to="/"
           className="inline-flex items-center gap-1.5 text-amber-400 hover:text-amber-300 text-sm transition-colors mb-8"
@@ -249,6 +248,9 @@ export default function AvailabilityPage() {
           </svg>
           На главную
         </Link>
+      </div>
+
+      <div className="max-w-3xl mx-auto px-4 pb-8">
 
         {/* Title */}
         <div className="text-center mb-8">

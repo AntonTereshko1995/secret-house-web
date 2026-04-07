@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import StepIndicator from './StepIndicator'
 import { STEP_REGISTRY } from './stepRegistry'
 import { useConditionalNavigation, cleanIncompatibleData } from './navigationLogic'
@@ -139,7 +139,20 @@ function BookingWizard() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 py-4 px-4">
+    <div className="min-h-screen bg-luxury-gradient py-4 px-4">
+      {/* Back link */}
+      <div className="max-w-7xl mx-auto pt-4 mb-2">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-1.5 text-amber-400 hover:text-amber-300 text-sm transition-colors"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+          На главную
+        </Link>
+      </div>
+
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-3">

@@ -129,49 +129,50 @@ function FullGallery({ isOpen, onClose, initialCategory }: FullGalleryProps) {
   return (
     <>
       {/* Gallery Modal */}
-      <div className="fixed inset-0 z-40 bg-black overflow-y-auto overflow-x-hidden">
-        {/* Header */}
-        <div className="sticky top-0 z-50 bg-luxury-gradient border-b border-yellow-600/20 backdrop-blur-lg">
-          <div className="w-full max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-3 sm:py-6">
-            <div className="flex items-center justify-between w-full">
-              <h2 className="text-xl sm:text-3xl font-bold text-luxury-gold uppercase tracking-wide sm:tracking-wider flex-shrink">
-                Галерея
-              </h2>
-              <button
-                onClick={onClose}
-                className="p-2 sm:p-3 border border-yellow-600/50 hover:bg-yellow-600/10 transition-all duration-300 text-yellow-600"
-                aria-label="Close gallery"
-              >
-                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
+      <div className="fixed inset-0 z-[60] bg-luxury-gradient overflow-y-auto overflow-x-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-            {/* Category Filters */}
-            <div className="w-full grid grid-cols-4 sm:flex sm:flex-wrap gap-1.5 sm:gap-2 mt-3 sm:mt-6 overflow-hidden">
-              {categories.map((cat) => (
-                <button
-                  key={cat.value}
-                  onClick={() => setSelectedCategory(cat.value)}
-                  className={`
-                    w-full px-1 py-2 text-[8px] sm:w-auto sm:px-4 sm:py-3 sm:text-sm font-bold text-center transition-all duration-500 uppercase tracking-tighter sm:tracking-wider border sm:border-2 min-w-0
-                    ${selectedCategory === cat.value
-                      ? 'bg-yellow-600 text-black border-yellow-600'
-                      : 'bg-transparent text-yellow-600 border-yellow-600/50 hover:bg-yellow-600/10'
-                    }
-                  `}
-                >
-                  <span className="sm:hidden block leading-tight">{cat.shortLabel}</span>
-                  <span className="hidden sm:inline whitespace-nowrap">{cat.label}</span>
-                </button>
-              ))}
-            </div>
+          {/* Back link — same as AvailabilityPage */}
+          <button
+            onClick={onClose}
+            className="inline-flex items-center gap-1.5 text-amber-400 hover:text-amber-300 text-sm transition-colors mb-8"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            На главную
+          </button>
+
+          {/* Title — same as AvailabilityPage */}
+          <div className="text-center mb-8">
+            <div className="w-16 h-px bg-gradient-to-r from-transparent via-yellow-600 to-transparent mx-auto mb-6" />
+            <h1 className="text-3xl font-bold text-yellow-600 mb-2 uppercase tracking-widest">
+              Интерьер
+            </h1>
           </div>
-        </div>
 
-        {/* Gallery Grid */}
-        <div className="w-full max-w-7xl mx-auto px-1 sm:px-6 lg:px-8 py-2 sm:py-8">
+          {/* Category Filters */}
+          <div className="w-full grid grid-cols-4 sm:flex sm:flex-wrap gap-1.5 sm:gap-2 mb-6">
+            {categories.map((cat) => (
+              <button
+                key={cat.value}
+                onClick={() => setSelectedCategory(cat.value)}
+                className={`
+                  w-full px-1 py-2 text-[8px] sm:w-auto sm:px-4 sm:py-2 sm:text-xs font-bold text-center transition-all duration-300 uppercase tracking-tighter sm:tracking-widest border min-w-0
+                  ${selectedCategory === cat.value
+                    ? 'bg-yellow-600 text-black border-yellow-600'
+                    : 'bg-transparent text-yellow-600 border-yellow-600/50 hover:bg-yellow-600/10'
+                  }
+                `}
+              >
+                <span className="sm:hidden block leading-tight">{cat.shortLabel}</span>
+                <span className="hidden sm:inline whitespace-nowrap">{cat.label}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Gallery Grid */}
+          <div>
           {filteredImages.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-400 text-lg">
@@ -224,13 +225,14 @@ function FullGallery({ isOpen, onClose, initialCategory }: FullGalleryProps) {
               ))}
             </div>
           )}
+          </div>
         </div>
       </div>
 
       {/* Lightbox Modal */}
       {isLightboxOpen && filteredImages[currentIndex] && (
         <div
-          className="fixed inset-0 z-50 bg-black flex items-center justify-center"
+          className="fixed inset-0 z-[70] bg-black flex items-center justify-center"
           onClick={closeLightbox}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
