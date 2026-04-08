@@ -140,9 +140,10 @@ export async function checkAvailability(
   startDatetime: Date,
   endDatetime: Date,
 ): Promise<AvailabilityResponse> {
+  const toNaiveISO = (d: Date) => d.toISOString().slice(0, 19) // "YYYY-MM-DDTHH:mm:ss"
   const result = await apiPost<AvailabilityResponse>('/api/bookings/check-availability', {
-    startDatetime: startDatetime.toISOString(),
-    endDatetime: endDatetime.toISOString(),
+    startDatetime: toNaiveISO(startDatetime),
+    endDatetime: toNaiveISO(endDatetime),
   })
   logger.info('availability_checked', {
     available: result.available,

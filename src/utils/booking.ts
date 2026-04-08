@@ -898,13 +898,19 @@ export async function validatePromocode(
 export async function submitBookingForm(
   formData: BookingFormData,
 ): Promise<{ bookingId: number; message: string }> {
+  // Format as naive ISO datetime (no timezone suffix) so the backend
+  // stores exactly the Minsk-local time the user selected, regardless
+  // of the browser's timezone.
+  const toNaiveISO = (date: Date, time: string) => {
+    const y = date.getFullYear()
+    const m = String(date.getMonth() + 1).padStart(2, '0')
+    const d = String(date.getDate()).padStart(2, '0')
+    return `${y}-${m}-${d}T${time}:00`
+  }
+
   const payload: BookingCreatePayload = {
-    checkInDate: new Date(
-      formData.checkInDate.toDateString() + ' ' + formData.checkInTime,
-    ).toISOString(),
-    checkOutDate: new Date(
-      formData.checkOutDate.toDateString() + ' ' + formData.checkOutTime,
-    ).toISOString(),
+    checkInDate: toNaiveISO(formData.checkInDate, formData.checkInTime),
+    checkOutDate: toNaiveISO(formData.checkOutDate, formData.checkOutTime),
     tariff: formData.tariff,
     giftCertificateCode: formData.giftCertificateCode,
     giftId: formData.giftId,
@@ -922,9 +928,9 @@ export async function submitBookingForm(
     totalPrice: formData.totalPrice,
     prepaymentPrice: formData.giftId
       ? Math.max(0, (formData.totalPrice ?? 0) - (formData.giftPrice ?? 0))
-      : undefined,
+      : calculatePrepayment(formData.totalPrice ?? 0, new Date(formData.checkInDate)),
     contactType: formData.contactType,
-    telegram: formData.telegram,
+    telegram: formData.telegram ? `@${formData.telegram.toLowerCase()}` : undefined,
     phone: formData.phone,
   }
 

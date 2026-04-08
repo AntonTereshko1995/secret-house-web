@@ -49,9 +49,35 @@ function BookingWizard() {
   useEffect(() => {
     logger.info('booking_step', {
       stepId: currentStepId,
+      stepTitle: currentStep?.shortTitle,
       stepIndex: currentStepIndex + 1,
       totalSteps,
+      // Core
       tariff: formData.tariff,
+      guestCount: formData.guestCount,
+      // Dates & duration
+      checkInDate: formData.checkInDate,
+      checkInTime: formData.checkInTime,
+      checkOutDate: formData.checkOutDate,
+      checkOutTime: formData.checkOutTime,
+      durationHours: formData.durationHours,
+      // Pricing
+      basePrice: formData.basePrice,
+      totalPrice: formData.totalPrice,
+      // Options
+      hasPhotoshoot: formData.hasPhotoshoot ?? false,
+      hasSauna: formData.hasSauna ?? false,
+      bedroomType: formData.bedroomType,
+      hasExtraBedroom: formData.hasExtraBedroom ?? false,
+      hasSecretRoom: formData.hasSecretRoom ?? false,
+      needsTransfer: formData.needsTransfer ?? false,
+      wineCount: formData.wineSelection?.length ?? 0,
+      // Discount / gift
+      hasPromocode: !!formData.promocodeValid,
+      promocodeDiscount: formData.promocodeDiscount,
+      hasGift: !!formData.giftId,
+      // Contact
+      contactType: formData.contactType,
     })
   }, [currentStepId]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -107,12 +133,44 @@ function BookingWizard() {
     setLoading(true)
     try {
       const finalData = { ...formDataRef.current, ...extraData } as BookingFormData
+      logger.info('booking_submit_start', {
+        tariff: finalData.tariff,
+        guestCount: finalData.guestCount,
+        checkInDate: finalData.checkInDate,
+        checkInTime: finalData.checkInTime,
+        checkOutDate: finalData.checkOutDate,
+        checkOutTime: finalData.checkOutTime,
+        durationHours: finalData.durationHours,
+        basePrice: finalData.basePrice,
+        totalPrice: finalData.totalPrice,
+        hasPhotoshoot: finalData.hasPhotoshoot ?? false,
+        hasSauna: finalData.hasSauna ?? false,
+        bedroomType: finalData.bedroomType,
+        hasExtraBedroom: finalData.hasExtraBedroom ?? false,
+        hasSecretRoom: finalData.hasSecretRoom ?? false,
+        needsTransfer: finalData.needsTransfer ?? false,
+        wineCount: finalData.wineSelection?.length ?? 0,
+        hasPromocode: !!finalData.promocodeValid,
+        promocodeDiscount: finalData.promocodeDiscount,
+        hasGift: !!finalData.giftId,
+        contactType: finalData.contactType,
+        hasReceipt: !!finalData.receiptFile,
+      })
       const { bookingId } = await submitBookingForm(finalData)
       if (finalData.receiptFile) {
+        logger.info('booking_receipt_upload_start', { bookingId })
         await uploadReceipt(bookingId, finalData.receiptFile)
+        logger.info('booking_receipt_upload_complete', { bookingId })
       }
       clearFormFromLocalStorage()
-      logger.info('booking_flow_complete', { bookingId })
+      logger.info('booking_flow_complete', {
+        bookingId,
+        tariff: finalData.tariff,
+        totalPrice: finalData.totalPrice,
+        guestCount: finalData.guestCount,
+        durationHours: finalData.durationHours,
+        hasReceipt: !!finalData.receiptFile,
+      })
       navigate('/booking/success', {
         state: { booking: finalData, bookingId },
         replace: true
@@ -123,6 +181,7 @@ function BookingWizard() {
         stack: error instanceof Error ? error.stack : undefined,
         stepId: currentStepId,
         tariff: formData.tariff,
+        totalPrice: formData.totalPrice,
       })
       console.error('Booking submission error:', error)
       alert('Ошибка при отправке бронирования. Пожалуйста, попробуйте еще раз.')

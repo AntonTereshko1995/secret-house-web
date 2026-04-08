@@ -25,6 +25,12 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0]
+      logger.info('booking_receipt_file_attached', {
+        fileName: file.name,
+        fileSize: file.size,
+        fileType: file.type,
+        totalPrice: formData.totalPrice,
+      })
       setReceiptFile(file)
       if (file.type.startsWith('image/')) {
         const reader = new FileReader()
@@ -34,7 +40,7 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
         setReceiptPreview(null)
       }
     }
-  }, [])
+  }, [formData.totalPrice])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -51,6 +57,12 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
       alert('Пожалуйста, загрузите чек или документ об оплате')
       return
     }
+    logger.info('booking_receipt_submit', {
+      hasReceipt: !!receiptFile,
+      isFullyCoveredByGift,
+      totalPrice: formData.totalPrice,
+      prepayment,
+    })
     setIsSubmitting(true)
     try {
       const receiptData: Partial<BookingFormData> = {
