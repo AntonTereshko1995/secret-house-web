@@ -12,6 +12,26 @@ export interface BookedPeriod {
 }
 
 /**
+ * Tariffs that always include sauna (forced true regardless of user selection).
+ */
+const TARIFFS_WITH_SAUNA_INCLUDED: TariffType[] = [
+  'incognito-daily',
+  'incognito-12h',
+  'incognito-work',
+]
+
+/**
+ * Tariffs that always include white bedroom and extra (green) bedroom.
+ */
+const TARIFFS_WITH_ALL_ROOMS: TariffType[] = [
+  'incognito-daily',
+  'incognito-12h',
+  'incognito-work',
+  'daily-couple',
+  'daily-3plus',
+]
+
+/**
  * Minimum booking duration in hours
  */
 export const MIN_BOOKING_HOURS = 3
@@ -916,9 +936,10 @@ export async function submitBookingForm(
     giftId: formData.giftId,
     guestCount: formData.guestCount,
     hasPhotoshoot: formData.hasPhotoshoot ?? false,
-    hasSauna: formData.hasSauna ?? false,
-    bedroomType: formData.bedroomType,
-    hasExtraBedroom: formData.hasExtraBedroom ?? false,
+    // Incognito and daily tariffs always include both bedrooms; sauna only for incognito
+    hasSauna: TARIFFS_WITH_SAUNA_INCLUDED.includes(formData.tariff) ? true : (formData.hasSauna ?? false),
+    bedroomType: TARIFFS_WITH_ALL_ROOMS.includes(formData.tariff) ? 'white' : formData.bedroomType,
+    hasExtraBedroom: TARIFFS_WITH_ALL_ROOMS.includes(formData.tariff) ? true : (formData.hasExtraBedroom ?? false),
     hasSecretRoom: formData.hasSecretRoom ?? false,
     comment: formData.comment,
     promocode: formData.promocode,
