@@ -21,7 +21,7 @@ const TARIFFS_WITH_SAUNA_INCLUDED: TariffType[] = [
 ]
 
 /**
- * Tariffs that always include white bedroom and extra (green) bedroom.
+ * Tariffs that always include white bedroom, extra (green) bedroom and secret room.
  */
 const TARIFFS_WITH_ALL_ROOMS: TariffType[] = [
   'incognito-daily',
@@ -940,7 +940,7 @@ export async function submitBookingForm(
     hasSauna: TARIFFS_WITH_SAUNA_INCLUDED.includes(formData.tariff) ? true : (formData.hasSauna ?? false),
     bedroomType: TARIFFS_WITH_ALL_ROOMS.includes(formData.tariff) ? 'white' : formData.bedroomType,
     hasExtraBedroom: TARIFFS_WITH_ALL_ROOMS.includes(formData.tariff) ? true : (formData.hasExtraBedroom ?? false),
-    hasSecretRoom: formData.hasSecretRoom ?? false,
+    hasSecretRoom: TARIFFS_WITH_ALL_ROOMS.includes(formData.tariff) ? true : (formData.hasSecretRoom ?? false),
     comment: formData.comment,
     promocode: formData.promocode,
     wineSelection: formData.wineSelection ?? [],
