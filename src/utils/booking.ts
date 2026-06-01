@@ -437,7 +437,7 @@ export const TARIFF_SALE_CONFIG: Record<TariffType, TariffConfig> = {
     isCheckInTimeLimit: false,
     hasPhotoshoot: true,
     hasTransfer: false,
-    multiDayPrices: { 1: 500, 2: 900, 3: 1400, 4: 1800, 5: 2200, 6: 2600, 7: 3000, 8: 3400, 9: 3700, 10: 4000, 11: 4300, 12: 4500, 13: 4800, 14: 5000 }
+    multiDayPrices: { 1: 500, 2: 950, 3: 1400, 4: 1800, 5: 2200, 6: 2600, 7: 3000, 8: 3400, 9: 3700, 10: 4000, 11: 4300, 12: 4500, 13: 4800, 14: 5000 }
   },
   'daily-couple': {
     id: 'daily-couple',
@@ -511,9 +511,9 @@ export const TARIFF_SALE_CONFIG: Record<TariffType, TariffConfig> = {
 
 /**
  * Returns the tariff config for the given tariff ID.
- * Defaults to the sale (weekday) config.
+ * Defaults to the standard (weekend) config.
  */
-export function getTariffConfig(tariffId: TariffType | string, sale = true): TariffConfig | undefined {
+export function getTariffConfig(tariffId: TariffType | string, sale = false): TariffConfig | undefined {
   const map = sale ? TARIFF_SALE_CONFIG : TARIFF_CONFIG
   return map[tariffId as TariffType]
 }
@@ -571,49 +571,49 @@ export const TARIFF_OPTIONS: TariffOption[] = [
     id: 'incognito-daily',
     name: 'Инкогнито (Суточно)',
     description: '24 часа с полной конфиденциальностью',
-    basePrice: TARIFF_SALE_CONFIG['incognito-daily'].price,
-    unit: '700 BYN'
+    basePrice: TARIFF_CONFIG['incognito-daily'].price,
+    unit: '900 BYN'
   },
   {
     id: 'incognito-12h',
     name: 'Инкогнито (12 часов)',
     description: '12 часов с полной конфиденциальностью',
-    basePrice: TARIFF_SALE_CONFIG['incognito-12h'].price,
-    unit: '500 BYN'
+    basePrice: TARIFF_CONFIG['incognito-12h'].price,
+    unit: '600 BYN'
   },
   {
     id: 'incognito-work',
     name: 'Инкогнито (Рабочий)',
     description: 'Будни с полной конфиденциальностью',
-    basePrice: TARIFF_SALE_CONFIG['incognito-work'].price,
-    unit: '400 BYN'
+    basePrice: TARIFF_CONFIG['incognito-work'].price,
+    unit: '450 BYN'
   },
   {
     id: 'daily-3plus',
     name: 'Суточно от 3 человек',
     description: '24 часа для компании от 3 человек',
-    basePrice: TARIFF_SALE_CONFIG['daily-3plus'].price,
-    unit: '500 BYN'
+    basePrice: TARIFF_CONFIG['daily-3plus'].price,
+    unit: '700 BYN'
   },
   {
     id: 'daily-couple',
     name: 'Суточно для двоих',
     description: '24 часа для пары',
-    basePrice: TARIFF_SALE_CONFIG['daily-couple'].price,
-    unit: '400 BYN'
+    basePrice: TARIFF_CONFIG['daily-couple'].price,
+    unit: '500 BYN'
   },
   {
     id: '12h-standard',
     name: '12 часов',
     description: 'Стандартный тариф на 12 часов',
-    basePrice: TARIFF_SALE_CONFIG['12h-standard'].price,
-    unit: 'от 200 BYN'
+    basePrice: TARIFF_CONFIG['12h-standard'].price,
+    unit: 'от 250 BYN'
   },
   {
     id: 'work-standard',
     name: 'Рабочий',
     description: 'Будние дни (пн-пт)',
-    basePrice: TARIFF_SALE_CONFIG['work-standard'].price,
+    basePrice: TARIFF_CONFIG['work-standard'].price,
     unit: 'от 180 BYN'
   },
   {
@@ -739,7 +739,7 @@ export function getBasePriceBreakdown(tariff: string, durationHours: number, sal
  * Calculate base price based on tariff and duration.
  * Delegates to getBasePriceBreakdown which mirrors the bot's algorithm exactly.
  */
-export function calculateBasePrice(tariff: string, durationHours: number, sale = true): number {
+export function calculateBasePrice(tariff: string, durationHours: number, sale = false): number {
   return getBasePriceBreakdown(tariff, durationHours, sale)?.basePrice ?? 0
 }
 
