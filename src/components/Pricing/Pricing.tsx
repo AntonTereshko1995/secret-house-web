@@ -1,24 +1,24 @@
 import { Link } from 'react-router-dom'
-import { TARIFF_CONFIG, TARIFF_SALE_CONFIG } from '../../utils/booking'
+import { TARIFF_CONFIG } from '../../utils/booking'
 
 const INCOGNITO_TARIFFS = [
   {
     id: 'incognito-daily',
     name: 'Инкогнито Суточно',
     duration: '24 часа',
-    features: ['до 6 гостей', 'Фотосессия включена', 'Трансфер', 'Полная конфиденциальность'],
+    features: ['до 6 гостей', 'Вино и лёгкие закуски', 'Сауна', 'Фотосессия включена', 'Трансфер', 'Полная конфиденциальность'],
   },
   {
     id: 'incognito-12h',
     name: 'Инкогнито 12 часов',
     duration: '12 часов',
-    features: ['до 6 гостей', 'Трансфер', 'Полная конфиденциальность'],
+    features: ['до 6 гостей', 'Вино и лёгкие закуски', 'Сауна', 'Трансфер', 'Полная конфиденциальность'],
   },
   {
     id: 'incognito-work',
     name: 'Инкогнито Рабочий',
     duration: '11 часов · будни',
-    features: ['до 6 гостей', 'Трансфер', 'Полная конфиденциальность'],
+    features: ['до 6 гостей', 'Вино и лёгкие закуски', 'Сауна', 'Трансфер', 'Полная конфиденциальность'],
   },
 ]
 
@@ -59,8 +59,6 @@ interface TariffCardProps {
 
 function TariffCard({ id, name, duration, features, incognito }: TariffCardProps) {
   const price = TARIFF_CONFIG[id as keyof typeof TARIFF_CONFIG]?.price ?? 0
-  const salePrice = TARIFF_SALE_CONFIG[id as keyof typeof TARIFF_SALE_CONFIG]?.price ?? 0
-  const hasSale = salePrice > 0 && salePrice < price
 
   return (
     <div className={`
@@ -92,9 +90,6 @@ function TariffCard({ id, name, duration, features, incognito }: TariffCardProps
           <span className="text-3xl font-bold text-yellow-600">{price}</span>
           <span className="text-sm text-gray-400">BYN</span>
         </div>
-        {hasSale && (
-          <p className="text-xs text-gray-500 mt-1">от {salePrice} BYN в будни</p>
-        )}
       </div>
 
       {/* Divider */}
