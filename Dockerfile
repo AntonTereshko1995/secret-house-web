@@ -5,18 +5,11 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files
 COPY package*.json ./
-
-# Install dependencies
-RUN npm ci --only=production=false
-
-# Copy source code
 COPY . .
 
-# Remove images before build so vite does not copy 628MB into dist/ (images go directly to nginx).
-# Also clean prerender temp files that vite-prerender-plugin writes to node_modules but never removes.
-RUN rm -rf public/images && npm run build && rm -rf node_modules
+# npm ci + build + cleanup in one RUN so kaniko snapshots only dist/ (node_modules never appears in any layer)
+RUN npm ci && rm -rf public/images && npm run build && rm -rf node_modules
 
 # Stage 2: Production
 FROM nginx:alpine
