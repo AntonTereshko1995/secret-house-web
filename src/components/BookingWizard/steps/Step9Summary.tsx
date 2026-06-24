@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { calculateTotalPrice, getTariffConfig, getBasePriceBreakdown, getDatePriceOverride, TARIFF_OPTIONS, WINE_OPTIONS, BEDROOM_OPTIONS, calculatePrepayment, getHolidayName } from '../../../utils/booking'
 import { logger } from '../../../services/logger'
 import type { StepProps } from '../../../types/booking.types'
@@ -32,8 +31,6 @@ function PriceRow({ label, value, highlight }: { label: string; value: string; h
 }
 
 function Step9Summary({ formData, updateFormData, nextStep, prevStep }: StepProps) {
-  const [termsAccepted, setTermsAccepted] = useState(formData.termsAccepted || false)
-
   const pricing = calculateTotalPrice(formData)
   const tariffName = TARIFF_OPTIONS.find(t => t.id === formData.tariff)?.name ?? '—'
   const tariffConfig = formData.tariff ? getTariffConfig(formData.tariff) : undefined
@@ -59,12 +56,16 @@ function Step9Summary({ formData, updateFormData, nextStep, prevStep }: StepProp
   const isFullPayment = doplate !== null ? true : prepayment === pricing.totalPrice
 
   const handleNext = () => {
-    if (!termsAccepted) {
-      alert('Пожалуйста, примите условия бронирования')
-      return
-    }
-    logger.info('booking_select', { step: 'summary', totalPrice: pricing.totalPrice, prepayment, tariff: formData.tariff })
-    updateFormData({ ...pricing, termsAccepted })
+    logger.info('booking_select', {
+      step: 'summary',
+      totalPrice: pricing.totalPrice,
+      prepayment,
+      tariff: formData.tariff,
+      contactType: formData.contactType,
+      telegram: formData.telegram,
+      phone: formData.phone,
+    })
+    updateFormData({ ...pricing })
     nextStep()
   }
 
@@ -158,22 +159,6 @@ function Step9Summary({ formData, updateFormData, nextStep, prevStep }: StepProp
         </div>
       </div>
 
-      {/* Terms */}
-      <label className="flex items-start gap-2 cursor-pointer mb-3">
-        <input
-          type="checkbox"
-          checked={termsAccepted}
-          onChange={(e) => setTermsAccepted(e.target.checked)}
-          className="w-4 h-4 mt-0.5 accent-yellow-600 flex-shrink-0"
-        />
-        <span className="text-xs text-gray-400">
-          Принимаю{' '}
-          <a href="#" className="text-amber-400 hover:underline">условия бронирования</a>
-          {' '}и{' '}
-          <a href="#" className="text-amber-400 hover:underline">политику конфиденциальности</a>
-        </span>
-      </label>
-
       <div className="flex gap-4">
         <button
           onClick={prevStep}
@@ -183,8 +168,7 @@ function Step9Summary({ formData, updateFormData, nextStep, prevStep }: StepProp
         </button>
         <button
           onClick={handleNext}
-          disabled={!termsAccepted}
-          className="flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 disabled:opacity-40 disabled:cursor-not-allowed text-black font-bold py-2 px-4 rounded-xl uppercase tracking-wider transition-all"
+          className="flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-black font-bold py-2 px-4 rounded-xl uppercase tracking-wider transition-all"
         >
           Подтвердить
         </button>

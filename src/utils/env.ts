@@ -5,5 +5,6 @@ declare global {
 }
 
 export function getEnv(key: string, fallback = ''): string {
-  return window.__env__?.[key] || (import.meta.env[key] as string) || fallback
+  const runtimeEnv = typeof window !== 'undefined' ? window.__env__ : undefined
+  return runtimeEnv?.[key] || (import.meta.env[key] as string) || fallback
 }
