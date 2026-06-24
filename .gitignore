@@ -24,7 +24,6 @@ public/images/rooms/*.png
 node_modules/
 
 # Build outputs
-dist/
 dist-ssr/
 *.local
 

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /booking/success
+
+Sitemap: https://secrethouse.by/sitemap.xml
