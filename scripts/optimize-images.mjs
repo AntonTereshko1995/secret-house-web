@@ -1,24 +1,31 @@
+/**
+ * Processes flat originals in public/images/rooms/.
+ *
+ * Input:  {category}__{name}.jpg  (e.g. green-bedroom__DSC05736.jpg)
+ * Output: {category}__{name}__thumb.webp / .jpg   (640px)
+ *         {category}__{name}__medium.webp / .jpg  (1280px)
+ *         {category}__{name}__large.webp / .jpg   (1920px)
+ *
+ * Skips variants that already exist. Safe to re-run.
+ */
+
 import sharp from 'sharp'
 import fs from 'fs/promises'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { glob } from 'glob'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const projectRoot = path.join(__dirname, '..')
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const ROOMS_DIR = path.join(__dirname, '..', 'public/images/rooms')
 
-const ROOMS_DIR = path.join(projectRoot, 'public/images/rooms')
-const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'JPG', 'JPEG', 'png', 'PNG']
-
-// Size configurations
 const SIZES = {
-  thumbnails: { width: 640, quality: 80 },
+  thumb:  { width: 640,  quality: 80 },
   medium: { width: 1280, quality: 85 },
-  large: { width: 1920, quality: 85 }
+  large:  { width: 1920, quality: 85 },
 }
 
-// Semaphore to limit concurrent processing (avoid memory exhaustion)
+const SIZE_SUFFIXES = ['__thumb', '__medium', '__large']
+
 class Semaphore {
   constructor(max) {
     this.max = max
@@ -29,20 +36,16 @@ class Semaphore {
   async acquire() {
     if (this.count < this.max) {
       this.count++
-      return Promise.resolve()
+      return
     }
-
-    return new Promise(resolve => {
-      this.queue.push(resolve)
-    })
+    return new Promise(resolve => this.queue.push(resolve))
   }
 
   release() {
     this.count--
     if (this.queue.length > 0) {
       this.count++
-      const resolve = this.queue.shift()
-      resolve()
+      this.queue.shift()()
     }
   }
 
@@ -56,175 +59,82 @@ class Semaphore {
   }
 }
 
-async function createDirectories(baseDir) {
-  await fs.mkdir(path.join(baseDir, 'original'), { recursive: true })
-  await fs.mkdir(path.join(baseDir, 'thumbnails'), { recursive: true })
-  await fs.mkdir(path.join(baseDir, 'medium'), { recursive: true })
-  await fs.mkdir(path.join(baseDir, 'large'), { recursive: true })
+async function exists(p) {
+  return fs.access(p).then(() => true).catch(() => false)
 }
 
-async function processImage(imagePath, semaphore) {
+async function processImage(src, semaphore) {
   return semaphore.run(async () => {
-    const filename = path.basename(imagePath)
-    const categoryDir = path.dirname(imagePath)
-    const baseFilename = path.parse(filename).name
+    const baseName = path.parse(src).name  // e.g. "green-bedroom__DSC05736"
+    console.log(`\n📸 ${baseName}`)
 
-    console.log(`\n📸 Processing: ${filename}`)
+    const meta = await sharp(src, { limitInputPixels: 100_000_000, sequentialRead: true }).metadata()
+    const aspectRatio = meta.width / meta.height
+    console.log(`   ${meta.width}×${meta.height}px`)
 
-    try {
-      // Create directories if they don't exist
-      await createDirectories(categoryDir)
+    const tasks = []
 
-      // Move original to original/ folder
-      const originalPath = path.join(categoryDir, 'original', filename)
-      const originalExists = await fs.access(originalPath).then(() => true).catch(() => false)
-
-      if (!originalExists) {
-        await fs.rename(imagePath, originalPath)
-        console.log(`  📁 Moved to: original/${filename}`)
-      } else {
-        console.log(`  ⏭️  Original already exists, skipping move`)
+    for (const [sizeName, { width, quality }] of Object.entries(SIZES)) {
+      if (meta.width < width) {
+        console.log(`   ⏭️  ${sizeName}: original too small (${meta.width}px < ${width}px)`)
+        continue
       }
 
-      // Load image
-      const image = sharp(originalPath, {
-        limitInputPixels: 100000000,  // Limit to ~100 MP
-        sequentialRead: true
-      })
+      const height = Math.round(width / aspectRatio)
 
-      const metadata = await image.metadata()
-      const aspectRatio = metadata.width / metadata.height
+      const variants = [
+        {
+          dest: path.join(ROOMS_DIR, `${baseName}__${sizeName}.webp`),
+          encode: (s) => s.webp({ quality, effort: 4 }),
+        },
+        {
+          dest: path.join(ROOMS_DIR, `${baseName}__${sizeName}.jpg`),
+          encode: (s) => s.jpeg({ quality, mozjpeg: true }),
+        },
+      ]
 
-      console.log(`  📏 Original: ${metadata.width}x${metadata.height}px`)
-
-      // Process each size
-      const processes = []
-
-      for (const [sizeName, config] of Object.entries(SIZES)) {
-        const targetWidth = config.width
-        const targetHeight = Math.round(targetWidth / aspectRatio)
-
-        // Skip if original is smaller than target
-        if (metadata.width < targetWidth) {
-          console.log(`  ⏭️  Skipping ${sizeName} (original is smaller)`)
+      for (const { dest, encode } of variants) {
+        if (await exists(dest)) {
+          console.log(`   ⏭️  ${path.basename(dest)} exists`)
           continue
         }
-
-        // WebP output
-        const webpPath = path.join(categoryDir, sizeName, `${baseFilename}.webp`)
-        const webpExists = await fs.access(webpPath).then(() => true).catch(() => false)
-
-        if (!webpExists) {
-          processes.push(
-            sharp(originalPath)
-              .resize(targetWidth, targetHeight, {
-                fit: 'cover',
-                position: 'center',
-                withoutEnlargement: true
-              })
-              .webp({ quality: config.quality, effort: 4 })
-              .toFile(webpPath)
-              .then(() => {
-                console.log(`  ✅ Created: ${sizeName}/${baseFilename}.webp`)
-              })
+        tasks.push(
+          encode(
+            sharp(src).resize(width, height, { fit: 'cover', withoutEnlargement: true })
           )
-        } else {
-          console.log(`  ⏭️  ${sizeName} WebP already exists`)
-        }
-
-        // JPG fallback
-        const jpgPath = path.join(categoryDir, sizeName, `${baseFilename}.jpg`)
-        const jpgExists = await fs.access(jpgPath).then(() => true).catch(() => false)
-
-        if (!jpgExists) {
-          processes.push(
-            sharp(originalPath)
-              .resize(targetWidth, targetHeight, {
-                fit: 'cover',
-                position: 'center',
-                withoutEnlargement: true
-              })
-              .jpeg({ quality: config.quality, mozjpeg: true })
-              .toFile(jpgPath)
-              .then(() => {
-                console.log(`  ✅ Created: ${sizeName}/${baseFilename}.jpg`)
-              })
-          )
-        } else {
-          console.log(`  ⏭️  ${sizeName} JPG already exists`)
-        }
+            .toFile(dest)
+            .then(() => console.log(`   ✅ ${path.basename(dest)}`))
+            .catch(err => console.error(`   ❌ ${path.basename(dest)}: ${err.message}`))
+        )
       }
-
-      await Promise.all(processes)
-
-      console.log(`  ✨ Completed: ${filename}`)
-
-      return { success: true, filename }
-    } catch (error) {
-      console.error(`  ❌ Error processing ${filename}:`, error.message)
-      return { success: false, filename, error: error.message }
     }
+
+    await Promise.all(tasks)
   })
 }
 
 async function main() {
-  console.log('🚀 Starting image optimization...\n')
-  console.log('Configuration:')
-  console.log(`  - Thumbnail: ${SIZES.thumbnails.width}px (quality ${SIZES.thumbnails.quality})`)
-  console.log(`  - Medium: ${SIZES.medium.width}px (quality ${SIZES.medium.quality})`)
-  console.log(`  - Large: ${SIZES.large.width}px (quality ${SIZES.large.quality})`)
-  console.log()
+  console.log('🚀 Optimizing images (flat structure)...\n')
 
-  // Find all images (excluding already processed folders)
-  const imagePatterns = IMAGE_EXTENSIONS.map(ext => `${ROOMS_DIR}/**/*.${ext}`)
-  let allImages = []
+  // Find originals: flat .jpg files without a size suffix
+  const allJpg = await glob(`${ROOMS_DIR}/*.{jpg,JPG,jpeg,JPEG}`)
+  const originals = allJpg.filter(f => {
+    const base = path.parse(f).name
+    return !SIZE_SUFFIXES.some(s => base.endsWith(s))
+  })
 
-  for (const pattern of imagePatterns) {
-    const images = await glob(pattern, {
-      ignore: [
-        '**/original/**',
-        '**/thumbnails/**',
-        '**/medium/**',
-        '**/large/**',
-        '**/.gitkeep'
-      ]
-    })
-    allImages = [...allImages, ...images]
-  }
-
-  if (allImages.length === 0) {
-    console.log('✨ No images to process. All images are already optimized.')
+  if (originals.length === 0) {
+    console.log('✨ No originals found. Run npm run images:flatten first.')
     return
   }
 
-  console.log(`Found ${allImages.length} images to process\n`)
+  console.log(`Found ${originals.length} originals to process\n`)
 
-  const startTime = Date.now()
-
-  // Process images with concurrency limit (4 concurrent processes)
+  const t0 = Date.now()
   const semaphore = new Semaphore(4)
-  const results = await Promise.all(
-    allImages.map(imagePath => processImage(imagePath, semaphore))
-  )
+  await Promise.all(originals.map(f => processImage(f, semaphore)))
 
-  const endTime = Date.now()
-  const duration = ((endTime - startTime) / 1000).toFixed(2)
-
-  const successCount = results.filter(r => r.success).length
-  const failCount = results.filter(r => !r.success).length
-
-  console.log('\n' + '='.repeat(60))
-  console.log(`✅ Successfully processed: ${successCount} images`)
-  console.log(`❌ Failed: ${failCount} images`)
-  console.log(`⏱️  Total time: ${duration}s`)
-  console.log('='.repeat(60))
-
-  if (failCount > 0) {
-    console.log('\nFailed images:')
-    results
-      .filter(r => !r.success)
-      .forEach(r => console.log(`  - ${r.filename}: ${r.error}`))
-  }
+  console.log(`\n✅ Done in ${((Date.now() - t0) / 1000).toFixed(1)}s`)
 }
 
 main().catch(console.error)

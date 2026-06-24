@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "images:convert-heic": "node scripts/convert-heic.mjs",
+    "images:flatten": "node scripts/flatten-images.mjs",
     "images:optimize": "node scripts/optimize-images.mjs",
     "images:generate-manifest": "node scripts/generate-manifest-responsive.mjs",
     "images:full-pipeline": "npm run images:convert-heic && npm run images:optimize && npm run images:generate-manifest"

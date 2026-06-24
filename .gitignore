@@ -11,6 +11,15 @@ obj/
 # Custom
 PRPs/
 
+# Room images — stored in Amvera /data persistent storage, not in git
+# Upload these files manually to /data/images/rooms/ via Amvera dashboard
+public/images/rooms/*.jpg
+public/images/rooms/*.JPG
+public/images/rooms/*.jpeg
+public/images/rooms/*.JPEG
+public/images/rooms/*.webp
+public/images/rooms/*.png
+
 # Dependencies
 node_modules/
 

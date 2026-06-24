@@ -1,15 +1,23 @@
+/**
+ * Scans the flat public/images/rooms/ directory for optimized images and
+ * writes src/data/gallery-manifest.json used by the React gallery component.
+ *
+ * Expects files named:  {category}__{name}__{size}.webp
+ * where size ∈ { thumb, medium, large }
+ *
+ * URLs in the manifest point to /images/rooms/... which nginx aliases
+ * to /data/images/rooms/ in production (Amvera persistent storage).
+ */
+
 import fs from 'fs/promises'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { glob } from 'glob'
 import sharp from 'sharp'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const projectRoot = path.join(__dirname, '..')
-
-const ROOMS_DIR = path.join(projectRoot, 'public/images/rooms')
-const OUTPUT_PATH = path.join(projectRoot, 'src/data/gallery-manifest.json')
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const ROOMS_DIR = path.join(__dirname, '..', 'public/images/rooms')
+const OUTPUT_PATH = path.join(__dirname, '..', 'src/data/gallery-manifest.json')
 
 const CATEGORIES = [
   'green-bedroom',
@@ -19,24 +27,24 @@ const CATEGORIES = [
   'first-floor',
   'first-bathroom',
   'second-bathroom',
-  'terrace'
+  'terrace',
 ]
 
 const CATEGORY_LABELS = {
-  'green-bedroom': 'Зеленая спальня',
-  'white-bedroom': 'Белая спальня',
-  'secret-room': 'Секретная комната',
-  'sauna': 'Сауна',
-  'first-floor': '1й этаж',
-  'first-bathroom': '1-ая ванная',
-  'second-bathroom': '2-ая ванная',
-  'terrace': 'Терраса'
+  'green-bedroom':    'Зеленая спальня',
+  'white-bedroom':    'Белая спальня',
+  'secret-room':      'Секретная комната',
+  'sauna':            'Сауна',
+  'first-floor':      '1й этаж',
+  'first-bathroom':   '1-ая ванная',
+  'second-bathroom':  '2-ая ванная',
+  'terrace':          'Терраса',
 }
 
-async function getImageDimensions(imagePath) {
+async function getDims(p) {
   try {
-    const metadata = await sharp(imagePath).metadata()
-    return { width: metadata.width, height: metadata.height }
+    const m = await sharp(p).metadata()
+    return { width: m.width ?? 0, height: m.height ?? 0 }
   } catch {
     return { width: 0, height: 0 }
   }
@@ -45,109 +53,87 @@ async function getImageDimensions(imagePath) {
 async function generateManifest() {
   console.log('🔍 Scanning for optimized images...\n')
 
+  // Each thumb webp file represents one photo
+  const thumbFiles = (await glob(`${ROOMS_DIR}/*__thumb.webp`)).sort()
+
+  if (thumbFiles.length === 0) {
+    console.log('No *__thumb.webp files found. Run npm run images:optimize first.')
+    return
+  }
+
+  // Group by category (preserving CATEGORIES order)
+  const byCategory = Object.fromEntries(CATEGORIES.map(c => [c, []]))
+
+  for (const f of thumbFiles) {
+    const base = path.parse(f).name           // e.g. "green-bedroom__DSC05736__thumb"
+    const category = base.split('__')[0]
+    if (byCategory[category]) {
+      byCategory[category].push(base)
+    } else {
+      console.warn(`⚠️  Unknown category in filename: ${path.basename(f)}`)
+    }
+  }
+
   const manifest = {
     items: [],
     lastUpdated: new Date().toISOString(),
     totalImages: 0,
-    categories: {}
+    categories: Object.fromEntries(CATEGORIES.map(c => [c, 0])),
   }
 
-  // Initialize category counts
-  CATEGORIES.forEach(cat => {
-    manifest.categories[cat] = 0
-  })
-
   for (const category of CATEGORIES) {
-    const categoryDir = path.join(ROOMS_DIR, category)
-    const thumbnailDir = path.join(categoryDir, 'thumbnails')
+    const bases = byCategory[category]
+    console.log(`📁 ${category}: ${bases.length} images`)
 
-    // Check if thumbnails directory exists
-    try {
-      await fs.access(thumbnailDir)
-    } catch {
-      console.log(`⚠️  No thumbnails found for ${category}, skipping...`)
-      continue
-    }
+    for (let i = 0; i < bases.length; i++) {
+      const thumbBase = bases[i]                              // "green-bedroom__DSC05736__thumb"
+      const imageBase = thumbBase.replace(/__thumb$/, '')     // "green-bedroom__DSC05736"
+      const urlBase   = `/images/rooms/${imageBase}`
 
-    // Find all WebP thumbnails (each represents one image)
-    const thumbnails = await glob(`${thumbnailDir}/*.webp`)
+      const thumbDim  = await getDims(path.join(ROOMS_DIR, `${thumbBase}.webp`))
+      const mediumDim = await getDims(path.join(ROOMS_DIR, `${imageBase}__medium.webp`))
+      const largeDim  = await getDims(path.join(ROOMS_DIR, `${imageBase}__large.webp`))
 
-    console.log(`📁 ${category}: Found ${thumbnails.length} images`)
-
-    for (let i = 0; i < thumbnails.length; i++) {
-      const thumbnailPath = thumbnails[i]
-      const baseFilename = path.parse(thumbnailPath).name
-
-      // Build paths for all variants
-      const relativeCategoryPath = `/images/rooms/${category}`
-
-      const thumbnailWebp = `${relativeCategoryPath}/thumbnails/${baseFilename}.webp`
-      const thumbnailJpg = `${relativeCategoryPath}/thumbnails/${baseFilename}.jpg`
-      const mediumWebp = `${relativeCategoryPath}/medium/${baseFilename}.webp`
-      const mediumJpg = `${relativeCategoryPath}/medium/${baseFilename}.jpg`
-      const largeWebp = `${relativeCategoryPath}/large/${baseFilename}.webp`
-      const largeJpg = `${relativeCategoryPath}/large/${baseFilename}.jpg`
-
-      // Get dimensions for each size
-      const thumbDim = await getImageDimensions(path.join(projectRoot, 'public', thumbnailWebp))
-      const mediumDim = await getImageDimensions(path.join(projectRoot, 'public', mediumWebp))
-      const largeDim = await getImageDimensions(path.join(projectRoot, 'public', largeWebp))
-
-      // Fallback logic: if larger size doesn't exist, use smaller size
-      // Medium fallback to thumbnail
-      const mediumPaths = mediumDim.width > 0
-        ? { webp: mediumWebp, jpg: mediumJpg, width: mediumDim.width, height: mediumDim.height }
-        : { webp: thumbnailWebp, jpg: thumbnailJpg, width: thumbDim.width, height: thumbDim.height }
-
-      // Large fallback to medium, then to thumbnail
-      let largePaths
-      if (largeDim.width > 0) {
-        largePaths = { webp: largeWebp, jpg: largeJpg, width: largeDim.width, height: largeDim.height }
-      } else if (mediumDim.width > 0) {
-        largePaths = { webp: mediumWebp, jpg: mediumJpg, width: mediumDim.width, height: mediumDim.height }
-      } else {
-        largePaths = { webp: thumbnailWebp, jpg: thumbnailJpg, width: thumbDim.width, height: thumbDim.height }
+      const thumb = {
+        webp: `${urlBase}__thumb.webp`,
+        jpg:  `${urlBase}__thumb.jpg`,
+        ...thumbDim,
       }
 
-      const item = {
-        id: `${category}-${i}`,
+      const medium = mediumDim.width > 0
+        ? { webp: `${urlBase}__medium.webp`, jpg: `${urlBase}__medium.jpg`, ...mediumDim }
+        : thumb
+
+      const large = largeDim.width > 0
+        ? { webp: `${urlBase}__large.webp`, jpg: `${urlBase}__large.jpg`, ...largeDim }
+        : medium
+
+      const label = CATEGORY_LABELS[category]
+      manifest.items.push({
+        id:          `${category}-${i}`,
         category,
-        alt: `${CATEGORY_LABELS[category]}${thumbnails.length > 1 ? ` вид ${i + 1}` : ''}`,
-        description: `${CATEGORY_LABELS[category]}${thumbnails.length > 1 ? ` - фото ${i + 1}` : ''}`,
-        featured: i === 0,  // First image of each category is featured
-        images: {
-          thumbnail: {
-            webp: thumbnailWebp,
-            jpg: thumbnailJpg,
-            width: thumbDim.width,
-            height: thumbDim.height
-          },
-          medium: mediumPaths,
-          large: largePaths
-        }
-      }
+        alt:         bases.length > 1 ? `${label} вид ${i + 1}` : label,
+        description: bases.length > 1 ? `${label} - фото ${i + 1}` : label,
+        featured:    i === 0,
+        images:      { thumbnail: thumb, medium, large },
+      })
 
-      manifest.items.push(item)
       manifest.categories[category]++
     }
   }
 
   manifest.totalImages = manifest.items.length
 
-  // Write manifest
   await fs.mkdir(path.dirname(OUTPUT_PATH), { recursive: true })
   await fs.writeFile(OUTPUT_PATH, JSON.stringify(manifest, null, 2))
 
   console.log('\n' + '='.repeat(60))
-  console.log(`✅ Generated manifest with ${manifest.totalImages} items`)
-  console.log(`📄 Saved to: src/data/gallery-manifest.json`)
+  console.log(`✅ Manifest: ${manifest.totalImages} items → src/data/gallery-manifest.json`)
   console.log('='.repeat(60))
   console.log('\nImages per category:')
-  Object.entries(manifest.categories)
-    .filter(([_, count]) => count > 0)
-    .forEach(([category, count]) => {
-      console.log(`  - ${CATEGORY_LABELS[category]}: ${count}`)
-    })
+  CATEGORIES.filter(c => manifest.categories[c] > 0).forEach(c => {
+    console.log(`  ${CATEGORY_LABELS[c]}: ${manifest.categories[c]}`)
+  })
 }
 
 generateManifest().catch(console.error)

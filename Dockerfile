@@ -14,10 +14,9 @@ RUN npm ci --only=production=false
 # Copy source code
 COPY . .
 
-# Build the application and remove prerender temp files left by vite-prerender-plugin
-# (the plugin writes built bundles into node_modules/vite-prerender-plugin/headless-prerender
-# but never cleans them up, causing kaniko layer snapshot to be slow)
-RUN npm run build && rm -rf node_modules/vite-prerender-plugin/headless-prerender
+# Remove images before build so vite does not copy 628MB into dist/ (images go directly to nginx).
+# Also clean prerender temp files that vite-prerender-plugin writes to node_modules but never removes.
+RUN rm -rf public/images && npm run build && rm -rf node_modules/vite-prerender-plugin/headless-prerender
 
 # Stage 2: Production
 FROM nginx:alpine
@@ -29,7 +28,7 @@ COPY nginx.conf /etc/nginx/nginx.conf.template
 COPY env-config.sh /docker-entrypoint.d/40-env-config.sh
 RUN chmod +x /docker-entrypoint.d/40-env-config.sh
 
-# Copy built assets from builder stage
+# Copy compiled JS/CSS/HTML from builder stage (images are served from /data at runtime)
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Add healthcheck
