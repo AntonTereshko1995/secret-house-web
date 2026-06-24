@@ -16,7 +16,7 @@ COPY . .
 
 # Remove images before build so vite does not copy 628MB into dist/ (images go directly to nginx).
 # Also clean prerender temp files that vite-prerender-plugin writes to node_modules but never removes.
-RUN rm -rf public/images && npm run build && rm -rf node_modules/vite-prerender-plugin/headless-prerender
+RUN rm -rf public/images && npm run build && rm -rf node_modules
 
 # Stage 2: Production
 FROM nginx:alpine
