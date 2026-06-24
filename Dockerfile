@@ -14,8 +14,10 @@ RUN npm ci --only=production=false
 # Copy source code
 COPY . .
 
-# Build the application and remove node_modules to speed up layer snapshot
-RUN npm run build && rm -rf node_modules
+# Build the application and remove prerender temp files left by vite-prerender-plugin
+# (the plugin writes built bundles into node_modules/vite-prerender-plugin/headless-prerender
+# but never cleans them up, causing kaniko layer snapshot to be slow)
+RUN npm run build && rm -rf node_modules/vite-prerender-plugin/headless-prerender
 
 # Stage 2: Production
 FROM nginx:alpine
