@@ -1,40 +1,13 @@
-# Multi-stage build for optimized production image
-
-# Stage 1: Build
-FROM node:20-alpine AS builder
-
-WORKDIR /app
-
-COPY package*.json ./
-COPY . .
-
-# npm ci + build + cleanup in one RUN so kaniko snapshots only dist/ (node_modules never appears in any layer)
-RUN npm ci && rm -rf public/images && npm run build \
-    && echo "=== DISK USAGE BEFORE CLEANUP ===" \
-    && du -sh /root/.cache 2>/dev/null || true \
-    && du -sh node_modules 2>/dev/null || true \
-    && find /root/.cache -maxdepth 3 -type d 2>/dev/null || true \
-    && rm -rf node_modules /root/.cache
-
-# Stage 2: Production
 FROM nginx:alpine
 
-# Copy nginx config as template (API_PROXY_URL substituted at runtime via env-config.sh)
 COPY nginx.conf /etc/nginx/nginx.conf.template
-
-# Runtime env injection script
 COPY env-config.sh /docker-entrypoint.d/40-env-config.sh
 RUN chmod +x /docker-entrypoint.d/40-env-config.sh
 
-# Copy compiled JS/CSS/HTML from builder stage (images are served from /data at runtime)
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY dist /usr/share/nginx/html
 
-# Add healthcheck
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD wget --quiet --tries=1 --spider http://localhost/health || exit 1
 
-# Expose port 80
 EXPOSE 80
-
-# Start nginx
 CMD ["nginx", "-g", "daemon off;"]
