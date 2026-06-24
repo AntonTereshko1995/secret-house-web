@@ -191,21 +191,15 @@ function FullGallery({ isOpen, onClose, initialCategory }: FullGalleryProps) {
                     className="relative w-full aspect-[4/3] cursor-pointer overflow-hidden"
                     onClick={() => openLightbox(index)}
                   >
-                    <picture>
-                      <source
-                        srcSet={image.images.thumbnail.webp}
-                        type="image/webp"
-                      />
-                      <img
-                        src={image.images.thumbnail.webp}
-                        alt={image.alt}
-                        width={image.images.thumbnail.width}
-                        height={image.images.thumbnail.height}
-                        loading="lazy"
-                        decoding="async"
-                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                      />
-                    </picture>
+                    <img
+                      src={image.images.thumbnail.jpg}
+                      alt={image.alt}
+                      width={image.images.thumbnail.width}
+                      height={image.images.thumbnail.height}
+                      loading="lazy"
+                      decoding="async"
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-yellow-600/10 transition-all duration-500" />
 
@@ -279,39 +273,13 @@ function FullGallery({ isOpen, onClose, initialCategory }: FullGalleryProps) {
             </button>
           )}
 
-          {/* Responsive Image - Use medium on mobile, large on desktop */}
           <div className="relative w-full h-full sm:w-auto sm:h-auto sm:border-2 sm:border-yellow-600/30 sm:p-4">
-            <picture onClick={(e) => e.stopPropagation()}>
-              {/* Mobile: medium size (1280px) */}
-              <source
-                media="(max-width: 768px)"
-                srcSet={filteredImages[currentIndex].images.medium.webp}
-                type="image/webp"
-              />
-              <source
-                media="(max-width: 768px)"
-                srcSet={filteredImages[currentIndex].images.medium.webp}
-              />
-
-              {/* Desktop: large size (1920px) */}
-              <source
-                media="(min-width: 769px)"
-                srcSet={filteredImages[currentIndex].images.large.webp}
-                type="image/webp"
-              />
-              <source
-                media="(min-width: 769px)"
-                srcSet={filteredImages[currentIndex].images.large.webp}
-              />
-
-              {/* Fallback */}
-              <img
-                src={filteredImages[currentIndex].images.large.webp}
-                alt={filteredImages[currentIndex].alt}
-                className="w-full h-full sm:w-auto sm:h-auto object-contain sm:max-h-[80vh]"
-                onClick={(e) => e.stopPropagation()}
-              />
-            </picture>
+            <img
+              src={filteredImages[currentIndex].images.large.jpg}
+              alt={filteredImages[currentIndex].alt}
+              className="w-full h-full sm:w-auto sm:h-auto object-contain sm:max-h-[80vh]"
+              onClick={(e) => e.stopPropagation()}
+            />
           </div>
 
           {/* Image counter */}

@@ -8,22 +8,19 @@
       "featured": true,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/green-bedroom__DSC05725__thumb.webp",
-          "jpg": "/images/rooms/green-bedroom__DSC05725__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/green-bedroom__DSC05725__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/green-bedroom__DSC05725__medium.webp",
           "jpg": "/images/rooms/green-bedroom__DSC05725__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/green-bedroom__DSC05725__large.webp",
-          "jpg": "/images/rooms/green-bedroom__DSC05725__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/green-bedroom__DSC05725__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -35,22 +32,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/green-bedroom__DSC05729__thumb.webp",
-          "jpg": "/images/rooms/green-bedroom__DSC05729__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/green-bedroom__DSC05729__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/green-bedroom__DSC05729__medium.webp",
           "jpg": "/images/rooms/green-bedroom__DSC05729__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/green-bedroom__DSC05729__large.webp",
-          "jpg": "/images/rooms/green-bedroom__DSC05729__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/green-bedroom__DSC05729__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -62,22 +56,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/green-bedroom__DSC05731__thumb.webp",
-          "jpg": "/images/rooms/green-bedroom__DSC05731__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/green-bedroom__DSC05731__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/green-bedroom__DSC05731__medium.webp",
           "jpg": "/images/rooms/green-bedroom__DSC05731__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/green-bedroom__DSC05731__large.webp",
-          "jpg": "/images/rooms/green-bedroom__DSC05731__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/green-bedroom__DSC05731__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -89,22 +80,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/green-bedroom__DSC05736__thumb.webp",
-          "jpg": "/images/rooms/green-bedroom__DSC05736__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/green-bedroom__DSC05736__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/green-bedroom__DSC05736__medium.webp",
           "jpg": "/images/rooms/green-bedroom__DSC05736__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/green-bedroom__DSC05736__large.webp",
-          "jpg": "/images/rooms/green-bedroom__DSC05736__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/green-bedroom__DSC05736__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -116,22 +104,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/green-bedroom__photo_2024-07-28_21-25-03__thumb.webp",
-          "jpg": "/images/rooms/green-bedroom__photo_2024-07-28_21-25-03__thumb.jpg",
-          "width": 640,
-          "height": 1138
+          "jpg": "/images/rooms/green-bedroom__photo_2024-07-28_21-25-03__medium.jpg",
+          "width": 720,
+          "height": 1280
         },
         "medium": {
-          "webp": "/images/rooms/green-bedroom__photo_2024-07-28_21-25-03__thumb.webp",
-          "jpg": "/images/rooms/green-bedroom__photo_2024-07-28_21-25-03__thumb.jpg",
-          "width": 640,
-          "height": 1138
+          "jpg": "/images/rooms/green-bedroom__photo_2024-07-28_21-25-03__medium.jpg",
+          "width": 720,
+          "height": 1280
         },
         "large": {
-          "webp": "/images/rooms/green-bedroom__photo_2024-07-28_21-25-03__thumb.webp",
-          "jpg": "/images/rooms/green-bedroom__photo_2024-07-28_21-25-03__thumb.jpg",
-          "width": 640,
-          "height": 1138
+          "jpg": "/images/rooms/green-bedroom__photo_2024-07-28_21-25-03__medium.jpg",
+          "width": 720,
+          "height": 1280
         }
       }
     },
@@ -143,22 +128,19 @@
       "featured": true,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/white-bedroom__DSC05513__thumb.webp",
-          "jpg": "/images/rooms/white-bedroom__DSC05513__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/white-bedroom__DSC05513__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/white-bedroom__DSC05513__medium.webp",
           "jpg": "/images/rooms/white-bedroom__DSC05513__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/white-bedroom__DSC05513__large.webp",
-          "jpg": "/images/rooms/white-bedroom__DSC05513__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/white-bedroom__DSC05513__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -170,22 +152,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/white-bedroom__DSC05516__thumb.webp",
-          "jpg": "/images/rooms/white-bedroom__DSC05516__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/white-bedroom__DSC05516__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/white-bedroom__DSC05516__medium.webp",
           "jpg": "/images/rooms/white-bedroom__DSC05516__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/white-bedroom__DSC05516__large.webp",
-          "jpg": "/images/rooms/white-bedroom__DSC05516__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/white-bedroom__DSC05516__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -197,22 +176,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/white-bedroom__DSC05742__thumb.webp",
-          "jpg": "/images/rooms/white-bedroom__DSC05742__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/white-bedroom__DSC05742__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/white-bedroom__DSC05742__medium.webp",
           "jpg": "/images/rooms/white-bedroom__DSC05742__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/white-bedroom__DSC05742__large.webp",
-          "jpg": "/images/rooms/white-bedroom__DSC05742__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/white-bedroom__DSC05742__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -224,22 +200,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/white-bedroom__DSC05747__thumb.webp",
-          "jpg": "/images/rooms/white-bedroom__DSC05747__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/white-bedroom__DSC05747__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/white-bedroom__DSC05747__medium.webp",
           "jpg": "/images/rooms/white-bedroom__DSC05747__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/white-bedroom__DSC05747__large.webp",
-          "jpg": "/images/rooms/white-bedroom__DSC05747__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/white-bedroom__DSC05747__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -251,22 +224,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/white-bedroom__DSC05754__thumb.webp",
-          "jpg": "/images/rooms/white-bedroom__DSC05754__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/white-bedroom__DSC05754__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/white-bedroom__DSC05754__medium.webp",
           "jpg": "/images/rooms/white-bedroom__DSC05754__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/white-bedroom__DSC05754__large.webp",
-          "jpg": "/images/rooms/white-bedroom__DSC05754__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/white-bedroom__DSC05754__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -278,22 +248,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/white-bedroom__DSC05756__thumb.webp",
-          "jpg": "/images/rooms/white-bedroom__DSC05756__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/white-bedroom__DSC05756__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/white-bedroom__DSC05756__medium.webp",
           "jpg": "/images/rooms/white-bedroom__DSC05756__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/white-bedroom__DSC05756__large.webp",
-          "jpg": "/images/rooms/white-bedroom__DSC05756__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/white-bedroom__DSC05756__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -305,22 +272,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/white-bedroom__DSC05758__thumb.webp",
-          "jpg": "/images/rooms/white-bedroom__DSC05758__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/white-bedroom__DSC05758__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/white-bedroom__DSC05758__medium.webp",
           "jpg": "/images/rooms/white-bedroom__DSC05758__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/white-bedroom__DSC05758__large.webp",
-          "jpg": "/images/rooms/white-bedroom__DSC05758__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/white-bedroom__DSC05758__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -332,22 +296,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/white-bedroom__DSC05761__thumb.webp",
-          "jpg": "/images/rooms/white-bedroom__DSC05761__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/white-bedroom__DSC05761__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/white-bedroom__DSC05761__medium.webp",
           "jpg": "/images/rooms/white-bedroom__DSC05761__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/white-bedroom__DSC05761__large.webp",
-          "jpg": "/images/rooms/white-bedroom__DSC05761__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/white-bedroom__DSC05761__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -359,22 +320,19 @@
       "featured": true,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/secret-room__DSC05538__thumb.webp",
-          "jpg": "/images/rooms/secret-room__DSC05538__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/secret-room__DSC05538__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/secret-room__DSC05538__medium.webp",
           "jpg": "/images/rooms/secret-room__DSC05538__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/secret-room__DSC05538__large.webp",
-          "jpg": "/images/rooms/secret-room__DSC05538__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/secret-room__DSC05538__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -386,22 +344,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/secret-room__DSC05547__thumb.webp",
-          "jpg": "/images/rooms/secret-room__DSC05547__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/secret-room__DSC05547__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/secret-room__DSC05547__medium.webp",
           "jpg": "/images/rooms/secret-room__DSC05547__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/secret-room__DSC05547__large.webp",
-          "jpg": "/images/rooms/secret-room__DSC05547__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/secret-room__DSC05547__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -413,22 +368,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/secret-room__DSC05763__thumb.webp",
-          "jpg": "/images/rooms/secret-room__DSC05763__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/secret-room__DSC05763__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/secret-room__DSC05763__medium.webp",
           "jpg": "/images/rooms/secret-room__DSC05763__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/secret-room__DSC05763__large.webp",
-          "jpg": "/images/rooms/secret-room__DSC05763__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/secret-room__DSC05763__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -440,22 +392,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/secret-room__DSC05766__thumb.webp",
-          "jpg": "/images/rooms/secret-room__DSC05766__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/secret-room__DSC05766__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/secret-room__DSC05766__medium.webp",
           "jpg": "/images/rooms/secret-room__DSC05766__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/secret-room__DSC05766__large.webp",
-          "jpg": "/images/rooms/secret-room__DSC05766__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/secret-room__DSC05766__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -467,22 +416,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/secret-room__DSC05768__thumb.webp",
-          "jpg": "/images/rooms/secret-room__DSC05768__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/secret-room__DSC05768__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/secret-room__DSC05768__medium.webp",
           "jpg": "/images/rooms/secret-room__DSC05768__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/secret-room__DSC05768__large.webp",
-          "jpg": "/images/rooms/secret-room__DSC05768__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/secret-room__DSC05768__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -494,22 +440,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/secret-room__DSC05777__thumb.webp",
-          "jpg": "/images/rooms/secret-room__DSC05777__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/secret-room__DSC05777__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/secret-room__DSC05777__medium.webp",
           "jpg": "/images/rooms/secret-room__DSC05777__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/secret-room__DSC05777__large.webp",
-          "jpg": "/images/rooms/secret-room__DSC05777__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/secret-room__DSC05777__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -521,22 +464,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/secret-room__DSC05778__thumb.webp",
-          "jpg": "/images/rooms/secret-room__DSC05778__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/secret-room__DSC05778__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/secret-room__DSC05778__medium.webp",
           "jpg": "/images/rooms/secret-room__DSC05778__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/secret-room__DSC05778__large.webp",
-          "jpg": "/images/rooms/secret-room__DSC05778__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/secret-room__DSC05778__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -548,22 +488,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/secret-room__IMG_1179-copy__thumb.webp",
-          "jpg": "/images/rooms/secret-room__IMG_1179-copy__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/secret-room__IMG_1179-copy__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/secret-room__IMG_1179-copy__medium.webp",
           "jpg": "/images/rooms/secret-room__IMG_1179-copy__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/secret-room__IMG_1179-copy__large.webp",
-          "jpg": "/images/rooms/secret-room__IMG_1179-copy__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/secret-room__IMG_1179-copy__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -575,22 +512,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/secret-room__IMG_1186__thumb.webp",
-          "jpg": "/images/rooms/secret-room__IMG_1186__thumb.jpg",
-          "width": 640,
-          "height": 960
+          "jpg": "/images/rooms/secret-room__IMG_1186__medium.jpg",
+          "width": 1280,
+          "height": 1920
         },
         "medium": {
-          "webp": "/images/rooms/secret-room__IMG_1186__medium.webp",
           "jpg": "/images/rooms/secret-room__IMG_1186__medium.jpg",
           "width": 1280,
           "height": 1920
         },
         "large": {
-          "webp": "/images/rooms/secret-room__IMG_1186__large.webp",
-          "jpg": "/images/rooms/secret-room__IMG_1186__large.jpg",
-          "width": 1920,
-          "height": 2880
+          "jpg": "/images/rooms/secret-room__IMG_1186__medium.jpg",
+          "width": 1280,
+          "height": 1920
         }
       }
     },
@@ -602,22 +536,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/secret-room__IMG_1213__thumb.webp",
-          "jpg": "/images/rooms/secret-room__IMG_1213__thumb.jpg",
-          "width": 640,
-          "height": 960
+          "jpg": "/images/rooms/secret-room__IMG_1213__medium.jpg",
+          "width": 1280,
+          "height": 1920
         },
         "medium": {
-          "webp": "/images/rooms/secret-room__IMG_1213__medium.webp",
           "jpg": "/images/rooms/secret-room__IMG_1213__medium.jpg",
           "width": 1280,
           "height": 1920
         },
         "large": {
-          "webp": "/images/rooms/secret-room__IMG_1213__large.webp",
-          "jpg": "/images/rooms/secret-room__IMG_1213__large.jpg",
-          "width": 1920,
-          "height": 2880
+          "jpg": "/images/rooms/secret-room__IMG_1213__medium.jpg",
+          "width": 1280,
+          "height": 1920
         }
       }
     },
@@ -629,22 +560,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/secret-room__IMG_4901__thumb.webp",
-          "jpg": "/images/rooms/secret-room__IMG_4901__thumb.jpg",
-          "width": 640,
-          "height": 853
+          "jpg": "/images/rooms/secret-room__IMG_4901__medium.jpg",
+          "width": 1280,
+          "height": 1707
         },
         "medium": {
-          "webp": "/images/rooms/secret-room__IMG_4901__medium.webp",
           "jpg": "/images/rooms/secret-room__IMG_4901__medium.jpg",
           "width": 1280,
           "height": 1707
         },
         "large": {
-          "webp": "/images/rooms/secret-room__IMG_4901__large.webp",
-          "jpg": "/images/rooms/secret-room__IMG_4901__large.jpg",
-          "width": 1920,
-          "height": 2560
+          "jpg": "/images/rooms/secret-room__IMG_4901__medium.jpg",
+          "width": 1280,
+          "height": 1707
         }
       }
     },
@@ -656,22 +584,19 @@
       "featured": true,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/sauna__DSC05698__thumb.webp",
-          "jpg": "/images/rooms/sauna__DSC05698__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/sauna__DSC05698__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/sauna__DSC05698__medium.webp",
           "jpg": "/images/rooms/sauna__DSC05698__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/sauna__DSC05698__large.webp",
-          "jpg": "/images/rooms/sauna__DSC05698__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/sauna__DSC05698__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -683,22 +608,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/sauna__DSC05700__thumb.webp",
-          "jpg": "/images/rooms/sauna__DSC05700__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/sauna__DSC05700__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/sauna__DSC05700__medium.webp",
           "jpg": "/images/rooms/sauna__DSC05700__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/sauna__DSC05700__large.webp",
-          "jpg": "/images/rooms/sauna__DSC05700__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/sauna__DSC05700__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -710,22 +632,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/sauna__DSC05701__thumb.webp",
-          "jpg": "/images/rooms/sauna__DSC05701__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/sauna__DSC05701__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/sauna__DSC05701__medium.webp",
           "jpg": "/images/rooms/sauna__DSC05701__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/sauna__DSC05701__large.webp",
-          "jpg": "/images/rooms/sauna__DSC05701__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/sauna__DSC05701__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -737,22 +656,19 @@
       "featured": true,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/first-floor__DSC05677__thumb.webp",
-          "jpg": "/images/rooms/first-floor__DSC05677__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/first-floor__DSC05677__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/first-floor__DSC05677__medium.webp",
           "jpg": "/images/rooms/first-floor__DSC05677__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/first-floor__DSC05677__large.webp",
-          "jpg": "/images/rooms/first-floor__DSC05677__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/first-floor__DSC05677__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -764,22 +680,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/first-floor__DSC05687__thumb.webp",
-          "jpg": "/images/rooms/first-floor__DSC05687__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/first-floor__DSC05687__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/first-floor__DSC05687__medium.webp",
           "jpg": "/images/rooms/first-floor__DSC05687__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/first-floor__DSC05687__large.webp",
-          "jpg": "/images/rooms/first-floor__DSC05687__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/first-floor__DSC05687__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -791,22 +704,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/first-floor__DSC05691__thumb.webp",
-          "jpg": "/images/rooms/first-floor__DSC05691__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/first-floor__DSC05691__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/first-floor__DSC05691__medium.webp",
           "jpg": "/images/rooms/first-floor__DSC05691__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/first-floor__DSC05691__large.webp",
-          "jpg": "/images/rooms/first-floor__DSC05691__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/first-floor__DSC05691__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -818,22 +728,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/first-floor__DSC05714__thumb.webp",
-          "jpg": "/images/rooms/first-floor__DSC05714__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/first-floor__DSC05714__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/first-floor__DSC05714__medium.webp",
           "jpg": "/images/rooms/first-floor__DSC05714__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/first-floor__DSC05714__large.webp",
-          "jpg": "/images/rooms/first-floor__DSC05714__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/first-floor__DSC05714__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -845,22 +752,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/first-floor__IMG_1043__thumb.webp",
-          "jpg": "/images/rooms/first-floor__IMG_1043__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/first-floor__IMG_1043__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/first-floor__IMG_1043__medium.webp",
           "jpg": "/images/rooms/first-floor__IMG_1043__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/first-floor__IMG_1043__large.webp",
-          "jpg": "/images/rooms/first-floor__IMG_1043__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/first-floor__IMG_1043__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -872,22 +776,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/first-floor__IMG_1045__thumb.webp",
-          "jpg": "/images/rooms/first-floor__IMG_1045__thumb.jpg",
-          "width": 640,
-          "height": 960
+          "jpg": "/images/rooms/first-floor__IMG_1045__medium.jpg",
+          "width": 1280,
+          "height": 1920
         },
         "medium": {
-          "webp": "/images/rooms/first-floor__IMG_1045__medium.webp",
           "jpg": "/images/rooms/first-floor__IMG_1045__medium.jpg",
           "width": 1280,
           "height": 1920
         },
         "large": {
-          "webp": "/images/rooms/first-floor__IMG_1045__large.webp",
-          "jpg": "/images/rooms/first-floor__IMG_1045__large.jpg",
-          "width": 1920,
-          "height": 2880
+          "jpg": "/images/rooms/first-floor__IMG_1045__medium.jpg",
+          "width": 1280,
+          "height": 1920
         }
       }
     },
@@ -899,22 +800,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/first-floor__IMG_1465__thumb.webp",
-          "jpg": "/images/rooms/first-floor__IMG_1465__thumb.jpg",
-          "width": 640,
-          "height": 1138
+          "jpg": "/images/rooms/first-floor__IMG_1465__medium.jpg",
+          "width": 1280,
+          "height": 2276
         },
         "medium": {
-          "webp": "/images/rooms/first-floor__IMG_1465__medium.webp",
           "jpg": "/images/rooms/first-floor__IMG_1465__medium.jpg",
           "width": 1280,
           "height": 2276
         },
         "large": {
-          "webp": "/images/rooms/first-floor__IMG_1465__large.webp",
-          "jpg": "/images/rooms/first-floor__IMG_1465__large.jpg",
-          "width": 1920,
-          "height": 3413
+          "jpg": "/images/rooms/first-floor__IMG_1465__medium.jpg",
+          "width": 1280,
+          "height": 2276
         }
       }
     },
@@ -926,22 +824,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/first-floor__IMG_4893__thumb.webp",
-          "jpg": "/images/rooms/first-floor__IMG_4893__thumb.jpg",
-          "width": 640,
-          "height": 853
+          "jpg": "/images/rooms/first-floor__IMG_4893__medium.jpg",
+          "width": 1280,
+          "height": 1706
         },
         "medium": {
-          "webp": "/images/rooms/first-floor__IMG_4893__medium.webp",
           "jpg": "/images/rooms/first-floor__IMG_4893__medium.jpg",
           "width": 1280,
           "height": 1706
         },
         "large": {
-          "webp": "/images/rooms/first-floor__IMG_4893__large.webp",
-          "jpg": "/images/rooms/first-floor__IMG_4893__large.jpg",
-          "width": 1920,
-          "height": 2560
+          "jpg": "/images/rooms/first-floor__IMG_4893__medium.jpg",
+          "width": 1280,
+          "height": 1706
         }
       }
     },
@@ -953,22 +848,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/first-floor__IMG_4896__thumb.webp",
-          "jpg": "/images/rooms/first-floor__IMG_4896__thumb.jpg",
-          "width": 640,
-          "height": 853
+          "jpg": "/images/rooms/first-floor__IMG_4896__medium.jpg",
+          "width": 1280,
+          "height": 1707
         },
         "medium": {
-          "webp": "/images/rooms/first-floor__IMG_4896__medium.webp",
           "jpg": "/images/rooms/first-floor__IMG_4896__medium.jpg",
           "width": 1280,
           "height": 1707
         },
         "large": {
-          "webp": "/images/rooms/first-floor__IMG_4896__large.webp",
-          "jpg": "/images/rooms/first-floor__IMG_4896__large.jpg",
-          "width": 1920,
-          "height": 2560
+          "jpg": "/images/rooms/first-floor__IMG_4896__medium.jpg",
+          "width": 1280,
+          "height": 1707
         }
       }
     },
@@ -980,22 +872,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/first-floor__IMG_4897__thumb.webp",
-          "jpg": "/images/rooms/first-floor__IMG_4897__thumb.jpg",
-          "width": 640,
-          "height": 853
+          "jpg": "/images/rooms/first-floor__IMG_4897__medium.jpg",
+          "width": 1280,
+          "height": 1707
         },
         "medium": {
-          "webp": "/images/rooms/first-floor__IMG_4897__medium.webp",
           "jpg": "/images/rooms/first-floor__IMG_4897__medium.jpg",
           "width": 1280,
           "height": 1707
         },
         "large": {
-          "webp": "/images/rooms/first-floor__IMG_4897__large.webp",
-          "jpg": "/images/rooms/first-floor__IMG_4897__large.jpg",
-          "width": 1920,
-          "height": 2560
+          "jpg": "/images/rooms/first-floor__IMG_4897__medium.jpg",
+          "width": 1280,
+          "height": 1707
         }
       }
     },
@@ -1007,22 +896,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/first-floor__photo_2025-05-13_18-00-55__thumb.webp",
-          "jpg": "/images/rooms/first-floor__photo_2025-05-13_18-00-55__thumb.jpg",
-          "width": 640,
-          "height": 853
+          "jpg": "/images/rooms/first-floor__photo_2025-05-13_18-00-55__medium.jpg",
+          "width": 960,
+          "height": 1280
         },
         "medium": {
-          "webp": "/images/rooms/first-floor__photo_2025-05-13_18-00-55__thumb.webp",
-          "jpg": "/images/rooms/first-floor__photo_2025-05-13_18-00-55__thumb.jpg",
-          "width": 640,
-          "height": 853
+          "jpg": "/images/rooms/first-floor__photo_2025-05-13_18-00-55__medium.jpg",
+          "width": 960,
+          "height": 1280
         },
         "large": {
-          "webp": "/images/rooms/first-floor__photo_2025-05-13_18-00-55__thumb.webp",
-          "jpg": "/images/rooms/first-floor__photo_2025-05-13_18-00-55__thumb.jpg",
-          "width": 640,
-          "height": 853
+          "jpg": "/images/rooms/first-floor__photo_2025-05-13_18-00-55__medium.jpg",
+          "width": 960,
+          "height": 1280
         }
       }
     },
@@ -1034,22 +920,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/first-floor__photo_2025-05-13_18-00-57__thumb.webp",
-          "jpg": "/images/rooms/first-floor__photo_2025-05-13_18-00-57__thumb.jpg",
-          "width": 640,
-          "height": 853
+          "jpg": "/images/rooms/first-floor__photo_2025-05-13_18-00-57__medium.jpg",
+          "width": 960,
+          "height": 1280
         },
         "medium": {
-          "webp": "/images/rooms/first-floor__photo_2025-05-13_18-00-57__thumb.webp",
-          "jpg": "/images/rooms/first-floor__photo_2025-05-13_18-00-57__thumb.jpg",
-          "width": 640,
-          "height": 853
+          "jpg": "/images/rooms/first-floor__photo_2025-05-13_18-00-57__medium.jpg",
+          "width": 960,
+          "height": 1280
         },
         "large": {
-          "webp": "/images/rooms/first-floor__photo_2025-05-13_18-00-57__thumb.webp",
-          "jpg": "/images/rooms/first-floor__photo_2025-05-13_18-00-57__thumb.jpg",
-          "width": 640,
-          "height": 853
+          "jpg": "/images/rooms/first-floor__photo_2025-05-13_18-00-57__medium.jpg",
+          "width": 960,
+          "height": 1280
         }
       }
     },
@@ -1061,22 +944,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/first-floor__photo_2025-05-13_18-00-59__thumb.webp",
-          "jpg": "/images/rooms/first-floor__photo_2025-05-13_18-00-59__thumb.jpg",
-          "width": 640,
-          "height": 854
+          "jpg": "/images/rooms/first-floor__photo_2025-05-13_18-00-59__medium.jpg",
+          "width": 959,
+          "height": 1280
         },
         "medium": {
-          "webp": "/images/rooms/first-floor__photo_2025-05-13_18-00-59__thumb.webp",
-          "jpg": "/images/rooms/first-floor__photo_2025-05-13_18-00-59__thumb.jpg",
-          "width": 640,
-          "height": 854
+          "jpg": "/images/rooms/first-floor__photo_2025-05-13_18-00-59__medium.jpg",
+          "width": 959,
+          "height": 1280
         },
         "large": {
-          "webp": "/images/rooms/first-floor__photo_2025-05-13_18-00-59__thumb.webp",
-          "jpg": "/images/rooms/first-floor__photo_2025-05-13_18-00-59__thumb.jpg",
-          "width": 640,
-          "height": 854
+          "jpg": "/images/rooms/first-floor__photo_2025-05-13_18-00-59__medium.jpg",
+          "width": 959,
+          "height": 1280
         }
       }
     },
@@ -1088,22 +968,19 @@
       "featured": true,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/first-bathroom__DSC05704__thumb.webp",
-          "jpg": "/images/rooms/first-bathroom__DSC05704__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/first-bathroom__DSC05704__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/first-bathroom__DSC05704__medium.webp",
           "jpg": "/images/rooms/first-bathroom__DSC05704__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/first-bathroom__DSC05704__large.webp",
-          "jpg": "/images/rooms/first-bathroom__DSC05704__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/first-bathroom__DSC05704__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -1115,22 +992,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/first-bathroom__DSC05706__thumb.webp",
-          "jpg": "/images/rooms/first-bathroom__DSC05706__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/first-bathroom__DSC05706__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/first-bathroom__DSC05706__medium.webp",
           "jpg": "/images/rooms/first-bathroom__DSC05706__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/first-bathroom__DSC05706__large.webp",
-          "jpg": "/images/rooms/first-bathroom__DSC05706__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/first-bathroom__DSC05706__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -1142,22 +1016,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/first-bathroom__DSC05708__thumb.webp",
-          "jpg": "/images/rooms/first-bathroom__DSC05708__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/first-bathroom__DSC05708__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/first-bathroom__DSC05708__medium.webp",
           "jpg": "/images/rooms/first-bathroom__DSC05708__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/first-bathroom__DSC05708__large.webp",
-          "jpg": "/images/rooms/first-bathroom__DSC05708__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/first-bathroom__DSC05708__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -1169,22 +1040,19 @@
       "featured": true,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/second-bathroom__DSC05575__thumb.webp",
-          "jpg": "/images/rooms/second-bathroom__DSC05575__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/second-bathroom__DSC05575__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/second-bathroom__DSC05575__medium.webp",
           "jpg": "/images/rooms/second-bathroom__DSC05575__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/second-bathroom__DSC05575__large.webp",
-          "jpg": "/images/rooms/second-bathroom__DSC05575__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/second-bathroom__DSC05575__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -1196,22 +1064,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/second-bathroom__DSC05719__thumb.webp",
-          "jpg": "/images/rooms/second-bathroom__DSC05719__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/second-bathroom__DSC05719__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/second-bathroom__DSC05719__medium.webp",
           "jpg": "/images/rooms/second-bathroom__DSC05719__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/second-bathroom__DSC05719__large.webp",
-          "jpg": "/images/rooms/second-bathroom__DSC05719__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/second-bathroom__DSC05719__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -1223,22 +1088,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/second-bathroom__DSC05721__thumb.webp",
-          "jpg": "/images/rooms/second-bathroom__DSC05721__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/second-bathroom__DSC05721__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/second-bathroom__DSC05721__medium.webp",
           "jpg": "/images/rooms/second-bathroom__DSC05721__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/second-bathroom__DSC05721__large.webp",
-          "jpg": "/images/rooms/second-bathroom__DSC05721__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/second-bathroom__DSC05721__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -1250,22 +1112,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/second-bathroom__IMG_4898__thumb.webp",
-          "jpg": "/images/rooms/second-bathroom__IMG_4898__thumb.jpg",
-          "width": 640,
-          "height": 853
+          "jpg": "/images/rooms/second-bathroom__IMG_4898__medium.jpg",
+          "width": 1280,
+          "height": 1707
         },
         "medium": {
-          "webp": "/images/rooms/second-bathroom__IMG_4898__medium.webp",
           "jpg": "/images/rooms/second-bathroom__IMG_4898__medium.jpg",
           "width": 1280,
           "height": 1707
         },
         "large": {
-          "webp": "/images/rooms/second-bathroom__IMG_4898__large.webp",
-          "jpg": "/images/rooms/second-bathroom__IMG_4898__large.jpg",
-          "width": 1920,
-          "height": 2560
+          "jpg": "/images/rooms/second-bathroom__IMG_4898__medium.jpg",
+          "width": 1280,
+          "height": 1707
         }
       }
     },
@@ -1277,22 +1136,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/second-bathroom__IMG_4899__thumb.webp",
-          "jpg": "/images/rooms/second-bathroom__IMG_4899__thumb.jpg",
-          "width": 640,
-          "height": 853
+          "jpg": "/images/rooms/second-bathroom__IMG_4899__medium.jpg",
+          "width": 1280,
+          "height": 1707
         },
         "medium": {
-          "webp": "/images/rooms/second-bathroom__IMG_4899__medium.webp",
           "jpg": "/images/rooms/second-bathroom__IMG_4899__medium.jpg",
           "width": 1280,
           "height": 1707
         },
         "large": {
-          "webp": "/images/rooms/second-bathroom__IMG_4899__large.webp",
-          "jpg": "/images/rooms/second-bathroom__IMG_4899__large.jpg",
-          "width": 1920,
-          "height": 2560
+          "jpg": "/images/rooms/second-bathroom__IMG_4899__medium.jpg",
+          "width": 1280,
+          "height": 1707
         }
       }
     },
@@ -1304,22 +1160,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/second-bathroom__IMG_4900__thumb.webp",
-          "jpg": "/images/rooms/second-bathroom__IMG_4900__thumb.jpg",
-          "width": 640,
-          "height": 853
+          "jpg": "/images/rooms/second-bathroom__IMG_4900__medium.jpg",
+          "width": 1280,
+          "height": 1707
         },
         "medium": {
-          "webp": "/images/rooms/second-bathroom__IMG_4900__medium.webp",
           "jpg": "/images/rooms/second-bathroom__IMG_4900__medium.jpg",
           "width": 1280,
           "height": 1707
         },
         "large": {
-          "webp": "/images/rooms/second-bathroom__IMG_4900__large.webp",
-          "jpg": "/images/rooms/second-bathroom__IMG_4900__large.jpg",
-          "width": 1920,
-          "height": 2560
+          "jpg": "/images/rooms/second-bathroom__IMG_4900__medium.jpg",
+          "width": 1280,
+          "height": 1707
         }
       }
     },
@@ -1331,22 +1184,19 @@
       "featured": true,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/terrace__IMG_4030__thumb.webp",
-          "jpg": "/images/rooms/terrace__IMG_4030__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/terrace__IMG_4030__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/terrace__IMG_4030__medium.webp",
           "jpg": "/images/rooms/terrace__IMG_4030__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/terrace__IMG_4030__large.webp",
-          "jpg": "/images/rooms/terrace__IMG_4030__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/terrace__IMG_4030__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -1358,22 +1208,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/terrace__IMG_4031__thumb.webp",
-          "jpg": "/images/rooms/terrace__IMG_4031__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/terrace__IMG_4031__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/terrace__IMG_4031__medium.webp",
           "jpg": "/images/rooms/terrace__IMG_4031__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/terrace__IMG_4031__large.webp",
-          "jpg": "/images/rooms/terrace__IMG_4031__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/terrace__IMG_4031__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -1385,22 +1232,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/terrace__IMG_4033__thumb.webp",
-          "jpg": "/images/rooms/terrace__IMG_4033__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/terrace__IMG_4033__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/terrace__IMG_4033__medium.webp",
           "jpg": "/images/rooms/terrace__IMG_4033__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/terrace__IMG_4033__large.webp",
-          "jpg": "/images/rooms/terrace__IMG_4033__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/terrace__IMG_4033__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -1412,22 +1256,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/terrace__IMG_4055__thumb.webp",
-          "jpg": "/images/rooms/terrace__IMG_4055__thumb.jpg",
-          "width": 640,
-          "height": 960
+          "jpg": "/images/rooms/terrace__IMG_4055__medium.jpg",
+          "width": 1280,
+          "height": 1920
         },
         "medium": {
-          "webp": "/images/rooms/terrace__IMG_4055__medium.webp",
           "jpg": "/images/rooms/terrace__IMG_4055__medium.jpg",
           "width": 1280,
           "height": 1920
         },
         "large": {
-          "webp": "/images/rooms/terrace__IMG_4055__large.webp",
-          "jpg": "/images/rooms/terrace__IMG_4055__large.jpg",
-          "width": 1920,
-          "height": 2880
+          "jpg": "/images/rooms/terrace__IMG_4055__medium.jpg",
+          "width": 1280,
+          "height": 1920
         }
       }
     },
@@ -1439,22 +1280,19 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/terrace__IMG_4072__thumb.webp",
-          "jpg": "/images/rooms/terrace__IMG_4072__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/terrace__IMG_4072__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/terrace__IMG_4072__medium.webp",
           "jpg": "/images/rooms/terrace__IMG_4072__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/terrace__IMG_4072__large.webp",
-          "jpg": "/images/rooms/terrace__IMG_4072__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/terrace__IMG_4072__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     },
@@ -1466,27 +1304,24 @@
       "featured": false,
       "images": {
         "thumbnail": {
-          "webp": "/images/rooms/terrace__IMG_4074__thumb.webp",
-          "jpg": "/images/rooms/terrace__IMG_4074__thumb.jpg",
-          "width": 640,
-          "height": 427
+          "jpg": "/images/rooms/terrace__IMG_4074__medium.jpg",
+          "width": 1280,
+          "height": 853
         },
         "medium": {
-          "webp": "/images/rooms/terrace__IMG_4074__medium.webp",
           "jpg": "/images/rooms/terrace__IMG_4074__medium.jpg",
           "width": 1280,
           "height": 853
         },
         "large": {
-          "webp": "/images/rooms/terrace__IMG_4074__large.webp",
-          "jpg": "/images/rooms/terrace__IMG_4074__large.jpg",
-          "width": 1920,
-          "height": 1280
+          "jpg": "/images/rooms/terrace__IMG_4074__medium.jpg",
+          "width": 1280,
+          "height": 853
         }
       }
     }
   ],
-  "lastUpdated": "2026-06-24T10:28:35.884Z",
+  "lastUpdated": "2026-06-24T10:51:26.928Z",
   "totalImages": 55,
   "categories": {
     "green-bedroom": 5,

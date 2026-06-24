@@ -85,13 +85,8 @@ function GalleryPreview({ onOpenFullGallery }: GalleryPreviewProps) {
                   onClick={() => onOpenFullGallery(image.category)}
                 >
                   <div className="relative w-full aspect-[4/3] overflow-hidden">
-                    <picture>
-                      <source
-                        srcSet={image.images.thumbnail.webp}
-                        type="image/webp"
-                      />
-                      <img
-                        src={image.images.thumbnail.webp}
+                    <img
+                        src={image.images.thumbnail.jpg}
                         alt={image.alt}
                         width={image.images.thumbnail.width}
                         height={image.images.thumbnail.height}
@@ -99,7 +94,6 @@ function GalleryPreview({ onOpenFullGallery }: GalleryPreviewProps) {
                         decoding="async"
                         className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                       />
-                    </picture>
                     {/* Luxury overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-yellow-600/10 transition-all duration-500" />
