@@ -9,7 +9,12 @@ COPY package*.json ./
 COPY . .
 
 # npm ci + build + cleanup in one RUN so kaniko snapshots only dist/ (node_modules never appears in any layer)
-RUN npm ci && rm -rf public/images && npm run build && rm -rf node_modules
+RUN npm ci && rm -rf public/images && npm run build \
+    && echo "=== DISK USAGE BEFORE CLEANUP ===" \
+    && du -sh /root/.cache 2>/dev/null || true \
+    && du -sh node_modules 2>/dev/null || true \
+    && find /root/.cache -maxdepth 3 -type d 2>/dev/null || true \
+    && rm -rf node_modules /root/.cache
 
 # Stage 2: Production
 FROM nginx:alpine
