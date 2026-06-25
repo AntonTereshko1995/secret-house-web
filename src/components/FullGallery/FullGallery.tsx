@@ -12,6 +12,7 @@ function FullGallery({ isOpen, onClose, initialCategory }: FullGalleryProps) {
   const [selectedCategory, setSelectedCategory] = useState<RoomCategory | 'all'>('all')
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isLightboxOpen, setIsLightboxOpen] = useState(false)
+  const [failedImages, setFailedImages] = useState<Set<string>>(new Set())
 
   const categories: Array<{ value: RoomCategory | 'all'; label: string; shortLabel: string }> = [
     { value: 'all', label: 'Все фото', shortLabel: 'Все' },
@@ -42,12 +43,19 @@ function FullGallery({ isOpen, onClose, initialCategory }: FullGalleryProps) {
     }
   }, [isOpen, initialCategory])
 
+  const handleImageError = useCallback((id: string) => {
+    setFailedImages(prev => new Set(prev).add(id))
+  }, [])
+
   // Filter images (memoized for performance)
   const filteredImages = useMemo(
-    () => selectedCategory === 'all'
-      ? images
-      : images.filter(img => img.category === selectedCategory),
-    [images, selectedCategory]
+    () => {
+      const base = selectedCategory === 'all'
+        ? images
+        : images.filter(img => img.category === selectedCategory)
+      return base.filter(img => !failedImages.has(img.id))
+    },
+    [images, selectedCategory, failedImages]
   )
 
   // Keyboard navigation
@@ -199,6 +207,7 @@ function FullGallery({ isOpen, onClose, initialCategory }: FullGalleryProps) {
                       loading="lazy"
                       decoding="async"
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      onError={() => handleImageError(image.id)}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-yellow-600/10 transition-all duration-500" />
@@ -279,6 +288,7 @@ function FullGallery({ isOpen, onClose, initialCategory }: FullGalleryProps) {
               alt={filteredImages[currentIndex].alt}
               className="w-full h-full sm:w-auto sm:h-auto object-contain sm:max-h-[80vh]"
               onClick={(e) => e.stopPropagation()}
+              onError={() => handleImageError(filteredImages[currentIndex].id)}
             />
           </div>
 

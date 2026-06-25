@@ -8,6 +8,7 @@ interface GalleryPreviewProps {
 function GalleryPreview({ onOpenFullGallery }: GalleryPreviewProps) {
   const [featuredImages, setFeaturedImages] = useState<GalleryItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [failedImages, setFailedImages] = useState<Set<string>>(new Set())
 
   const categoryLabels: Record<string, string> = {
     'green-bedroom': 'Зеленая спальня',
@@ -75,10 +76,10 @@ function GalleryPreview({ onOpenFullGallery }: GalleryPreviewProps) {
           <div className="text-center py-12">
             <p className="text-yellow-600/60">Загрузка...</p>
           </div>
-        ) : featuredImages.length > 0 ? (
+        ) : featuredImages.filter(img => !failedImages.has(img.id)).length > 0 ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
-              {featuredImages.map((image, index) => (
+              {featuredImages.filter(img => !failedImages.has(img.id)).map((image, index) => (
                 <div
                   key={image.id}
                   className="group relative overflow-hidden shadow-luxury hover:shadow-luxury-hover transition-all duration-500 cursor-pointer bg-luxury-card"
@@ -93,6 +94,7 @@ function GalleryPreview({ onOpenFullGallery }: GalleryPreviewProps) {
                         loading={index < 4 ? 'eager' : 'lazy'}
                         decoding="async"
                         className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                        onError={() => setFailedImages(prev => new Set(prev).add(image.id))}
                       />
                     {/* Luxury overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
