@@ -6,5 +6,8 @@ declare global {
 
 export function getEnv(key: string, fallback = ''): string {
   const runtimeEnv = typeof window !== 'undefined' ? window.__env__ : undefined
-  return runtimeEnv?.[key] || (import.meta.env[key] as string) || fallback
+  if (runtimeEnv !== undefined) {
+    return runtimeEnv[key] ?? (import.meta.env[key] as string) ?? fallback
+  }
+  return (import.meta.env[key] as string) ?? fallback
 }
