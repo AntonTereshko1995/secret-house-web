@@ -54,7 +54,12 @@ export function useBookedPeriods(): UseBookedPeriodsResult {
         if (cancelled) return
         const message = err instanceof Error ? err.message : 'Ошибка загрузки занятых дат'
         setError(message)
-        logger.error('booked_periods_fetch_error', { message })
+        logger.error('booked_periods_fetch_error', {
+          message,
+          error_name: err instanceof Error ? err.name : typeof err,
+          from_date: toDateParam(from),
+          to_date: toDateParam(to),
+        })
         // Keep periods empty — calendar remains functional, just shows nothing booked
         setPeriods([])
       })

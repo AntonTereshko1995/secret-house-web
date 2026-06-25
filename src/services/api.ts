@@ -84,11 +84,20 @@ async function apiGet<T>(path: string, params?: Record<string, string>): Promise
   if (params) {
     Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v))
   }
-  logger.debug('api_request', { method: 'GET', path })
-  const response = await fetch(url.toString())
+  const fullUrl = url.toString()
+  logger.debug('api_request', { method: 'GET', path, url: fullUrl, api_base: getApiBase() })
+  let response: Response
+  try {
+    response = await fetch(fullUrl)
+  } catch (networkErr) {
+    const errName = networkErr instanceof Error ? networkErr.name : 'UnknownError'
+    const errMsg = networkErr instanceof Error ? networkErr.message : String(networkErr)
+    logger.error('api_network_error', { method: 'GET', path, url: fullUrl, api_base: getApiBase(), error_name: errName, error_message: errMsg })
+    throw networkErr
+  }
   if (!response.ok) {
     const text = await response.text()
-    logger.error('api_error', { method: 'GET', path, status: response.status, body: text })
+    logger.error('api_error', { method: 'GET', path, url: fullUrl, status: response.status, body: text })
     throw new Error(`API error ${response.status}: ${text}`)
   }
   logger.debug('api_response', { method: 'GET', path, status: response.status })
