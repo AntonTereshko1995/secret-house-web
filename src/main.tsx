@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
 import { logger } from './services/logger'
+import { getEnv } from './utils/env'
 import { LoadingProvider } from './context/LoadingContext'
 import { ErrorBoundary } from './components/ErrorBoundary'
 
@@ -37,7 +38,11 @@ window.addEventListener('beforeunload', () => {
   logger.flush()
 })
 
-logger.info('app_start', { url: window.location.href })
+logger.info('app_start', {
+  url: window.location.href,
+  api_url: getEnv('VITE_API_URL'),
+  runtime_env: window.__env__ ?? null,
+})
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
