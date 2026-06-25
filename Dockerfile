@@ -3,10 +3,8 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
-
 COPY . .
-RUN npm run build
+RUN npm ci && npm run build && rm -rf node_modules /root/.cache
 
 FROM nginx:alpine
 
