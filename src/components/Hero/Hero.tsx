@@ -28,56 +28,67 @@ function Hero() {
         <p className="text-xl sm:text-2xl lg:text-3xl text-gray-300 mb-4 max-w-4xl mx-auto font-light leading-relaxed">
           Закрытый дом для пар, где эстетика встречается с искушением.
         </p>
-        <p className="text-lg sm:text-xl text-gray-400 mb-16 max-w-3xl mx-auto font-light leading-relaxed">
+        <p className="text-lg sm:text-xl text-gray-400 mb-10 max-w-3xl mx-auto font-light leading-relaxed">
           Профессионально оборудованная Red Room, продуманный свет и полная анонимность.
           <span className="block mt-2 text-yellow-600/80">Позвольте себе сценарий, о котором раньше только мечтали.</span>
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-stretch">
+        <div className="flex flex-col items-center gap-4">
           {/* Primary CTA - In-App Booking */}
           <Link
             to="/booking"
             onClick={() => logger.info('cta_click', { button: 'book_online' })}
-            className="group relative w-full sm:w-auto flex items-center justify-center bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-5 px-8 sm:px-12 rounded-none transition-all duration-500 shadow-luxury hover:shadow-luxury-hover hover:scale-105 uppercase tracking-widest text-sm"
+            className="group relative flex items-center justify-center bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-600 hover:from-yellow-500 hover:via-yellow-400 hover:to-yellow-500 text-black font-bold py-3 px-10 rounded-none transition-all duration-500 shadow-luxury hover:shadow-luxury-hover hover:scale-105 uppercase tracking-widest text-xs"
           >
             <span className="relative z-10">Забронировать</span>
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
           </Link>
 
-          {/* Secondary CTA - Telegram Booking */}
-          <button
-            onClick={() => { logger.info('cta_click', { button: 'book_telegram' }); openTelegramBot() }}
-            className="w-full sm:w-auto flex items-center justify-center bg-transparent border border-yellow-600 text-yellow-600 hover:bg-yellow-600 hover:text-black font-semibold py-5 px-8 sm:px-12 rounded-none transition-all duration-500 uppercase tracking-widest text-sm hover:scale-105"
-          >
-            Забронировать через Telegram
-          </button>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center items-stretch">
+            {/* Secondary CTA - Telegram Booking */}
+            <button
+              onClick={() => { logger.info('cta_click', { button: 'book_telegram' }); openTelegramBot() }}
+              className="w-full sm:w-auto flex items-center justify-center bg-transparent border border-yellow-600 text-yellow-600 hover:bg-yellow-600 hover:text-black font-semibold py-3 px-6 rounded-none transition-all duration-500 uppercase tracking-widest text-xs hover:scale-105"
+            >
+              Telegram
+            </button>
 
-          {/* Tertiary CTA - View Gallery */}
-          <Link
-            to="?gallery=open"
-            onClick={() => logger.info('cta_click', { button: 'view_gallery' })}
-            className="w-full sm:w-auto flex items-center justify-center bg-transparent border border-yellow-600 text-yellow-600 hover:bg-yellow-600 hover:text-black font-semibold py-5 px-8 sm:px-12 rounded-none transition-all duration-500 uppercase tracking-widest text-sm hover:scale-105"
-          >
-            Интерьер
-          </Link>
+            {/* Tertiary CTA - View Gallery */}
+            <Link
+              to="?gallery=open"
+              onClick={() => logger.info('cta_click', { button: 'view_gallery' })}
+              className="w-full sm:w-auto flex items-center justify-center bg-transparent border border-yellow-600 text-yellow-600 hover:bg-yellow-600 hover:text-black font-semibold py-3 px-6 rounded-none transition-all duration-500 uppercase tracking-widest text-xs hover:scale-105"
+            >
+              Интерьер
+            </Link>
 
-          {/* Calendar CTA */}
-          <Link
-            to="/availability"
-            onClick={() => logger.info('cta_click', { button: 'availability' })}
-            className="w-full sm:w-auto flex items-center justify-center bg-transparent border border-yellow-600 text-yellow-600 hover:bg-yellow-600 hover:text-black font-semibold py-5 px-8 sm:px-12 rounded-none transition-all duration-500 uppercase tracking-widest text-sm hover:scale-105"
-          >
-            Свободные даты
-          </Link>
+            {/* Calendar CTA */}
+            <Link
+              to="/availability"
+              onClick={() => logger.info('cta_click', { button: 'availability' })}
+              className="w-full sm:w-auto flex items-center justify-center bg-transparent border border-yellow-600 text-yellow-600 hover:bg-yellow-600 hover:text-black font-semibold py-3 px-6 rounded-none transition-all duration-500 uppercase tracking-widest text-xs hover:scale-105"
+            >
+              Свободные даты
+            </Link>
+
+            {/* Gift Certificate CTA */}
+            <Link
+              to="/gift"
+              onClick={() => logger.info('cta_click', { button: 'buy_gift_certificate' })}
+              className="w-full sm:w-auto flex items-center justify-center bg-transparent border border-yellow-600 text-yellow-600 hover:bg-yellow-600 hover:text-black font-semibold py-3 px-6 rounded-none transition-all duration-500 uppercase tracking-widest text-xs hover:scale-105"
+            >
+              Подарочный сертификат
+            </Link>
+          </div>
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <div className="flex justify-center mt-10 animate-bounce">
           <div className="flex flex-col items-center gap-2">
-            <div className="w-px h-12 bg-gradient-to-b from-transparent via-yellow-600 to-transparent"></div>
+            <div className="w-px h-10 bg-gradient-to-b from-transparent via-yellow-600 to-transparent"></div>
             <svg
-              className="w-6 h-6 text-yellow-600"
+              className="w-5 h-5 text-yellow-600"
               fill="none"
               strokeLinecap="round"
               strokeLinejoin="round"

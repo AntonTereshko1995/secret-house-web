@@ -1,0 +1,78 @@
+import { useState } from 'react'
+import { logger } from '../../../services/logger'
+import type { GiftStepProps } from '../../../types/gift.types'
+
+function GiftStepBathTub({ giftData, updateGiftData, nextStep, prevStep }: GiftStepProps) {
+  const [hasBathTub, setHasBathTub] = useState(giftData.hasBathTub)
+  const price = giftData.bathTubPrice
+
+  const handleNext = () => {
+    logger.info('gift_select', { step: 'bath-tub', hasBathTub, price: hasBathTub ? price : 0 })
+    updateGiftData({ hasBathTub })
+    nextStep()
+  }
+
+  return (
+    <div className="bg-zinc-900 p-4 rounded-xl border border-zinc-800 shadow-2xl">
+      <h2 className="text-lg sm:text-xl font-bold text-white mb-2 uppercase tracking-wider">
+        Банный чан
+      </h2>
+      <p className="text-gray-400 mb-3 text-sm">
+        Добавить банный чан к сертификату? (необязательно)
+      </p>
+
+      <div className="grid grid-cols-2 gap-4 mb-6">
+        <button
+          onClick={() => setHasBathTub(false)}
+          className={`
+            p-6 border-2 rounded-lg font-bold uppercase tracking-wider transition-all
+            ${!hasBathTub
+              ? 'border-amber-400 bg-amber-400/10 text-white'
+              : 'border-zinc-700 text-zinc-400 hover:border-zinc-500'}
+          `}
+        >
+          <div className="text-2xl mb-2">❌</div>
+          Не нужен
+        </button>
+        <button
+          onClick={() => setHasBathTub(true)}
+          className={`
+            p-6 border-2 rounded-lg font-bold uppercase tracking-wider transition-all
+            ${hasBathTub
+              ? 'border-amber-400 bg-amber-400/10 text-white'
+              : 'border-zinc-700 text-zinc-400 hover:border-zinc-500'}
+          `}
+        >
+          <div className="text-2xl mb-2">🛁</div>
+          Добавить
+        </button>
+      </div>
+
+      <div className="bg-zinc-800/60 border border-zinc-700 p-4 rounded-lg mb-6">
+        <div className="text-center">
+          <div className="text-gray-400 text-sm mb-1">Стоимость банного чана:</div>
+          <div className="text-amber-400 font-bold text-3xl">
+            {price} BYN
+          </div>
+        </div>
+      </div>
+
+      <div className="flex gap-4">
+        <button
+          onClick={prevStep}
+          className="flex-1 border border-zinc-600 bg-transparent hover:bg-zinc-800/50 text-zinc-300 font-bold py-2 px-4 rounded-xl uppercase tracking-wider transition-all"
+        >
+          Назад
+        </button>
+        <button
+          onClick={handleNext}
+          className="flex-1 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-black font-bold py-2 px-4 rounded-xl uppercase tracking-wider transition-all"
+        >
+          Далее
+        </button>
+      </div>
+    </div>
+  )
+}
+
+export default GiftStepBathTub

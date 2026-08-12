@@ -53,7 +53,7 @@ function GalleryPreview({ onOpenFullGallery }: GalleryPreviewProps) {
   }, [])
 
   return (
-    <section id="gallery-preview" className="py-24 sm:py-32 bg-luxury-gradient relative overflow-hidden">
+    <section id="gallery-preview" className="py-10 sm:py-14 bg-luxury-gradient relative overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-yellow-600 rounded-full blur-3xl"></div>
@@ -61,24 +61,24 @@ function GalleryPreview({ onOpenFullGallery }: GalleryPreviewProps) {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-20">
-          <div className="w-20 h-px bg-gradient-to-r from-transparent via-yellow-600 to-transparent mx-auto mb-6"></div>
-          <h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6">
+        <div className="text-center mb-8">
+          <div className="w-16 h-px bg-gradient-to-r from-transparent via-yellow-600 to-transparent mx-auto mb-4"></div>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-2">
             <span className="text-luxury-gold">Интерьер</span>
           </h2>
-          <p className="text-xl sm:text-2xl text-gray-400 max-w-3xl mx-auto font-light">
+          <p className="text-sm sm:text-base text-gray-400 max-w-3xl mx-auto font-light">
             Изысканный дизайн и безупречный вкус в каждой детали
           </p>
         </div>
 
         {/* Image Grid */}
         {isLoading ? (
-          <div className="text-center py-12">
+          <div className="text-center py-8">
             <p className="text-yellow-600/60">Загрузка...</p>
           </div>
         ) : featuredImages.filter(img => !failedImages.has(img.id)).length > 0 ? (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               {featuredImages.filter(img => !failedImages.has(img.id)).map((image, index) => (
                 <div
                   key={image.id}
@@ -104,7 +104,7 @@ function GalleryPreview({ onOpenFullGallery }: GalleryPreviewProps) {
                     <div className="absolute inset-0 border-2 border-transparent group-hover:border-yellow-600/50 transition-all duration-500"></div>
                   </div>
                   {/* Category Badge */}
-                  <div className="absolute bottom-4 left-4 bg-black/70 backdrop-blur-sm px-4 py-2 border border-yellow-600/30 text-sm font-light text-yellow-500 uppercase tracking-wider">
+                  <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-sm px-3 py-1 border border-yellow-600/30 text-xs font-light text-yellow-500 uppercase tracking-wider">
                     {categoryLabels[image.category] || image.category}
                   </div>
                 </div>
@@ -115,7 +115,7 @@ function GalleryPreview({ onOpenFullGallery }: GalleryPreviewProps) {
             <div className="text-center">
               <button
                 onClick={() => onOpenFullGallery()}
-                className="group relative inline-flex items-center gap-3 bg-yellow-600 hover:bg-yellow-500 text-black px-10 py-5 text-lg font-bold uppercase tracking-wider transition-all duration-300 shadow-luxury hover:shadow-luxury-hover overflow-hidden"
+                className="group relative inline-flex items-center gap-2 bg-yellow-600 hover:bg-yellow-500 text-black px-8 py-3 text-sm font-bold uppercase tracking-wider transition-all duration-300 shadow-luxury hover:shadow-luxury-hover overflow-hidden"
               >
                 {/* Button shine effect */}
                 <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>

@@ -201,6 +201,7 @@ export async function submitBooking(
     hasSecretRoom: payload.hasSecretRoom,
     needsTransfer: payload.needsTransfer,
     contactType: payload.contactType,
+    contact: payload.contactType === 'telegram' ? `@${payload.telegram}` : payload.phone,
   })
   const result = await apiPost<BookingCreateResponse>('/api/bookings', payload)
   logger.info('booking_created', { bookingId: result.bookingId })
@@ -218,6 +219,66 @@ export async function validateGiftCode(code: string): Promise<GiftValidateRespon
     logger.warn('gift_code_invalid', { message: result.message })
   }
   return result
+}
+
+// ---------------------------------------------------------------------------
+// Gift Certificate
+// ---------------------------------------------------------------------------
+
+export interface GiftPurchaseResponse {
+  giftId: number
+  code: string
+  price: number
+  message: string
+}
+
+/**
+ * Submit a gift certificate purchase request.
+ * Uses multipart form data (receipt file + gift options).
+ */
+export async function submitGiftPurchase(
+  giftData: import('../types/gift.types').GiftFormData
+): Promise<GiftPurchaseResponse> {
+  const form = new FormData()
+  form.append('tariff', giftData.tariff!)
+  form.append('hasSauna', String(giftData.hasSauna))
+  form.append('hasSecretRoom', String(giftData.hasSecretRoom))
+  form.append('hasAdditionalBedroom', String(giftData.hasExtraBedroom))
+  form.append('hasBathTub', String(giftData.hasBathTub))
+  const contact = giftData.contactType === 'telegram'
+    ? `@${giftData.telegram}`
+    : giftData.phone!
+  form.append('contact', contact)
+  form.append('price', String(giftData.totalPrice))
+  if (giftData.receiptFile) {
+    form.append('file', giftData.receiptFile)
+  }
+
+  logger.info('gift_purchase_submit', {
+    tariff: giftData.tariff,
+    hasSauna: giftData.hasSauna,
+    hasSecretRoom: giftData.hasSecretRoom,
+    hasExtraBedroom: giftData.hasExtraBedroom,
+    hasBathTub: giftData.hasBathTub,
+    totalPrice: giftData.totalPrice,
+    contactType: giftData.contactType,
+    hasReceipt: !!giftData.receiptFile,
+  })
+
+  const response = await fetch(`${getApiBase()}/api/gifts/purchase`, {
+    method: 'POST',
+    body: form,
+  })
+
+  if (!response.ok) {
+    const detail = await response.json().catch(() => ({ detail: response.statusText }))
+    const message = detail?.detail ?? `API error ${response.status}`
+    logger.error('gift_purchase_error', { status: response.status, detail: message })
+    throw new Error(message)
+  }
+
+  logger.info('gift_purchase_success')
+  return response.json() as Promise<GiftPurchaseResponse>
 }
 
 /**

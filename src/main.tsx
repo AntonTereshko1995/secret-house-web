@@ -41,7 +41,6 @@ window.addEventListener('beforeunload', () => {
 logger.info('app_start', {
   url: window.location.href,
   api_url: getEnv('VITE_API_URL'),
-  runtime_env: window.__env__ ?? null,
 })
 
 createRoot(document.getElementById('root')!).render(

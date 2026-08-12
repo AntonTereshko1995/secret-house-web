@@ -50,7 +50,7 @@ function Location() {
   }, [lat, lon, address])
 
   return (
-    <section className="py-24 sm:py-32 bg-luxury-gradient relative overflow-hidden">
+    <section className="py-10 sm:py-14 bg-luxury-gradient relative overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-yellow-600 rounded-full blur-3xl"></div>
@@ -58,18 +58,18 @@ function Location() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-20">
-          <div className="w-20 h-px bg-gradient-to-r from-transparent via-yellow-600 to-transparent mx-auto mb-6"></div>
-          <h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6">
+        <div className="text-center mb-8">
+          <div className="w-16 h-px bg-gradient-to-r from-transparent via-yellow-600 to-transparent mx-auto mb-4"></div>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-2">
             <span className="text-luxury-gold">Расположение</span>
           </h2>
-          <p className="text-xl sm:text-2xl text-gray-400 font-light">
+          <p className="text-sm sm:text-base text-gray-400 font-light">
             {address}
           </p>
         </div>
 
         {/* Map Links */}
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
           <a
             href={yandexMapsUrl}
             target="_blank"

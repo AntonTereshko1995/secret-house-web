@@ -192,19 +192,19 @@ function TariffCard({ id, name, duration, features, incognito }: TariffCardProps
 
 function Pricing() {
   return (
-    <section className="py-24 sm:py-32 bg-zinc-950 relative overflow-hidden">
+    <section className="py-10 sm:py-14 bg-zinc-950 relative overflow-hidden">
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-yellow-600 rounded-full blur-3xl" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-20">
-          <div className="w-20 h-px bg-gradient-to-r from-transparent via-yellow-600 to-transparent mx-auto mb-6" />
-          <h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6">
+        <div className="text-center mb-8">
+          <div className="w-16 h-px bg-gradient-to-r from-transparent via-yellow-600 to-transparent mx-auto mb-4" />
+          <h2 className="text-3xl sm:text-4xl font-bold mb-2">
             <span className="text-luxury-gold">Тарифы</span>
           </h2>
-          <p className="text-xl sm:text-2xl text-gray-400 max-w-3xl mx-auto font-light">
+          <p className="text-sm sm:text-base text-gray-400 max-w-3xl mx-auto font-light">
             Цены указаны для выходных и праздничных дней
           </p>
         </div>

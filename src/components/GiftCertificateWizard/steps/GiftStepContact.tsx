@@ -1,38 +1,30 @@
 import { useState } from 'react'
 import { validateTelegramUsername, validatePhoneNumber } from '../../../utils/booking'
 import { logger } from '../../../services/logger'
-import type { BookingFormData, ContactType } from '../../../types/booking.types'
+import type { GiftStepProps } from '../../../types/gift.types'
+import type { ContactType } from '../../../types/booking.types'
 
-interface StepProps {
-  formData: Partial<BookingFormData>
-  updateFormData: (data: Partial<BookingFormData>) => void
-  nextStep: () => void
-  prevStep: () => void
-}
-
-function Step10Contact({ formData, updateFormData, prevStep, nextStep }: StepProps) {
-  const [contactType, setContactType] = useState<ContactType>(
-    formData.contactType || 'telegram'
-  )
-  const [telegram, setTelegram] = useState(formData.telegram || '')
-  const [phone, setPhone] = useState(formData.phone || '')
+function GiftStepContact({ giftData, updateGiftData, nextStep, prevStep }: GiftStepProps) {
+  const [contactType, setContactType] = useState<ContactType>(giftData.contactType)
+  const [telegram, setTelegram] = useState(giftData.telegram ?? '')
+  const [phone, setPhone] = useState(giftData.phone ?? '')
 
   const handleNext = () => {
     if (contactType === 'telegram') {
-      const cleanTelegram = telegram.replace('@', '')
-      if (!validateTelegramUsername(cleanTelegram)) {
+      const clean = telegram.replace('@', '')
+      if (!validateTelegramUsername(clean)) {
         alert('Пожалуйста, введите корректный Telegram username (5-32 символа, буквы, цифры, подчеркивания)')
         return
       }
-      updateFormData({ contactType, telegram: cleanTelegram, phone: undefined })
+      updateGiftData({ contactType, telegram: clean, phone: undefined })
     } else {
       if (!validatePhoneNumber(phone)) {
         alert('Пожалуйста, введите корректный номер телефона в формате +375XXXXXXXXX')
         return
       }
-      updateFormData({ contactType, phone, telegram: undefined })
+      updateGiftData({ contactType, phone, telegram: undefined })
     }
-    logger.info('booking_select', {
+    logger.info('gift_select', {
       step: 'contact',
       contactType,
       contact: contactType === 'telegram' ? `@${telegram.replace('@', '')}` : phone,
@@ -49,7 +41,6 @@ function Step10Contact({ formData, updateFormData, prevStep, nextStep }: StepPro
         Как нам с вами связаться?
       </p>
 
-      {/* Contact Type Toggle */}
       <div className="grid grid-cols-2 gap-4 mb-6">
         <button
           onClick={() => setContactType('telegram')}
@@ -77,16 +68,13 @@ function Step10Contact({ formData, updateFormData, prevStep, nextStep }: StepPro
         </button>
       </div>
 
-      {/* Input Fields */}
       {contactType === 'telegram' ? (
         <div className="mb-6">
           <label className="block text-white font-semibold mb-2 uppercase text-sm tracking-wider">
             Telegram Username
           </label>
           <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg">
-              @
-            </span>
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg">@</span>
             <input
               type="text"
               value={telegram}
@@ -150,4 +138,4 @@ function Step10Contact({ formData, updateFormData, prevStep, nextStep }: StepPro
   )
 }
 
-export default Step10Contact
+export default GiftStepContact
