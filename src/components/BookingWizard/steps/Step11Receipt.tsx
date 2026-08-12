@@ -1,9 +1,28 @@
 import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { calculatePrepayment, getHolidayName } from '../../../utils/booking'
+import { calculatePrepayment, getHolidayName, TARIFF_OPTIONS, WINE_OPTIONS, BEDROOM_OPTIONS } from '../../../utils/booking'
 import { getEnv } from '../../../utils/env'
 import { logger } from '../../../services/logger'
 import type { BookingFormData, StepProps } from '../../../types/booking.types'
+
+function fmt(date: Date | string | undefined, time?: string): string {
+  if (!date) return '—'
+  const d = date instanceof Date ? new Date(date) : new Date(date)
+  if (time) {
+    const [h, m] = time.split(':').map(Number)
+    d.setHours(h, m, 0, 0)
+  }
+  return d.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+}
+
+function Row({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex justify-between items-baseline py-1 border-b border-gray-800 last:border-0">
+      <span className="text-gray-400 text-xs">{label}</span>
+      <span className="text-white text-xs font-medium text-right ml-4">{value}</span>
+    </div>
+  )
+}
 
 function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepProps) {
   const [receiptFile, setReceiptFile] = useState<File | null>(formData.receiptFile || null)
@@ -93,6 +112,34 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
       <p className="text-gray-400 mb-3 text-sm">
         Загрузите фото или документ с подтверждением оплаты
       </p>
+
+      {/* Booking summary */}
+      <div className="bg-zinc-800/40 rounded-lg px-3 py-1 mb-3">
+        {formData.tariff && (
+          <Row label="Тариф" value={TARIFF_OPTIONS.find(t => t.id === formData.tariff)?.name ?? formData.tariff} />
+        )}
+        <Row label="Заезд" value={fmt(formData.checkInDate, formData.checkInTime)} />
+        <Row label="Выезд" value={fmt(formData.checkOutDate, formData.checkOutTime)} />
+        {formData.guestCount && <Row label="Гостей" value={String(formData.guestCount)} />}
+        {formData.hasPhotoshoot && <Row label="Фотосессия" value="Да" />}
+        {formData.hasSauna && <Row label="Сауна" value="Да" />}
+        {formData.hasBathTub && <Row label="Банный чан" value="Да" />}
+        {formData.bedroomType && (
+          <Row label="Спальня" value={BEDROOM_OPTIONS.find(b => b.id === formData.bedroomType)?.name ?? formData.bedroomType} />
+        )}
+        {formData.hasExtraBedroom && <Row label="Доп. спальня" value="Да" />}
+        {formData.hasSecretRoom && <Row label="Секретная комната" value="Да" />}
+        {formData.wineSelection && formData.wineSelection.length > 0 && (
+          <Row label="Вино" value={WINE_OPTIONS.find(w => w.id === formData.wineSelection![0])?.name ?? formData.wineSelection[0]} />
+        )}
+        {formData.needsTransfer && <Row label="Трансфер" value={formData.transferAddress ?? 'Да'} />}
+        {formData.giftCertificateCode && (
+          <Row label="Сертификат" value={formData.giftCertificateCode} />
+        )}
+        {formData.promocode && formData.promocodeValid && (
+          <Row label="Промокод" value={formData.promocode} />
+        )}
+      </div>
 
       {/* Price */}
       <div className="bg-black/60 border border-zinc-800 rounded-lg px-4 py-2 mb-3">

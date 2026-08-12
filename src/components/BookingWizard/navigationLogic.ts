@@ -105,6 +105,9 @@ export function cleanIncompatibleData(
     delete cleaned.saunaPrice
   }
 
+  // Bath tub price varies by tariff — reset it so StepBathTub picks up the correct price
+  delete cleaned.bathTubPrice
+
   // Clear bedroom/extras if new tariff doesn't support them
   const hasBedroomSelection = ['12h-standard', 'work-standard'].includes(newTariff)
   if (!hasBedroomSelection) {

@@ -39,6 +39,7 @@ function Step1Tariff({ formData, updateFormData, nextStep }: StepProps) {
         giftHasSauna: undefined,
         giftHasSecretRoom: undefined,
         giftHasAdditionalBedroom: undefined,
+        giftHasBathTub: undefined,
       })
     }
   }
@@ -66,11 +67,13 @@ function Step1Tariff({ formData, updateFormData, nextStep }: StepProps) {
         giftHasSauna: res.hasSauna,
         giftHasSecretRoom: res.hasSecretRoom,
         giftHasAdditionalBedroom: res.hasAdditionalBedroom,
+        giftHasBathTub: res.hasBathTub,
         giftCertificateCode: giftCode.trim().toUpperCase(),
         // Pre-fill options included in the certificate
         hasSauna: res.hasSauna ? true : undefined,
         hasSecretRoom: res.hasSecretRoom ? true : undefined,
         hasExtraBedroom: res.hasAdditionalBedroom ? true : undefined,
+        hasBathTub: res.hasBathTub ? true : undefined,
       })
     } catch (error) {
       logger.error('gift_validation_error', {
@@ -161,6 +164,7 @@ function Step1Tariff({ formData, updateFormData, nextStep }: StepProps) {
                     giftHasSauna: undefined,
                     giftHasSecretRoom: undefined,
                     giftHasAdditionalBedroom: undefined,
+                    giftHasBathTub: undefined,
                   })
                 }
               }}
@@ -192,6 +196,9 @@ function Step1Tariff({ formData, updateFormData, nextStep }: StepProps) {
               <div className="flex flex-wrap gap-1 mt-1">
                 {formData.giftHasSauna && (
                   <span className="text-[10px] bg-amber-400/10 border border-amber-400/30 text-amber-400 px-2 py-0.5 rounded">Сауна включена</span>
+                )}
+                {formData.giftHasBathTub && (
+                  <span className="text-[10px] bg-amber-400/10 border border-amber-400/30 text-amber-400 px-2 py-0.5 rounded">Банный чан</span>
                 )}
                 {formData.giftHasSecretRoom && (
                   <span className="text-[10px] bg-amber-400/10 border border-amber-400/30 text-amber-400 px-2 py-0.5 rounded">Секретная комната</span>

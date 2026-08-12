@@ -67,6 +67,7 @@ function BookingWizard() {
       // Options
       hasPhotoshoot: formData.hasPhotoshoot ?? false,
       hasSauna: formData.hasSauna ?? false,
+      hasBathTub: formData.hasBathTub ?? false,
       bedroomType: formData.bedroomType,
       hasExtraBedroom: formData.hasExtraBedroom ?? false,
       hasSecretRoom: formData.hasSecretRoom ?? false,
@@ -145,6 +146,7 @@ function BookingWizard() {
         totalPrice: finalData.totalPrice,
         hasPhotoshoot: finalData.hasPhotoshoot ?? false,
         hasSauna: finalData.hasSauna ?? false,
+        hasBathTub: finalData.hasBathTub ?? false,
         bedroomType: finalData.bedroomType,
         hasExtraBedroom: finalData.hasExtraBedroom ?? false,
         hasSecretRoom: finalData.hasSecretRoom ?? false,

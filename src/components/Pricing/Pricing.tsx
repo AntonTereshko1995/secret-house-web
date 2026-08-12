@@ -1,24 +1,64 @@
 import { Link } from 'react-router-dom'
 import { TARIFF_CONFIG } from '../../utils/booking'
+import type { TariffConfig } from '../../types/booking.types'
+
+type FeatureItem = string | ((config: TariffConfig) => string | null)
+
+function priced(
+  label: string,
+  key: keyof TariffConfig,
+  opts?: { includedText?: string; skipIfZero?: boolean }
+): FeatureItem {
+  return (config: TariffConfig) => {
+    const price = config[key] as number
+    if (price === 0) {
+      if (opts?.skipIfZero) return null
+      return opts?.includedText ?? label
+    }
+    return `${label} +${price} BYN`
+  }
+}
 
 const INCOGNITO_TARIFFS = [
   {
     id: 'incognito-daily',
     name: 'Инкогнито Суточно',
     duration: '24 часа',
-    features: ['до 6 гостей', 'Вино и лёгкие закуски', 'Сауна', 'Фотосессия включена', 'Трансфер', 'Полная конфиденциальность'],
+    features: [
+      'до 6 гостей',
+      'Вино и лёгкие закуски',
+      priced('Сауна', 'saunaPrice', { includedText: 'Сауна' }),
+      priced('Банный чан', 'bathTubPrice', { skipIfZero: true }),
+      priced('Фотосессия', 'photoshootPrice', { includedText: 'Фотосессия включена' }),
+      'Трансфер',
+      'Полная конфиденциальность',
+    ] as FeatureItem[],
   },
   {
     id: 'incognito-12h',
     name: 'Инкогнито 12 часов',
     duration: '12 часов',
-    features: ['до 6 гостей', 'Вино и лёгкие закуски', 'Сауна', 'Трансфер', 'Полная конфиденциальность'],
+    features: [
+      'до 6 гостей',
+      'Вино и лёгкие закуски',
+      priced('Сауна', 'saunaPrice', { includedText: 'Сауна' }),
+      priced('Банный чан', 'bathTubPrice', { skipIfZero: true }),
+      'Трансфер',
+      'Полная конфиденциальность',
+    ] as FeatureItem[],
   },
   {
     id: 'incognito-work',
     name: 'Инкогнито Рабочий',
     duration: '11 часов · будни',
-    features: ['до 6 гостей', 'Вино и лёгкие закуски', 'Сауна', 'Трансфер', 'Полная конфиденциальность'],
+    features: [
+      'до 6 гостей',
+      'Вино и лёгкие закуски',
+      priced('Сауна', 'saunaPrice', { includedText: 'Сауна' }),
+      priced('Банный чан', 'bathTubPrice', { skipIfZero: true }),
+      'Трансфер',
+      'Полная конфиденциальность',
+    ] as FeatureItem[],
   },
 ]
 
@@ -27,25 +67,47 @@ const STANDARD_TARIFFS = [
     id: 'daily-3plus',
     name: 'Суточно от 3 человек',
     duration: '24 часа',
-    features: ['3–6 гостей', 'Сауна +100 BYN', 'Фотосессия +100 BYN'],
+    features: [
+      '3–6 гостей',
+      priced('Сауна', 'saunaPrice', { skipIfZero: true }),
+      priced('Банный чан', 'bathTubPrice', { skipIfZero: true }),
+      priced('Фотосессия', 'photoshootPrice', { skipIfZero: true }),
+    ] as FeatureItem[],
   },
   {
     id: 'daily-couple',
     name: 'Суточно для двоих',
     duration: '24 часа',
-    features: ['2 гостя (+200 за доп.)', 'Сауна +100 BYN', 'Фотосессия +100 BYN'],
+    features: [
+      (c: TariffConfig) => `2 гостя (+${c.extraPeoplePrice} за доп.)`,
+      priced('Сауна', 'saunaPrice', { skipIfZero: true }),
+      priced('Банный чан', 'bathTubPrice', { skipIfZero: true }),
+      priced('Фотосессия', 'photoshootPrice', { skipIfZero: true }),
+    ] as FeatureItem[],
   },
   {
     id: '12h-standard',
     name: '12 часов',
     duration: '12 часов',
-    features: ['2 гостя (+70 за доп.)', 'Сауна +100 BYN', 'Секретная комната +70 BYN', 'Доп. спальня +70 BYN'],
+    features: [
+      (c: TariffConfig) => `2 гостя (+${c.extraPeoplePrice} за доп.)`,
+      priced('Сауна', 'saunaPrice', { skipIfZero: true }),
+      priced('Банный чан', 'bathTubPrice', { skipIfZero: true }),
+      priced('Секретная комната', 'secretRoomPrice', { skipIfZero: true }),
+      priced('Доп. спальня', 'extraBedroomPrice', { skipIfZero: true }),
+    ] as FeatureItem[],
   },
   {
     id: 'work-standard',
     name: 'Рабочий',
     duration: '11 часов · будни',
-    features: ['2 гостя (+100 за доп.)', 'Сауна +100 BYN', 'Секретная комната +50 BYN', 'Доп. спальня +50 BYN'],
+    features: [
+      (c: TariffConfig) => `2 гостя (+${c.extraPeoplePrice} за доп.)`,
+      priced('Сауна', 'saunaPrice', { skipIfZero: true }),
+      priced('Банный чан', 'bathTubPrice', { skipIfZero: true }),
+      priced('Секретная комната', 'secretRoomPrice', { skipIfZero: true }),
+      priced('Доп. спальня', 'extraBedroomPrice', { skipIfZero: true }),
+    ] as FeatureItem[],
   },
 ]
 
@@ -53,12 +115,17 @@ interface TariffCardProps {
   id: string
   name: string
   duration: string
-  features: string[]
+  features: FeatureItem[]
   incognito?: boolean
 }
 
 function TariffCard({ id, name, duration, features, incognito }: TariffCardProps) {
-  const price = TARIFF_CONFIG[id as keyof typeof TARIFF_CONFIG]?.price ?? 0
+  const config = TARIFF_CONFIG[id as keyof typeof TARIFF_CONFIG]
+  const price = config?.price ?? 0
+
+  const resolvedFeatures = features
+    .map(f => (typeof f === 'function' ? f(config!) : f))
+    .filter((f): f is string => f !== null)
 
   return (
     <div className={`
@@ -97,7 +164,7 @@ function TariffCard({ id, name, duration, features, incognito }: TariffCardProps
 
       {/* Features */}
       <ul className="flex-1 space-y-2 mb-6">
-        {features.map((f) => (
+        {resolvedFeatures.map((f) => (
           <li key={f} className="flex items-start gap-2 text-sm text-gray-400">
             <svg className="w-4 h-4 text-yellow-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />

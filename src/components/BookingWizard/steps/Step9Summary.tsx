@@ -83,6 +83,7 @@ function Step9Summary({ formData, updateFormData, nextStep, prevStep }: StepProp
         <Row label="Выезд" value={fmt(formData.checkOutDate, formData.checkOutTime)} />
         {formData.hasPhotoshoot && <Row label="Фотосессия" value="Да" />}
         {formData.hasSauna && <Row label="Сауна" value="Да" />}
+        {formData.hasBathTub && <Row label="Банный чан" value="Да" />}
         {formData.bedroomType && <Row label="Спальня" value={BEDROOM_OPTIONS.find(b => b.id === formData.bedroomType)?.name ?? formData.bedroomType} />}
         {formData.hasExtraBedroom && <Row label="Доп. спальня" value="Да" />}
         {formData.hasSecretRoom && <Row label="Секретная комната" value="Да" />}
@@ -131,6 +132,9 @@ function Step9Summary({ formData, updateFormData, nextStep, prevStep }: StepProp
         )}
         {formData.hasSauna && pricing.saunaPrice > 0 && (
           <PriceRow label="Сауна" value={`+${pricing.saunaPrice} BYN`} />
+        )}
+        {formData.hasBathTub && pricing.bathTubPrice > 0 && (
+          <PriceRow label="Банный чан" value={`+${pricing.bathTubPrice} BYN`} />
         )}
         {formData.hasExtraBedroom && pricing.extraBedroomPrice > 0 && (
           <PriceRow label="Доп. спальня" value={`+${pricing.extraBedroomPrice} BYN`} />

@@ -5,6 +5,7 @@ import Step3CheckIn from './steps/Step3CheckIn'
 import Step4CheckOut from './steps/Step4CheckOut'
 import Step5Photoshoot from './steps/Step5Photoshoot'
 import Step6Sauna from './steps/Step6Sauna'
+import StepBathTub from './steps/StepBathTub'
 import Step7Bedroom from './steps/Step7Bedroom'
 import Step8ExtraBedroom from './steps/Step8ExtraBedroom'
 import Step9SecretRoom from './steps/Step9SecretRoom'
@@ -112,6 +113,17 @@ export const STEP_REGISTRY: StepConfig[] = [
       // Skip if option is already covered by the gift certificate
       if (data.giftId && data.giftHasSauna) return false
       return supportsSauna
+    }
+  },
+  {
+    id: 'bath-tub',
+    type: 'bath-tub',
+    component: StepBathTub,
+    title: 'Банный чан',
+    shortTitle: 'Чан',
+    shouldShow: (data) => {
+      if (data.giftId && data.giftHasBathTub) return false
+      return !!data.tariff && data.tariff !== 'gift-certificate'
     }
   },
   {

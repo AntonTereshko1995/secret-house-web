@@ -47,11 +47,13 @@ const ALL_SLOTS = [
   23 * 60 + 59,
 ]
 
-/** True when the day has at least one valid check-in time slot */
-function hasFreeSlot(date: Date, periods: BookedPeriod[]): boolean {
+/** True when the day has at least one valid check-in time slot.
+ *  Pass nowMinutes (current hour*60+min) to skip past slots when date is today. */
+function hasFreeSlot(date: Date, periods: BookedPeriod[], nowMinutes?: number): boolean {
   const minDurationMs = MIN_BOOKING_HOURS * 3_600_000
   const cleaningMs = CLEANING_BUFFER_HOURS * 3_600_000
   for (const minutes of ALL_SLOTS) {
+    if (nowMinutes !== undefined && minutes < nowMinutes) continue
     const h = Math.floor(minutes / 60)
     const m = minutes % 60
     const slot = new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, m)
@@ -64,17 +66,22 @@ function hasFreeSlot(date: Date, periods: BookedPeriod[]): boolean {
   return false
 }
 
-/** Returns free time intervals (in fractional hours) for the given day */
-function getFreeIntervals(date: Date, periods: BookedPeriod[]): { start: number; end: number }[] {
+/** Returns free time intervals (in fractional hours) for the given day.
+ *  Pass nowHour (current time as fractional hours, e.g. 20.5 for 20:30) to
+ *  exclude already-past slots when date is today. */
+function getFreeIntervals(date: Date, periods: BookedPeriod[], nowHour?: number): { start: number; end: number }[] {
   const dayStart = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0)
   const dayEnd   = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 24, 0)
+  const cleaningMs = CLEANING_BUFFER_HOURS * 3_600_000
 
-  // Build blocked ranges including cleaning buffer
+  // Build blocked ranges: CLEANING_BUFFER before check-in and after check-out
   const blocked: { start: number; end: number }[] = []
   for (const p of periods) {
-    if (p.checkOut <= dayStart || p.checkIn >= dayEnd) continue
-    const cleanEnd = new Date(p.checkOut.getTime() + CLEANING_BUFFER_HOURS * 3_600_000)
-    const blockStart = Math.max(0, (p.checkIn.getTime() - dayStart.getTime()) / 3_600_000)
+    const preBuffer = new Date(p.checkIn.getTime() - cleaningMs)
+    const cleanEnd  = new Date(p.checkOut.getTime() + cleaningMs)
+    // Skip if the period (with both buffers) doesn't touch this day at all
+    if (cleanEnd <= dayStart || preBuffer >= dayEnd) continue
+    const blockStart = Math.max(0, (preBuffer.getTime() - dayStart.getTime()) / 3_600_000)
     const blockEnd   = Math.min(24, (cleanEnd.getTime() - dayStart.getTime()) / 3_600_000)
     blocked.push({ start: blockStart, end: blockEnd })
   }
@@ -90,9 +97,9 @@ function getFreeIntervals(date: Date, periods: BookedPeriod[]): { start: number;
     }
   }
 
-  // Complement within [0, 24], filter out gaps shorter than MIN_BOOKING_HOURS
+  // Complement within [nowHour..24], filter out gaps shorter than MIN_BOOKING_HOURS
   const free: { start: number; end: number }[] = []
-  let cursor = 0
+  let cursor = nowHour ?? 0
   for (const r of merged) {
     if (r.start - cursor >= MIN_BOOKING_HOURS) free.push({ start: cursor, end: r.start })
     cursor = Math.max(cursor, r.end)
@@ -109,11 +116,12 @@ interface MonthCalendarProps {
   month: number
   periods: BookedPeriod[]
   today: Date
+  now: Date
   selectedDay: Date | null
   onDayClick: (date: Date) => void
 }
 
-function MonthCalendar({ year, month, periods, today, selectedDay, onDayClick }: MonthCalendarProps) {
+function MonthCalendar({ year, month, periods, today, now, selectedDay, onDayClick }: MonthCalendarProps) {
   const cells = useMemo(() => buildGrid(year, month), [year, month])
 
   return (
@@ -143,7 +151,8 @@ function MonthCalendar({ year, month, periods, today, selectedDay, onDayClick }:
           const isToday = isSameDay(date, today)
           const isSelected = selectedDay ? isSameDay(date, selectedDay) : false
           const occupied = getOccupiedRangesForDay(date, periods)
-          const hasFree = !isPast && hasFreeSlot(date, periods)
+          const nowMinutes = isToday ? now.getHours() * 60 + now.getMinutes() : undefined
+          const hasFree = !isPast && hasFreeSlot(date, periods, nowMinutes)
 
           let status: DayStatus
           if (isPast) {
@@ -208,7 +217,8 @@ function MonthCalendar({ year, month, periods, today, selectedDay, onDayClick }:
 }
 
 export default function AvailabilityPage() {
-  const today = useMemo(() => toDateOnly(new Date()), [])
+  const now = useMemo(() => new Date(), [])
+  const today = useMemo(() => toDateOnly(now), [now])
   const { periods, loading, error, refetch } = useBookedPeriods()
 
   const [startYear, setStartYear] = useState(today.getFullYear())
@@ -219,10 +229,13 @@ export default function AvailabilityPage() {
     return [{ year: startYear, month: startMonth }]
   }, [startYear, startMonth])
 
-  const freeIntervals = useMemo(
-    () => selectedDay ? getFreeIntervals(selectedDay, periods) : [],
-    [selectedDay, periods]
-  )
+  const freeIntervals = useMemo(() => {
+    if (!selectedDay) return []
+    const nowHour = isSameDay(selectedDay, today)
+      ? now.getHours() + now.getMinutes() / 60
+      : undefined
+    return getFreeIntervals(selectedDay, periods, nowHour)
+  }, [selectedDay, periods, now, today])
 
   const canPrev = startYear > today.getFullYear() || startMonth > today.getMonth()
 
@@ -326,6 +339,7 @@ export default function AvailabilityPage() {
                   month={month}
                   periods={periods}
                   today={today}
+                  now={now}
                   selectedDay={selectedDay}
                   onDayClick={setSelectedDay}
                 />

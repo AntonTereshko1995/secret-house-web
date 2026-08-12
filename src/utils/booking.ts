@@ -44,6 +44,12 @@ export const MIN_BOOKING_HOURS = 3
 export const CLEANING_BUFFER_HOURS = 2
 
 /**
+ * Extra buffer in hours required when a bath tub booking is requested.
+ * The bath tub needs additional preparation time beyond the standard cleaning window.
+ */
+export const BATH_TUB_BUFFER_HOURS = 3
+
+/**
  * Mock booked periods with exact check-in/check-out times.
  * Replace with API call in production.
  */
@@ -234,6 +240,7 @@ export const TARIFF_CONFIG: Record<TariffType, TariffConfig> = {
     durationHours: 24,
     price: 900,
     saunaPrice: 0,
+    bathTubPrice: 130,
     secretRoomPrice: 0,
     extraBedroomPrice: 0,
     extraHourPrice: 30,
@@ -251,6 +258,7 @@ export const TARIFF_CONFIG: Record<TariffType, TariffConfig> = {
     durationHours: 12,
     price: 600,
     saunaPrice: 0,
+    bathTubPrice: 130,
     secretRoomPrice: 0,
     extraBedroomPrice: 0,
     extraHourPrice: 30,
@@ -268,6 +276,7 @@ export const TARIFF_CONFIG: Record<TariffType, TariffConfig> = {
     durationHours: 11,
     price: 450,
     saunaPrice: 0,
+    bathTubPrice: 130,
     secretRoomPrice: 0,
     extraBedroomPrice: 0,
     extraHourPrice: 30,
@@ -284,7 +293,8 @@ export const TARIFF_CONFIG: Record<TariffType, TariffConfig> = {
     botTariffId: 1,
     durationHours: 24,
     price: 700,
-    saunaPrice: 100,
+    saunaPrice: 120,
+    bathTubPrice: 180,
     secretRoomPrice: 0,
     extraBedroomPrice: 0,
     extraHourPrice: 30,
@@ -301,7 +311,8 @@ export const TARIFF_CONFIG: Record<TariffType, TariffConfig> = {
     botTariffId: 7,
     durationHours: 24,
     price: 500,
-    saunaPrice: 100,
+    saunaPrice: 120,
+    bathTubPrice: 180,
     secretRoomPrice: 0,
     extraBedroomPrice: 0,
     extraHourPrice: 30,
@@ -318,7 +329,8 @@ export const TARIFF_CONFIG: Record<TariffType, TariffConfig> = {
     botTariffId: 0,
     durationHours: 12,
     price: 250,
-    saunaPrice: 100,
+    saunaPrice: 120,
+    bathTubPrice: 180,
     secretRoomPrice: 70,
     extraBedroomPrice: 70,
     extraHourPrice: 30,
@@ -335,7 +347,8 @@ export const TARIFF_CONFIG: Record<TariffType, TariffConfig> = {
     botTariffId: 2,
     durationHours: 11,
     price: 180,
-    saunaPrice: 100,
+    saunaPrice: 120,
+    bathTubPrice: 180,
     secretRoomPrice: 50,
     extraBedroomPrice: 50,
     extraHourPrice: 30,
@@ -353,6 +366,7 @@ export const TARIFF_CONFIG: Record<TariffType, TariffConfig> = {
     durationHours: 0,
     price: 0,
     saunaPrice: 0,
+    bathTubPrice: 0,
     secretRoomPrice: 0,
     extraBedroomPrice: 0,
     extraHourPrice: 0,
@@ -377,6 +391,7 @@ export const TARIFF_SALE_CONFIG: Record<TariffType, TariffConfig> = {
     durationHours: 24,
     price: 700,
     saunaPrice: 0,
+    bathTubPrice: 130,
     secretRoomPrice: 0,
     extraBedroomPrice: 0,
     extraHourPrice: 30,
@@ -394,6 +409,7 @@ export const TARIFF_SALE_CONFIG: Record<TariffType, TariffConfig> = {
     durationHours: 12,
     price: 500,
     saunaPrice: 0,
+    bathTubPrice: 130,
     secretRoomPrice: 0,
     extraBedroomPrice: 0,
     extraHourPrice: 30,
@@ -411,6 +427,7 @@ export const TARIFF_SALE_CONFIG: Record<TariffType, TariffConfig> = {
     durationHours: 11,
     price: 400,
     saunaPrice: 0,
+    bathTubPrice: 130,
     secretRoomPrice: 0,
     extraBedroomPrice: 0,
     extraHourPrice: 30,
@@ -428,6 +445,7 @@ export const TARIFF_SALE_CONFIG: Record<TariffType, TariffConfig> = {
     durationHours: 24,
     price: 500,
     saunaPrice: 100,
+    bathTubPrice: 180,
     secretRoomPrice: 0,
     extraBedroomPrice: 0,
     extraHourPrice: 30,
@@ -445,6 +463,7 @@ export const TARIFF_SALE_CONFIG: Record<TariffType, TariffConfig> = {
     durationHours: 24,
     price: 400,
     saunaPrice: 100,
+    bathTubPrice: 180,
     secretRoomPrice: 0,
     extraBedroomPrice: 0,
     extraHourPrice: 30,
@@ -462,6 +481,7 @@ export const TARIFF_SALE_CONFIG: Record<TariffType, TariffConfig> = {
     durationHours: 12,
     price: 200,
     saunaPrice: 100,
+    bathTubPrice: 180,
     secretRoomPrice: 70,
     extraBedroomPrice: 70,
     extraHourPrice: 30,
@@ -479,6 +499,7 @@ export const TARIFF_SALE_CONFIG: Record<TariffType, TariffConfig> = {
     durationHours: 11,
     price: 180,
     saunaPrice: 100,
+    bathTubPrice: 180,
     secretRoomPrice: 50,
     extraBedroomPrice: 50,
     extraHourPrice: 30,
@@ -495,7 +516,8 @@ export const TARIFF_SALE_CONFIG: Record<TariffType, TariffConfig> = {
     botTariffId: -1,
     durationHours: 0,
     price: 0,
-    saunaPrice: 0,
+    saunaPrice: 100,
+    bathTubPrice: 0,
     secretRoomPrice: 0,
     extraBedroomPrice: 0,
     extraHourPrice: 0,
@@ -841,6 +863,7 @@ export function calculateTotalPrice(formData: Partial<BookingFormData>): {
   transferPrice: number
   photoshootPrice: number
   saunaPrice: number
+  bathTubPrice: number
   extraBedroomPrice: number
   secretRoomPrice: number
   discount: number
@@ -852,6 +875,7 @@ export function calculateTotalPrice(formData: Partial<BookingFormData>): {
   const transferPrice = formData.transferPrice || 0
   const photoshootPrice = formData.photoshootPrice || 0
   const saunaPrice = formData.saunaPrice || 0
+  const bathTubPrice = formData.bathTubPrice || 0
   const extraBedroomPrice = formData.extraBedroomPrice || 0
   const secretRoomPrice = formData.secretRoomPrice || 0
   const discount = formData.promocodeDiscount || 0
@@ -863,6 +887,7 @@ export function calculateTotalPrice(formData: Partial<BookingFormData>): {
     transferPrice +
     photoshootPrice +
     saunaPrice +
+    bathTubPrice +
     extraBedroomPrice +
     secretRoomPrice -
     discount
@@ -874,6 +899,7 @@ export function calculateTotalPrice(formData: Partial<BookingFormData>): {
     transferPrice,
     photoshootPrice,
     saunaPrice,
+    bathTubPrice,
     extraBedroomPrice,
     secretRoomPrice,
     discount,
@@ -941,6 +967,7 @@ export async function submitBookingForm(
     bedroomType: TARIFFS_WITH_ALL_ROOMS.includes(formData.tariff) ? 'white' : formData.bedroomType,
     hasExtraBedroom: TARIFFS_WITH_ALL_ROOMS.includes(formData.tariff) ? true : (formData.hasExtraBedroom ?? false),
     hasSecretRoom: TARIFFS_WITH_ALL_ROOMS.includes(formData.tariff) ? true : (formData.hasSecretRoom ?? false),
+    hasBathTub: formData.hasBathTub ?? false,
     comment: formData.comment,
     promocode: formData.promocode,
     wineSelection: formData.wineSelection ?? [],

@@ -19,6 +19,7 @@ export type StepType =
   | 'guests'
   | 'photoshoot'
   | 'sauna'
+  | 'bath-tub'
   | 'bedroom'
   | 'extra-bedroom'
   | 'secret-room'
@@ -58,6 +59,7 @@ export interface BookingFormData {
   giftHasSauna?: boolean
   giftHasSecretRoom?: boolean
   giftHasAdditionalBedroom?: boolean
+  giftHasBathTub?: boolean
 
   // Step 2: Check-in
   checkInDate: Date
@@ -79,6 +81,10 @@ export interface BookingFormData {
   // Step 6: Sauna
   hasSauna?: boolean
   saunaPrice?: number
+
+  // Step 6b: Bath tub
+  hasBathTub?: boolean
+  bathTubPrice?: number
 
   // Step 7: Bedroom
   bedroomType?: BedroomType
@@ -155,6 +161,7 @@ export interface TariffConfig {
   durationHours: number
   price: number
   saunaPrice: number
+  bathTubPrice: number
   secretRoomPrice: number
   extraBedroomPrice: number
   extraHourPrice: number

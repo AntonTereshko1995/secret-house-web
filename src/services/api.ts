@@ -47,6 +47,7 @@ export interface GiftValidateResponse {
   hasSauna?: boolean
   hasSecretRoom?: boolean
   hasAdditionalBedroom?: boolean
+  hasBathTub?: boolean
   price?: number
 }
 
@@ -62,6 +63,7 @@ export interface BookingCreatePayload {
   bedroomType?: string
   hasExtraBedroom: boolean
   hasSecretRoom: boolean
+  hasBathTub: boolean
   comment?: string
   promocode?: string
   promocodeId?: number
