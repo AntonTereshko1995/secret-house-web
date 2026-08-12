@@ -3,7 +3,7 @@ function Amenities() {
         {
             icon: (
                 <svg className="w-10 sm:w-12 lg:w-16 h-10 sm:h-12 lg:h-16 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 20v-6a5 5 0 015-5h8a5 5 0 015 5v6M3 20h18M3 14h18M9 9V7a3 3 0 016 0v2M4 20v2M20 20v2" />
                 </svg>
             ),
             title: '2 спальни',
@@ -21,12 +21,22 @@ function Amenities() {
         {
             icon: (
                 <svg className="w-10 sm:w-12 lg:w-16 h-10 sm:h-12 lg:h-16 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26A4.5 4.5 0 1014 14.76z" />
                 </svg>
             ),
             title: 'Сауна',
             description: 'Финская сауна для релаксации'
+        },
+        {
+            icon: (
+                <svg className="w-10 sm:w-12 lg:w-16 h-10 sm:h-12 lg:h-16 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M5 19h14a2 2 0 002-2v-5H3v5a2 2 0 002 2z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 12V8a3 3 0 013-3 3 3 0 013 3v4" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M7 19v2M17 19v2" />
+                </svg>
+            ),
+            title: 'Банный чан',
+            description: 'Чан с подогревом воды для отдыха на открытом воздухе'
         },
         {
             icon: (
@@ -40,7 +50,7 @@ function Amenities() {
         {
             icon: (
                 <svg className="w-10 sm:w-12 lg:w-16 h-10 sm:h-12 lg:h-16 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 9h18M3 9v9a2 2 0 002 2h14a2 2 0 002-2V9M3 9l2-5h14l2 5M9 4v5M15 4v5" />
                 </svg>
             ),
             title: 'Кухня',
@@ -49,7 +59,7 @@ function Amenities() {
         {
             icon: (
                 <svg className="w-10 sm:w-12 lg:w-16 h-10 sm:h-12 lg:h-16 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M7 12l2-5h6l2 5M3 12h18v5a1 1 0 01-1 1H4a1 1 0 01-1-1v-5zM7 18a2 2 0 100 4 2 2 0 000-4zM17 18a2 2 0 100 4 2 2 0 000-4z" />
                 </svg>
             ),
             title: 'Парковка',
@@ -63,15 +73,6 @@ function Amenities() {
             ),
             title: 'Камин',
             description: 'Уютный камин для вечерних посиделок'
-        },
-        {
-            icon: (
-                <svg className="w-10 sm:w-12 lg:w-16 h-10 sm:h-12 lg:h-16 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-            ),
-            title: '2 санузла',
-            description: 'Современные ванные комнаты'
         },
     ]
 

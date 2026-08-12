@@ -1,0 +1,1 @@
+import{t as e}from"./index-BVvywhFi.js";export{e as prerender};
