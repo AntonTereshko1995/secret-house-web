@@ -102,8 +102,8 @@ function Step4CheckOut({ formData, updateFormData, nextStep, prevStep, bookedPer
 
   const unavailableSlots = useMemo(() => {
     if (!checkOutDate) return new Set<string>()
-    return getUnavailableCheckOutSlots(checkOutDate, checkInDateTime, bookedPeriods)
-  }, [checkOutDate, checkInDateTime, bookedPeriods])
+    return getUnavailableCheckOutSlots(checkOutDate, checkInDateTime, bookedPeriods, formData.tariff)
+  }, [checkOutDate, checkInDateTime, bookedPeriods, formData.tariff])
 
   const isTimeValid = checkOutDateTime !== null
     && checkOutDateTime > checkInDateTime

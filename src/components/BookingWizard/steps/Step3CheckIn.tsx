@@ -26,7 +26,7 @@ function Step3CheckIn({ formData, updateFormData, nextStep, prevStep, bookedPeri
 
   const unavailableSlots = useMemo(() => {
     if (!checkInDate) return new Set<string>()
-    const slots = getUnavailableCheckInSlots(checkInDate, bookedPeriods)
+    const slots = getUnavailableCheckInSlots(checkInDate, bookedPeriods, formData.tariff)
 
     // Block past times if today is selected
     const isToday = checkInDate.toDateString() === new Date().toDateString()
@@ -44,12 +44,12 @@ function Step3CheckIn({ formData, updateFormData, nextStep, prevStep, bookedPeri
     }
 
     return slots
-  }, [checkInDate, bookedPeriods])
+  }, [checkInDate, bookedPeriods, formData.tariff])
 
   const handleDateSelect = (date: Date) => {
     setCheckInDate(date)
     setCheckInTime('')
-    const slots = getUnavailableCheckInSlots(date, bookedPeriods)
+    const slots = getUnavailableCheckInSlots(date, bookedPeriods, formData.tariff)
 
     // Also add past times if today
     const isToday = date.toDateString() === new Date().toDateString()

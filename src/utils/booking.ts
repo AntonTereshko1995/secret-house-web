@@ -44,6 +44,16 @@ export const MIN_BOOKING_HOURS = 3
 export const CLEANING_BUFFER_HOURS = 3
 
 /**
+ * Reduced cleaning buffer for work-tariff sessions (work-standard, incognito-work).
+ * These tariffs have fixed windows (day: 11:00–20:00, night: 20:00–09:00) that only
+ * leave a 2-hour gap between consecutive sessions, so 3 hours would block valid slots.
+ */
+export const CLEANING_BUFFER_WORK_HOURS = 2
+
+/** Tariff IDs that use the reduced 2-hour cleaning buffer. */
+const WORK_TARIFF_IDS: TariffType[] = ['work-standard', 'incognito-work']
+
+/**
  * Extra buffer in hours required when a bath tub booking is requested.
  * The bath tub needs additional preparation time beyond the standard cleaning window.
  */
@@ -110,11 +120,14 @@ export function getOccupiedRangesForDay(
  */
 export function getUnavailableCheckInSlots(
   date: Date,
-  periods: BookedPeriod[]
+  periods: BookedPeriod[],
+  tariff?: string
 ): Set<string> {
   const unavailable = new Set<string>()
   const minDurationMs = MIN_BOOKING_HOURS * 3600000
-  const cleaningBufferMs = CLEANING_BUFFER_HOURS * 3600000
+  const cleaningBufferMs = (tariff && WORK_TARIFF_IDS.includes(tariff as TariffType)
+    ? CLEANING_BUFFER_WORK_HOURS
+    : CLEANING_BUFFER_HOURS) * 3600000
   const slots = [
     ...Array.from({ length: 24 }, (_, h) => ({ h, m: 0, str: `${h.toString().padStart(2, '0')}:00` })),
     { h: 23, m: 59, str: '23:59' },
@@ -149,10 +162,13 @@ export function getUnavailableCheckInSlots(
 export function getUnavailableCheckOutSlots(
   date: Date,
   checkInDateTime: Date,
-  periods: BookedPeriod[]
+  periods: BookedPeriod[],
+  tariff?: string
 ): Set<string> {
   const minDurationMs = MIN_BOOKING_HOURS * 3600000
-  const cleaningBufferMs = CLEANING_BUFFER_HOURS * 3600000
+  const cleaningBufferMs = (tariff && WORK_TARIFF_IDS.includes(tariff as TariffType)
+    ? CLEANING_BUFFER_WORK_HOURS
+    : CLEANING_BUFFER_HOURS) * 3600000
   const unavailable = new Set<string>()
   const slots = [
     ...Array.from({ length: 24 }, (_, h) => ({ h, m: 0, str: `${h.toString().padStart(2, '0')}:00` })),
