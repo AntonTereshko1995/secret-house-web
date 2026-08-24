@@ -132,9 +132,9 @@ export function getUnavailableCheckInSlots(
       unavailable.add(str)
       continue
     }
-    // Block if the next booking starts before slot + MIN_BOOKING_HOURS,
-    // leaving no valid checkout slot
-    const minCheckOut = new Date(slot.getTime() + minDurationMs)
+    // Block if the next booking starts within minDuration + cleaningBuffer,
+    // leaving no valid checkout slot before the next booking's pre-cleaning window
+    const minCheckOut = new Date(slot.getTime() + minDurationMs + cleaningBufferMs)
     if (periods.some(p => p.checkIn > slot && p.checkIn <= minCheckOut)) {
       unavailable.add(str)
     }

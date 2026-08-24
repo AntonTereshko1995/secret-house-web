@@ -59,7 +59,9 @@ function hasFreeSlot(date: Date, periods: BookedPeriod[], nowMinutes?: number): 
     const slot = new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, m)
     if (periods.some(p => slot >= p.checkIn && slot < p.checkOut)) continue
     if (periods.some(p => slot >= p.checkOut && slot.getTime() - p.checkOut.getTime() < cleaningMs)) continue
-    const minOut = new Date(slot.getTime() + minDurationMs)
+    // Next booking must start at least minDuration + cleaningBuffer after this slot
+    // (guest needs minDuration to stay, then 2h cleaning before next check-in)
+    const minOut = new Date(slot.getTime() + minDurationMs + cleaningMs)
     if (periods.some(p => p.checkIn > slot && p.checkIn <= minOut)) continue
     return true
   }
