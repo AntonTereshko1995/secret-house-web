@@ -45,9 +45,9 @@ function hasFreeCheckInSlot(date: Date, periods: BookedPeriod[], minDT?: Date, s
     const slot = new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, m)
     if (minDT && slot < minDT) continue
     if (periods.some(p => slot >= p.checkIn && slot < p.checkOut)) continue
-    // 2-hour cleaning buffer after a booking ends
+    // 3-hour cleaning buffer after a booking ends
     if (periods.some(p => slot >= p.checkOut && slot.getTime() - p.checkOut.getTime() < cleaningBufferMs)) continue
-    // Must fit minDuration + 2h cleaning buffer before next booking's check-in
+    // Must fit minDuration + 3h cleaning buffer before next booking's check-in
     const minCheckOut = new Date(slot.getTime() + minDurationMs + cleaningBufferMs)
     if (periods.some(p => p.checkIn > slot && p.checkIn <= minCheckOut)) continue
     return true

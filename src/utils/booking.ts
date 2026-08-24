@@ -38,10 +38,10 @@ export const MIN_BOOKING_HOURS = 3
 
 /**
  * Cleaning buffer in hours required between bookings.
- * After a booking ends, the house is closed for 2 hours for cleaning.
- * Before a booking starts, 2 hours must be reserved for the previous guest's checkout + cleaning.
+ * After a booking ends, the house is closed for 3 hours for cleaning.
+ * Before a booking starts, 3 hours must be reserved for the previous guest's checkout + cleaning.
  */
-export const CLEANING_BUFFER_HOURS = 2
+export const CLEANING_BUFFER_HOURS = 3
 
 /**
  * Extra buffer in hours required when a bath tub booking is requested.
@@ -126,7 +126,7 @@ export function getUnavailableCheckInSlots(
       unavailable.add(str)
       continue
     }
-    // Block if slot is within the 2-hour cleaning window after a booking ends
+    // Block if slot is within the 3-hour cleaning window after a booking ends
     // (the house needs time to be cleaned before the next guests arrive)
     if (periods.some(p => slot >= p.checkOut && slot.getTime() - p.checkOut.getTime() < cleaningBufferMs)) {
       unavailable.add(str)
@@ -170,8 +170,8 @@ export function getUnavailableCheckOutSlots(
       unavailable.add(str)
       continue
     }
-    // The next booking starts within cleaning buffer (2h) of this checkout — block it.
-    // Last available checkout = next booking start - 2h (matches bot logic).
+    // The next booking starts within cleaning buffer (3h) of this checkout — block it.
+    // Last available checkout = next booking start - 3h (matches bot logic).
     if (periods.some(p => p.checkIn > slot && p.checkIn.getTime() - slot.getTime() < cleaningBufferMs)) {
       unavailable.add(str)
     }
