@@ -32,6 +32,7 @@ export interface PromoValidateResponse {
 
 export interface BookingCreateResponse {
   bookingId: number
+  publicId: string
   message: string
 }
 
@@ -103,6 +104,23 @@ async function apiGet<T>(path: string, params?: Record<string, string>): Promise
     throw new Error(`API error ${response.status}: ${text}`)
   }
   logger.debug('api_response', { method: 'GET', path, status: response.status })
+  return response.json() as Promise<T>
+}
+
+async function apiPatch<T>(path: string, body: unknown): Promise<T> {
+  logger.debug('api_request', { method: 'PATCH', path })
+  const response = await fetch(`${getApiBase()}${path}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  })
+  if (!response.ok) {
+    const detail = await response.json().catch(() => ({ detail: response.statusText }))
+    const message = detail?.detail ?? `API error ${response.status}`
+    logger.error('api_error', { method: 'PATCH', path, status: response.status, detail: message })
+    throw new Error(message)
+  }
+  logger.debug('api_response', { method: 'PATCH', path, status: response.status })
   return response.json() as Promise<T>
 }
 
@@ -281,23 +299,118 @@ export async function submitGiftPurchase(
   return response.json() as Promise<GiftPurchaseResponse>
 }
 
+// ---------------------------------------------------------------------------
+// My Bookings
+// ---------------------------------------------------------------------------
+
+export type { BookingDetailDTO, BookingUpdateServicesPayload } from '../types/booking.types'
+
+/**
+ * Search all bookings for a user by their contact (Telegram handle or phone).
+ */
+export async function searchMyBookings(
+  contact: string,
+): Promise<import('../types/booking.types').BookingDetailDTO[]> {
+  const result = await apiGet<import('../types/booking.types').BookingDetailDTO[]>(
+    '/api/bookings/my',
+    { contact },
+  )
+  logger.info('my_bookings_loaded', { contact, count: result.length })
+  return result
+}
+
+/**
+ * Fetch full detail for a single booking by its public UUID.
+ */
+export async function getBookingDetail(
+  publicId: string,
+): Promise<import('../types/booking.types').BookingDetailDTO> {
+  const result = await apiGet<import('../types/booking.types').BookingDetailDTO>(
+    `/api/bookings/${publicId}`,
+  )
+  logger.info('booking_detail_loaded', { publicId })
+  return result
+}
+
+/**
+ * Cancel a future prepaid booking.
+ */
+export async function cancelBooking(
+  publicId: string,
+): Promise<{ bookingId: number; message: string }> {
+  const result = await apiPost<{ bookingId: number; message: string }>(
+    `/api/bookings/${publicId}/cancel`,
+    {},
+  )
+  logger.info('booking_cancelled', { publicId })
+  return result
+}
+
+/**
+ * Update the tariff for a future prepaid booking.
+ */
+export async function updateBookingTariff(
+  publicId: string,
+  tariff: string,
+  totalPrice: number,
+): Promise<{ bookingId: number; message: string }> {
+  const result = await apiPatch<{ bookingId: number; message: string }>(
+    `/api/bookings/${publicId}/tariff`,
+    { tariff, totalPrice },
+  )
+  logger.info('booking_tariff_updated', { publicId, tariff, totalPrice })
+  return result
+}
+
+/**
+ * Update additional services for a future prepaid booking.
+ */
+export async function updateBookingServices(
+  publicId: string,
+  payload: import('../types/booking.types').BookingUpdateServicesPayload,
+): Promise<{ bookingId: number; message: string }> {
+  const result = await apiPatch<{ bookingId: number; message: string }>(
+    `/api/bookings/${publicId}/services`,
+    payload,
+  )
+  logger.info('booking_services_updated', { publicId })
+  return result
+}
+
+/**
+ * Reschedule a future prepaid booking to new dates (only once allowed).
+ */
+export async function rescheduleBooking(
+  publicId: string,
+  checkInDate: string,
+  checkOutDate: string,
+  totalPrice: number,
+): Promise<{ bookingId: number; message: string }> {
+  const result = await apiPatch<{ bookingId: number; message: string }>(
+    `/api/bookings/${publicId}/reschedule`,
+    { checkInDate, checkOutDate, totalPrice },
+  )
+  logger.info('booking_rescheduled', { publicId, checkInDate, checkOutDate })
+  return result
+}
+
 /**
  * Upload payment receipt file and notify admin via Telegram.
  */
-export async function uploadReceipt(bookingId: number, file: File): Promise<void> {
-  logger.info('receipt_upload_start', { bookingId, fileSize: file.size, fileType: file.type })
+export async function uploadReceipt(publicId: string, file: File): Promise<void> {
+  logger.info('receipt_upload_start', { publicId, fileSize: file.size, fileType: file.type })
   const formData = new FormData()
   formData.append('file', file)
 
-  const response = await fetch(`${getApiBase()}/api/bookings/${bookingId}/receipt`, {
+  const response = await fetch(`${getApiBase()}/api/bookings/${publicId}/receipt`, {
     method: 'POST',
     body: formData,
   })
 
   if (!response.ok) {
-    logger.error('receipt_upload_error', { bookingId, status: response.status })
+    logger.error('receipt_upload_error', { publicId, status: response.status })
     throw new Error(`Receipt upload failed: ${response.status}`)
   }
 
-  logger.info('receipt_upload_success', { bookingId })
+  logger.info('receipt_upload_success', { publicId })
 }

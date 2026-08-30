@@ -87,6 +87,18 @@ function HomePage({ onOpenGallery }: HomePageProps) {
               </svg>
               <span className="hidden sm:inline">Закрытый</span>
             </a>
+
+            {/* My Bookings */}
+            <Link
+              to="/my-bookings"
+              className="flex items-center gap-1.5 text-gray-300 hover:text-yellow-500 transition-colors text-sm"
+              aria-label="Мои бронирования"
+            >
+              <svg className="w-3.5 h-3.5 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+              <span className="hidden sm:inline">Мои брони</span>
+            </Link>
           </div>
         </div>
       </header>
@@ -200,12 +212,20 @@ function HomePage({ onOpenGallery }: HomePageProps) {
 
             <div className="w-24 h-px bg-gradient-to-r from-transparent via-yellow-600/30 to-transparent mb-4"></div>
 
-            <Link
-              to="/availability"
-              className="text-yellow-600/70 hover:text-yellow-500 text-xs uppercase tracking-widest transition-colors mb-4 inline-block"
-            >
-              Свободные даты →
-            </Link>
+            <div className="flex items-center gap-6 mb-4">
+              <Link
+                to="/availability"
+                className="text-yellow-600/70 hover:text-yellow-500 text-xs uppercase tracking-widest transition-colors"
+              >
+                Свободные даты →
+              </Link>
+              <Link
+                to="/my-bookings"
+                className="text-yellow-600/70 hover:text-yellow-500 text-xs uppercase tracking-widest transition-colors"
+              >
+                Мои бронирования →
+              </Link>
+            </div>
 
             <p className="text-gray-500 text-xs uppercase tracking-widest">
               © {new Date().getFullYear()} Secret House. Все права защищены

@@ -80,6 +80,15 @@ function Hero() {
             >
               Подарочный сертификат
             </Link>
+
+            {/* My Bookings CTA */}
+            <Link
+              to="/my-bookings"
+              onClick={() => logger.info('cta_click', { button: 'my_bookings' })}
+              className="w-full sm:w-auto flex items-center justify-center bg-transparent border border-yellow-600 text-yellow-600 hover:bg-yellow-600 hover:text-black font-semibold py-3 px-6 rounded-none transition-all duration-500 uppercase tracking-widest text-xs hover:scale-105"
+            >
+              Мои бронирования
+            </Link>
           </div>
         </div>
 

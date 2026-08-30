@@ -158,10 +158,10 @@ function BookingWizard() {
         contactType: finalData.contactType,
         hasReceipt: !!finalData.receiptFile,
       })
-      const { bookingId } = await submitBookingForm(finalData)
+      const { bookingId, publicId } = await submitBookingForm(finalData)
       if (finalData.receiptFile) {
         logger.info('booking_receipt_upload_start', { bookingId })
-        await uploadReceipt(bookingId, finalData.receiptFile)
+        await uploadReceipt(publicId, finalData.receiptFile)
         logger.info('booking_receipt_upload_complete', { bookingId })
       }
       clearFormFromLocalStorage()

@@ -34,7 +34,7 @@ const TARIFFS_WITH_ALL_ROOMS: TariffType[] = [
 /**
  * Minimum booking duration in hours
  */
-export const MIN_BOOKING_HOURS = 3
+export const MIN_BOOKING_HOURS = 1
 
 /**
  * Cleaning buffer in hours required between bookings.
@@ -781,6 +781,36 @@ export function calculateBasePrice(tariff: string, durationHours: number, sale =
   return getBasePriceBreakdown(tariff, durationHours, sale)?.basePrice ?? 0
 }
 
+export interface BookingServices {
+  hasPhotoshoot: boolean
+  hasSauna: boolean
+  hasBathTub: boolean
+  hasExtraBedroom: boolean
+  hasSecretRoom: boolean
+}
+
+/**
+ * Calculate full price = base price + extras for the given tariff and current services.
+ * Use this whenever a tariff change requires a full reprice that preserves existing services.
+ */
+export function calculatePriceWithServices(
+  tariff: string,
+  durationHours: number,
+  services: BookingServices,
+  sale = false,
+): number {
+  const cfg = getTariffConfig(tariff, sale)
+  if (!cfg) return 0
+  const base = calculateBasePrice(tariff, durationHours, sale)
+  const extras =
+    (services.hasPhotoshoot ? (cfg.photoshootPrice ?? 0) : 0) +
+    (services.hasSauna ? (cfg.saunaPrice ?? 0) : 0) +
+    (services.hasBathTub ? (cfg.bathTubPrice ?? 0) : 0) +
+    (services.hasExtraBedroom ? (cfg.extraBedroomPrice ?? 0) : 0) +
+    (services.hasSecretRoom ? (cfg.secretRoomPrice ?? 0) : 0)
+  return base + extras
+}
+
 /**
  * Calculate wine total price
  */
@@ -959,7 +989,7 @@ export async function validatePromocode(
  */
 export async function submitBookingForm(
   formData: BookingFormData,
-): Promise<{ bookingId: number; message: string }> {
+): Promise<{ bookingId: number; publicId: string; message: string }> {
   // Format as naive ISO datetime (no timezone suffix) so the backend
   // stores exactly the Minsk-local time the user selected, regardless
   // of the browser's timezone.

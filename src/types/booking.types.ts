@@ -187,3 +187,43 @@ export interface StepConfig {
   shouldShow: (formData: Partial<BookingFormData>) => boolean
   requiredFields?: (keyof BookingFormData)[]
 }
+
+export interface BookingDetailDTO {
+  bookingId: number
+  publicId: string
+  startDate: string
+  endDate: string
+  tariff: TariffType
+  guestCount: number
+  hasPhotoshoot: boolean
+  hasSauna: boolean
+  hasExtraBedroom: boolean
+  hasSecretRoom: boolean
+  hasBathTub: boolean
+  isCanceled: boolean
+  isDateChanged: boolean
+  isPrepaymented: boolean
+  isDone: boolean
+  totalPrice: number
+  prepaymentPrice: number
+  comment?: string
+  wineSelection: string[]
+  transferAddress?: string
+  isFuture: boolean
+  canModify: boolean
+  canReschedule: boolean
+  canCancel: boolean
+  canPay: boolean
+}
+
+export interface BookingUpdateServicesPayload {
+  hasPhotoshoot: boolean
+  hasSauna: boolean
+  hasBathTub: boolean
+  hasExtraBedroom: boolean
+  hasSecretRoom: boolean
+  wineSelection: string[]
+  needsTransfer: boolean
+  transferAddress?: string
+  totalPrice: number
+}

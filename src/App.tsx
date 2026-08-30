@@ -7,6 +7,10 @@ import BookingWizardPage from './pages/BookingWizardPage'
 import BookingSuccessPage from './pages/BookingSuccessPage'
 import AvailabilityPage from './pages/AvailabilityPage'
 import GiftCertificatePage from './pages/GiftCertificatePage'
+import MyBookingsPage from './pages/MyBookingsPage'
+import BookingDetailPage from './pages/BookingDetailPage'
+import ReschedulePage from './pages/ReschedulePage'
+import AdminPage from './pages/AdminPage'
 import FullGallery from './components/FullGallery'
 import LoadingOverlay from './components/LoadingOverlay/LoadingOverlay'
 import type { RoomCategory } from './types/gallery.types'
@@ -54,6 +58,10 @@ function App() {
           <Route path="/telegram" element={<BookingRedirect />} />
           <Route path="/availability" element={<AvailabilityPage />} />
           <Route path="/gift" element={<GiftCertificatePage />} />
+          <Route path="/my-bookings" element={<MyBookingsPage />} />
+          <Route path="/my-bookings/:publicId" element={<BookingDetailPage />} />
+          <Route path="/my-bookings/:publicId/reschedule" element={<ReschedulePage />} />
+          <Route path="/admin" element={<AdminPage />} />
         </Routes>
       </div>
 

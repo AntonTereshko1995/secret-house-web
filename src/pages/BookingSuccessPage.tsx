@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
+import { logger } from '../services/logger'
 import { TARIFF_OPTIONS } from '../utils/booking'
 import type { BookingFormData } from '../types/booking.types'
 
@@ -9,7 +10,15 @@ function BookingSuccessPage() {
   const booking = location.state?.booking as Partial<BookingFormData> | undefined
 
   useEffect(() => {
-    if (!booking) navigate('/', { replace: true })
+    if (!booking) {
+      navigate('/', { replace: true })
+      return
+    }
+    logger.info('booking_success_view', {
+      tariff: booking.tariff,
+      totalPrice: booking.totalPrice,
+      contactType: booking.contactType,
+    })
   }, [booking, navigate])
 
   if (!booking) return null

@@ -2,13 +2,13 @@
 
 /* Custom base styles */
 @layer base {
-  html, body {
-    overflow-x: hidden;
+  html {
     max-width: 100%;
     background-color: #000;
   }
-  
+
   body {
+    overflow-x: hidden;
     @apply font-sans antialiased bg-black text-white;
   }
   

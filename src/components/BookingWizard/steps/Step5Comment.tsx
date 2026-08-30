@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { logger } from '../../../services/logger'
 import type { BookingFormData } from '../../../types/booking.types'
 
 interface StepProps {
@@ -13,7 +14,9 @@ function Step5Comment({ formData, updateFormData, nextStep, prevStep }: StepProp
   const maxLength = 500
 
   const handleNext = () => {
-    updateFormData({ comment: comment.trim() })
+    const trimmed = comment.trim()
+    logger.info('booking_comment_submitted', { hasComment: trimmed.length > 0, length: trimmed.length })
+    updateFormData({ comment: trimmed })
     nextStep()
   }
 
