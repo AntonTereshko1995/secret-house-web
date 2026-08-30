@@ -79,7 +79,7 @@ export default function AdminPage() {
   const [page, setPage] = useState(1)
   const [listLoading, setListLoading] = useState(false)
   const [listError, setListError] = useState<string | null>(null)
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
   const [statusFilter, setStatusFilter] = useState('all')
 
   // Detail
@@ -289,7 +289,7 @@ export default function AdminPage() {
           <button onClick={() => setSortOrder(o => o === 'desc' ? 'asc' : 'desc')}
             className="flex items-center gap-1.5 text-sm text-amber-400 hover:text-amber-300 border
               border-amber-500/30 hover:border-amber-500/60 px-3 py-1.5 rounded-lg transition-all whitespace-nowrap">
-            По дате {sortOrder === 'desc' ? '↓' : '↑'}
+            По дате заселения {sortOrder === 'asc' ? '↑' : '↓'}
           </button>
           <div className="flex gap-1.5 flex-wrap">
             {STATUS_TABS.map(tab => (
