@@ -94,7 +94,7 @@ const STANDARD_TARIFFS = [
       priced('Сауна', 'saunaPrice', { skipIfZero: true }),
       priced('Банный чан', 'bathTubPrice', { skipIfZero: true }),
       priced('Секретная комната', 'secretRoomPrice', { skipIfZero: true }),
-      priced('Доп. спальня', 'extraBedroomPrice', { skipIfZero: true }),
+      priced('Обе спальные комнаты', 'extraBedroomPrice', { skipIfZero: true }),
     ] as FeatureItem[],
   },
   {
@@ -106,7 +106,7 @@ const STANDARD_TARIFFS = [
       priced('Сауна', 'saunaPrice', { skipIfZero: true }),
       priced('Банный чан', 'bathTubPrice', { skipIfZero: true }),
       priced('Секретная комната', 'secretRoomPrice', { skipIfZero: true }),
-      priced('Доп. спальня', 'extraBedroomPrice', { skipIfZero: true }),
+      priced('Обе спальные комнаты', 'extraBedroomPrice', { skipIfZero: true }),
     ] as FeatureItem[],
   },
 ]

@@ -48,7 +48,7 @@ function GiftStepSummary({ giftData, updateGiftData, nextStep, prevStep }: GiftS
         <Row label="Тариф" value={`${tariffName} — ${basePrice} BYN`} />
         {giftData.hasSauna && <Row label="Сауна" value={`${giftData.saunaPrice} BYN`} />}
         {giftData.hasSecretRoom && <Row label="Секретная комната" value={`${giftData.secretRoomPrice} BYN`} />}
-        {giftData.hasExtraBedroom && <Row label="Доп. спальня" value={`${giftData.extraBedroomPrice} BYN`} />}
+        {giftData.hasExtraBedroom && <Row label="Обе спальные комнаты" value={`${giftData.extraBedroomPrice} BYN`} />}
         {giftData.hasBathTub && <Row label="Банный чан" value={`${giftData.bathTubPrice} BYN`} />}
       </div>
 

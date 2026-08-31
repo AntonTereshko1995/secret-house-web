@@ -231,4 +231,5 @@ export interface BookingUpdateServicesPayload {
   needsTransfer: boolean
   transferAddress?: string
   totalPrice: number
+  bedroomType?: string
 }

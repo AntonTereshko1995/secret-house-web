@@ -63,6 +63,7 @@ export interface ServicesPayload {
   needsTransfer: boolean
   transferAddress?: string
   totalPrice: number
+  bedroomType?: string
 }
 
 export interface BookingViewActions {
@@ -207,7 +208,7 @@ function buildBookingCopyText(booking: BookingViewData): string {
     `Фотосессия: ${yesNo(booking.hasPhotoshoot)}`,
     `Сауна: ${yesNo(booking.hasSauna)}`,
     `Горячий чан: ${yesNo(booking.hasBathTub)}`,
-    `Доп. спальня: ${yesNo(booking.hasExtraBedroom)}`,
+    `Обе спальные комнаты: ${yesNo(booking.hasExtraBedroom)}`,
     `Секретная комната: ${yesNo(booking.hasSecretRoom)}`,
     `Количество гостей: ${booking.guestCount}`,
   ]
@@ -361,6 +362,12 @@ function ServicesPanel({ booking, onClose, onSuccess, onError, actions }: PanelP
   const [hasBathTub, setHasBathTub] = useState(booking.hasBathTub)
   const [hasExtraBedroom, setHasExtraBedroom] = useState(booking.hasExtraBedroom)
   const [hasSecretRoom, setHasSecretRoom] = useState(booking.hasSecretRoom)
+  const [hasWhiteBedroom, setHasWhiteBedroom] = useState(
+    booking.bedroomType === 'white' || booking.hasExtraBedroom,
+  )
+  const [hasGreenBedroom, setHasGreenBedroom] = useState(
+    booking.bedroomType === 'green' || booking.hasExtraBedroom,
+  )
   const [selectedWine, setSelectedWine] = useState<string>(booking.wineSelection[0] ?? '')
   const [needsTransfer, setNeedsTransfer] = useState(!!booking.transferAddress)
   const [transferAddress, setTransferAddress] = useState(booking.transferAddress ?? '')
@@ -368,21 +375,53 @@ function ServicesPanel({ booking, onClose, onSuccess, onError, actions }: PanelP
 
   const tariffId = booking.tariff as TariffType
   const cfg = TARIFF_CONFIG[tariffId]
+  const is12hOrWork = tariffId === '12h-standard' || tariffId === 'work-standard'
+  const bothBedrooms = is12hOrWork && hasWhiteBedroom && hasGreenBedroom
   const durationHours = calculateDuration(new Date(booking.startDate), new Date(booking.endDate))
   const basePrice = calculateBasePrice(tariffId, durationHours)
   const extras =
     (hasPhotoshoot ? (cfg?.photoshootPrice ?? 0) : 0) +
     (hasSauna ? (cfg?.saunaPrice ?? 0) : 0) +
     (hasBathTub ? (cfg?.bathTubPrice ?? 0) : 0) +
-    (hasExtraBedroom ? (cfg?.extraBedroomPrice ?? 0) : 0) +
+    (is12hOrWork ? (bothBedrooms ? (cfg?.extraBedroomPrice ?? 0) : 0) : (hasExtraBedroom ? (cfg?.extraBedroomPrice ?? 0) : 0)) +
     (hasSecretRoom ? (cfg?.secretRoomPrice ?? 0) : 0)
   const newTotal = basePrice + extras
+
+  const initWhite = booking.bedroomType === 'white' || booking.hasExtraBedroom
+  const initGreen = booking.bedroomType === 'green' || booking.hasExtraBedroom
+  const hasChanged =
+    hasPhotoshoot !== booking.hasPhotoshoot ||
+    hasSauna !== booking.hasSauna ||
+    hasBathTub !== booking.hasBathTub ||
+    hasSecretRoom !== booking.hasSecretRoom ||
+    (is12hOrWork
+      ? hasWhiteBedroom !== initWhite || hasGreenBedroom !== initGreen
+      : hasExtraBedroom !== booking.hasExtraBedroom) ||
+    selectedWine !== (booking.wineSelection[0] ?? '') ||
+    needsTransfer !== !!booking.transferAddress ||
+    (needsTransfer && transferAddress !== (booking.transferAddress ?? ''))
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setSubmitting(true)
+    let bedroomPayload: Pick<ServicesPayload, 'hasExtraBedroom' | 'bedroomType'>
+    if (is12hOrWork) {
+      if (hasWhiteBedroom && hasGreenBedroom) {
+        bedroomPayload = { hasExtraBedroom: true, bedroomType: undefined }
+      } else if (hasWhiteBedroom) {
+        bedroomPayload = { hasExtraBedroom: false, bedroomType: 'white' }
+      } else if (hasGreenBedroom) {
+        bedroomPayload = { hasExtraBedroom: false, bedroomType: 'green' }
+      } else {
+        bedroomPayload = { hasExtraBedroom: false, bedroomType: undefined }
+      }
+    } else {
+      bedroomPayload = { hasExtraBedroom, bedroomType: undefined }
+    }
     const payload: ServicesPayload = {
-      hasPhotoshoot, hasSauna, hasBathTub, hasExtraBedroom, hasSecretRoom,
+      hasPhotoshoot, hasSauna, hasBathTub,
+      ...bedroomPayload,
+      hasSecretRoom,
       wineSelection: selectedWine ? [selectedWine] : [],
       needsTransfer,
       transferAddress: needsTransfer ? transferAddress : undefined,
@@ -415,7 +454,25 @@ function ServicesPanel({ booking, onClose, onSuccess, onError, actions }: PanelP
           <ServiceCheckbox label="Банный чан" checked={hasBathTub} onChange={setHasBathTub}
             priceHint={`+${cfg.bathTubPrice} BYN`} />
         )}
-        {(cfg?.extraBedroomPrice ?? 0) > 0 && (
+
+        {is12hOrWork && (
+          <>
+            <ServiceCheckbox
+              label="Белая спальня"
+              checked={hasWhiteBedroom}
+              onChange={setHasWhiteBedroom}
+              priceHint={hasGreenBedroom && !hasWhiteBedroom ? `+${cfg?.extraBedroomPrice ?? 0} BYN` : 'Бесплатно'}
+            />
+            <ServiceCheckbox
+              label="Зеленая спальня"
+              checked={hasGreenBedroom}
+              onChange={setHasGreenBedroom}
+              priceHint={hasWhiteBedroom && !hasGreenBedroom ? `+${cfg?.extraBedroomPrice ?? 0} BYN` : 'Бесплатно'}
+            />
+          </>
+        )}
+
+        {!is12hOrWork && (cfg?.extraBedroomPrice ?? 0) > 0 && (
           <ServiceCheckbox label="Дополнительная спальня" checked={hasExtraBedroom} onChange={setHasExtraBedroom}
             priceHint={`+${cfg.extraBedroomPrice} BYN`} />
         )}
@@ -459,7 +516,7 @@ function ServicesPanel({ booking, onClose, onSuccess, onError, actions }: PanelP
         Новая стоимость: <span className="text-yellow-500 font-bold">{newTotal} BYN</span>
       </p>
 
-      <SaveCancelRow submitting={submitting} onCancel={onClose} />
+      <SaveCancelRow submitting={submitting} disabled={!hasChanged} onCancel={onClose} />
     </form>
   )
 }
@@ -1067,7 +1124,7 @@ export function BookingDetailView({
             {booking.hasSauna && <DetailRow label="Сауна" value="Да" />}
             {booking.hasPhotoshoot && <DetailRow label="Фотосессия" value="Да" />}
             {booking.hasBathTub && <DetailRow label="Банный чан" value="Да" />}
-            {booking.hasExtraBedroom && <DetailRow label="Доп. спальня" value="Да" />}
+            {booking.hasExtraBedroom && <DetailRow label="Обе спальные комнаты" value="Да" />}
             {booking.hasSecretRoom && <DetailRow label="Секретная комната" value="Да" />}
             {booking.transferAddress && <DetailRow label="Трансфер" value={booking.transferAddress} />}
             {booking.wineSelection.length > 0 && (

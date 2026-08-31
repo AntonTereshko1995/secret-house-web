@@ -127,7 +127,7 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
         {formData.bedroomType && (
           <Row label="Спальня" value={BEDROOM_OPTIONS.find(b => b.id === formData.bedroomType)?.name ?? formData.bedroomType} />
         )}
-        {formData.hasExtraBedroom && <Row label="Доп. спальня" value="Да" />}
+        {formData.hasExtraBedroom && <Row label="Обе спальные комнаты" value="Да" />}
         {formData.hasSecretRoom && <Row label="Секретная комната" value="Да" />}
         {formData.wineSelection && formData.wineSelection.length > 0 && (
           <Row label="Вино" value={WINE_OPTIONS.find(w => w.id === formData.wineSelection![0])?.name ?? formData.wineSelection[0]} />

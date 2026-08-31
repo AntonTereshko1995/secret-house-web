@@ -204,7 +204,7 @@ function Step1Tariff({ formData, updateFormData, nextStep }: StepProps) {
                   <span className="text-[10px] bg-amber-400/10 border border-amber-400/30 text-amber-400 px-2 py-0.5 rounded">Секретная комната</span>
                 )}
                 {formData.giftHasAdditionalBedroom && (
-                  <span className="text-[10px] bg-amber-400/10 border border-amber-400/30 text-amber-400 px-2 py-0.5 rounded">Доп. спальня</span>
+                  <span className="text-[10px] bg-amber-400/10 border border-amber-400/30 text-amber-400 px-2 py-0.5 rounded">Обе спальные комнаты</span>
                 )}
                 {formData.giftPrice !== undefined && formData.giftPrice > 0 && (
                   <span className="text-[10px] bg-green-400/10 border border-green-400/30 text-green-400 px-2 py-0.5 rounded">Покрывает {formData.giftPrice} BYN</span>

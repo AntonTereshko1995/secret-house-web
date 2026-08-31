@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, type FormEvent } from 'react'
+import { Link } from 'react-router-dom'
 import {
   adminLogin,
   adminGetBookings,
@@ -288,6 +289,22 @@ export default function AdminPage() {
               px-3 py-1.5 rounded-lg transition-all">
             Выйти
           </button>
+        </div>
+
+        {/* Navigation */}
+        <div className="mt-4 flex gap-2">
+          <Link
+            to="/admin/promocodes"
+            className="text-xs px-3 py-1.5 rounded-lg border border-zinc-700 text-zinc-400
+              hover:border-amber-500/50 hover:text-amber-400 transition-all">
+            Промокоды →
+          </Link>
+          <Link
+            to="/admin/statistics"
+            className="text-xs px-3 py-1.5 rounded-lg border border-zinc-700 text-zinc-400
+              hover:border-amber-500/50 hover:text-amber-400 transition-all">
+            Статистика →
+          </Link>
         </div>
 
         {/* Sort + filter */}

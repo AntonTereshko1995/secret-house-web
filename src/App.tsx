@@ -11,6 +11,8 @@ import MyBookingsPage from './pages/MyBookingsPage'
 import BookingDetailPage from './pages/BookingDetailPage'
 import ReschedulePage from './pages/ReschedulePage'
 import AdminPage from './pages/AdminPage'
+import AdminPromocodesPage from './pages/AdminPromocodesPage'
+import AdminStatisticsPage from './pages/AdminStatisticsPage'
 import FullGallery from './components/FullGallery'
 import LoadingOverlay from './components/LoadingOverlay/LoadingOverlay'
 import type { RoomCategory } from './types/gallery.types'
@@ -62,6 +64,8 @@ function App() {
           <Route path="/my-bookings/:publicId" element={<BookingDetailPage />} />
           <Route path="/my-bookings/:publicId/reschedule" element={<ReschedulePage />} />
           <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin/promocodes" element={<AdminPromocodesPage />} />
+          <Route path="/admin/statistics" element={<AdminStatisticsPage />} />
         </Routes>
       </div>
 

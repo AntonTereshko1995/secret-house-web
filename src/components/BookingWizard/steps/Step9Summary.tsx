@@ -85,7 +85,7 @@ function Step9Summary({ formData, updateFormData, nextStep, prevStep }: StepProp
         {formData.hasSauna && <Row label="Сауна" value="Да" />}
         {formData.hasBathTub && <Row label="Банный чан" value="Да" />}
         {formData.bedroomType && <Row label="Спальня" value={BEDROOM_OPTIONS.find(b => b.id === formData.bedroomType)?.name ?? formData.bedroomType} />}
-        {formData.hasExtraBedroom && <Row label="Доп. спальня" value="Да" />}
+        {formData.hasExtraBedroom && <Row label="Обе спальные комнаты" value="Да" />}
         {formData.hasSecretRoom && <Row label="Секретная комната" value="Да" />}
         {wineName && <Row label="Вино" value={wineName} />}
         {formData.needsTransfer && <Row label="Трансфер" value={formData.transferAddress ?? '—'} />}
@@ -137,7 +137,7 @@ function Step9Summary({ formData, updateFormData, nextStep, prevStep }: StepProp
           <PriceRow label="Банный чан" value={`+${pricing.bathTubPrice} BYN`} />
         )}
         {formData.hasExtraBedroom && pricing.extraBedroomPrice > 0 && (
-          <PriceRow label="Доп. спальня" value={`+${pricing.extraBedroomPrice} BYN`} />
+          <PriceRow label="Обе спальные комнаты" value={`+${pricing.extraBedroomPrice} BYN`} />
         )}
         {formData.hasSecretRoom && pricing.secretRoomPrice > 0 && (
           <PriceRow label="Секретная комната" value={`+${pricing.secretRoomPrice} BYN`} />
