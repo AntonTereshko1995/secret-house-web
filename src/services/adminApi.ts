@@ -199,3 +199,9 @@ export const adminUpdatePrice = (
     `/api/admin/bookings/${id}/price`,
     { totalPrice, prepaymentPrice },
   )
+
+export const adminDeleteBooking = (id: number): Promise<{ bookingId: number; message: string }> =>
+  adminFetch<{ bookingId: number; message: string }>(
+    'DELETE',
+    `/api/admin/bookings/${id}`,
+  )

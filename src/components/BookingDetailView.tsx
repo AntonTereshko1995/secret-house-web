@@ -1,4 +1,4 @@
-import { useState, useMemo, type FormEvent } from 'react'
+import { useState, useMemo, useCallback, type FormEvent } from 'react'
 import { getEnv } from '../utils/env'
 import { PriceBreakdown } from './PriceBreakdown'
 import {
@@ -72,11 +72,12 @@ export interface BookingViewActions {
   // Admin-only
   confirm?(): Promise<void>
   savePrice?(totalPrice: number, prepaymentPrice: number): Promise<void>
+  delete?(): Promise<void>
   // User-only
   uploadReceipt?(file: File): Promise<void>
 }
 
-type ActivePanel = 'tariff' | 'services' | 'reschedule' | 'cancel' | 'confirm' | 'price' | 'pay' | 'instructions' | null
+type ActivePanel = 'tariff' | 'services' | 'reschedule' | 'cancel' | 'confirm' | 'price' | 'pay' | 'instructions' | 'delete' | null
 
 // ─── Shared helpers ───────────────────────────────────────────────────────────
 
@@ -177,6 +178,98 @@ function SaveCancelRow({
 function StatusBadge({ b }: { b: BookingViewData }) {
   const { label, className } = getBookingStatusBadge(b)
   return <span className={`text-xs px-2.5 py-1 rounded-full border whitespace-nowrap ${className}`}>{label}</span>
+}
+
+// ─── Copy booking text ────────────────────────────────────────────────────────
+
+function fmtDateForCopy(iso: string): string {
+  const d = new Date(iso)
+  const dd = String(d.getDate()).padStart(2, '0')
+  const mm = String(d.getMonth() + 1).padStart(2, '0')
+  const hh = String(d.getHours()).padStart(2, '0')
+  const min = String(d.getMinutes()).padStart(2, '0')
+  return `${dd}.${mm}.${d.getFullYear()} ${hh}:${min}`
+}
+
+function buildBookingCopyText(booking: BookingViewData): string {
+  const tariffName = TARIFF_OPTIONS.find(t => t.id === booking.tariff)?.name ?? booking.tariff
+  const yesNo = (v: boolean) => v ? 'Да' : 'Нет'
+  const contact = booking.userContact ?? booking.userName ?? 'N/A'
+
+  const lines = [
+    `Пользователь: ${contact}`,
+    `Дата начала: ${fmtDateForCopy(booking.startDate)}`,
+    `Дата завершения: ${fmtDateForCopy(booking.endDate)}`,
+    `Тариф: ${tariffName}`,
+    `Стоимость: ${booking.totalPrice} руб.`,
+    `Предоплата: ${booking.prepaymentPrice} руб.`,
+    `Фотосессия: ${yesNo(booking.hasPhotoshoot)}`,
+    `Сауна: ${yesNo(booking.hasSauna)}`,
+    `Горячий чан: ${yesNo(booking.hasBathTub)}`,
+    `Доп. спальня: ${yesNo(booking.hasExtraBedroom)}`,
+    `Секретная комната: ${yesNo(booking.hasSecretRoom)}`,
+    `Количество гостей: ${booking.guestCount}`,
+  ]
+
+  if (booking.comment) lines.push(`Комментарий: ${booking.comment}`)
+
+  if (booking.wineSelection.length > 0) {
+    const wineNames = booking.wineSelection
+      .map(id => WINE_OPTIONS.find(w => w.id === id)?.name ?? id)
+      .join(', ')
+    lines.push(`Вино: ${wineNames}`)
+  }
+
+  if (booking.transferAddress) lines.push(`Трансфер: ${booking.transferAddress}`)
+
+  lines.push(`Источник: ${booking.source === 'web' ? '🌐 Веб' : '📱 Телеграм'}`)
+
+  return lines.join('\n')
+}
+
+function CopyBookingButton({ booking }: { booking: BookingViewData }) {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = useCallback(async () => {
+    const text = buildBookingCopyText(booking)
+    try {
+      await navigator.clipboard.writeText(text)
+    } catch {
+      const el = document.createElement('textarea')
+      el.value = text
+      el.style.position = 'fixed'
+      el.style.opacity = '0'
+      document.body.appendChild(el)
+      el.select()
+      document.execCommand('copy')
+      document.body.removeChild(el)
+    }
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }, [booking])
+
+  return (
+    <button
+      onClick={handleCopy}
+      className={[
+        'w-full flex items-center justify-between p-3 rounded-lg border text-sm transition-all group',
+        copied
+          ? 'border-emerald-700/50 text-emerald-400'
+          : 'border-zinc-700 hover:border-zinc-500 text-white',
+      ].join(' ')}
+    >
+      <span>{copied ? '✓ Скопировано' : 'Скопировать описание'}</span>
+      {copied ? (
+        <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      ) : (
+        <svg className="w-4 h-4 text-zinc-600 group-hover:text-amber-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        </svg>
+      )}
+    </button>
+  )
 }
 
 // ─── Panel shared props ───────────────────────────────────────────────────────
@@ -617,6 +710,52 @@ function ConfirmPanel({ booking, onClose, onSuccess, onError, actions }: PanelPr
   )
 }
 
+// ─── Delete panel (admin only) ───────────────────────────────────────────────
+
+function DeletePanel({
+  booking, onClose, onDeleted, onError, actions,
+}: {
+  booking: BookingViewData
+  onClose(): void
+  onDeleted(): void
+  onError(msg: string): void
+  actions: BookingViewActions
+}) {
+  const [submitting, setSubmitting] = useState(false)
+
+  const handleDelete = async () => {
+    setSubmitting(true)
+    try {
+      await actions.delete!()
+      onDeleted()
+    } catch (err) {
+      onError(err instanceof Error ? err.message : 'Ошибка')
+      setSubmitting(false)
+    }
+  }
+
+  return (
+    <div className="space-y-4">
+      <h3 className="text-white font-semibold">Удалить бронирование</h3>
+      <p className="text-zinc-400 text-sm">
+        Бронирование #{booking.bookingId} будет <strong className="text-red-400">безвозвратно удалено</strong> из базы данных.
+        Это действие нельзя отменить.
+      </p>
+      <div className="flex gap-3">
+        <button type="button" onClick={handleDelete} disabled={submitting}
+          className="flex-1 bg-red-800 hover:bg-red-700 disabled:bg-zinc-700 disabled:text-zinc-500
+            text-white font-bold py-2.5 rounded-lg text-sm uppercase tracking-wider transition-all">
+          {submitting ? 'Удаляем…' : 'Да, удалить навсегда'}
+        </button>
+        <button type="button" onClick={onClose}
+          className="flex-1 border border-zinc-700 text-zinc-400 hover:text-white py-2.5 rounded-lg text-sm transition-all">
+          Назад
+        </button>
+      </div>
+    </div>
+  )
+}
+
 // ─── Price panel (admin only) ─────────────────────────────────────────────────
 
 function PricePanel({ booking, onClose, onSuccess, onError, actions }: PanelProps) {
@@ -828,6 +967,7 @@ export function BookingDetailView({
   onReload,
   actions,
   onReschedule,
+  onDeleted,
 }: {
   booking: BookingViewData
   mode: 'user' | 'admin'
@@ -835,6 +975,7 @@ export function BookingDetailView({
   onReload(): Promise<void>
   actions: BookingViewActions
   onReschedule?: () => void
+  onDeleted?: () => void
 }) {
   const [activePanel, setActivePanel] = useState<ActivePanel>(null)
   const [actionError, setActionError] = useState<string | null>(null)
@@ -937,6 +1078,13 @@ export function BookingDetailView({
               </div>
             )}
 
+            {/* Admin: copy booking description */}
+            {isAdmin && (
+              <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-3">
+                <CopyBookingButton booking={booking} />
+              </div>
+            )}
+
             {/* Admin actions */}
             {isAdmin && !booking.isCanceled && !booking.isDone && (
               <div className="bg-zinc-900 border border-zinc-700 rounded-xl p-4">
@@ -953,6 +1101,9 @@ export function BookingDetailView({
                       <ActionButton label="Изменить стоимость и предоплату" onClick={() => openPanel('price')} />
                     )}
                     <ActionButton label="Отменить бронирование" onClick={() => openPanel('cancel')} variant="red" />
+                    {actions.delete && (
+                      <ActionButton label="Удалить бронирование" onClick={() => openPanel('delete')} variant="red" />
+                    )}
                   </div>
                 )}
                 {activePanel === 'confirm' && <ConfirmPanel {...panelProps} />}
@@ -961,13 +1112,38 @@ export function BookingDetailView({
                 {activePanel === 'reschedule' && <ReschedulePanel {...panelProps} />}
                 {activePanel === 'price' && <PricePanel {...panelProps} />}
                 {activePanel === 'cancel' && <CancelPanel {...panelProps} />}
+                {activePanel === 'delete' && actions.delete && (
+                  <DeletePanel
+                    booking={booking}
+                    onClose={closePanel}
+                    onDeleted={onDeleted ?? onBack}
+                    onError={setActionError}
+                    actions={actions}
+                  />
+                )}
               </div>
             )}
             {isAdmin && (booking.isCanceled || booking.isDone) && (
-              <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 text-center">
-                <p className="text-zinc-500 text-sm">
-                  {booking.isCanceled ? 'Бронирование отменено — изменения недоступны' : 'Бронирование завершено'}
-                </p>
+              <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4">
+                {activePanel !== 'delete' && (
+                  <>
+                    <p className="text-zinc-500 text-sm text-center mb-3">
+                      {booking.isCanceled ? 'Бронирование отменено — изменения недоступны' : 'Бронирование завершено'}
+                    </p>
+                    {actions.delete && (
+                      <ActionButton label="Удалить бронирование" onClick={() => openPanel('delete')} variant="red" />
+                    )}
+                  </>
+                )}
+                {activePanel === 'delete' && actions.delete && (
+                  <DeletePanel
+                    booking={booking}
+                    onClose={closePanel}
+                    onDeleted={onDeleted ?? onBack}
+                    onError={setActionError}
+                    actions={actions}
+                  />
+                )}
               </div>
             )}
 

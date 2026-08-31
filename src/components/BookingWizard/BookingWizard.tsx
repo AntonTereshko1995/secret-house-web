@@ -102,14 +102,90 @@ function BookingWizard() {
     })
   }
 
-  // NAVIGATION: Move to next step (auto-submit when no next step remains)
-  const nextStep = () => {
+  // NAVIGATION: Move to next step.
+  // Special case: when leaving the contact step, create the booking first so
+  // the receipt step only needs to upload the file to an existing booking.
+  const nextStep = async () => {
+    if (currentStepId === 'contact') {
+      // Guard: booking already created (user went back from receipt and returned)
+      if (formDataRef.current.createdPublicId) {
+        if (nextStepId) {
+          setCurrentStepId(nextStepId)
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        }
+        return
+      }
+
+      setLoading(true)
+      try {
+        const data = formDataRef.current as BookingFormData
+        logger.info('booking_submit', {
+          tariff: data.tariff,
+          guestCount: data.guestCount,
+          checkInDate: data.checkInDate,
+          checkInTime: data.checkInTime,
+          checkOutDate: data.checkOutDate,
+          checkOutTime: data.checkOutTime,
+          durationHours: data.durationHours,
+          basePrice: data.basePrice,
+          totalPrice: data.totalPrice,
+          hasPhotoshoot: data.hasPhotoshoot ?? false,
+          hasSauna: data.hasSauna ?? false,
+          hasBathTub: data.hasBathTub ?? false,
+          bedroomType: data.bedroomType,
+          hasExtraBedroom: data.hasExtraBedroom ?? false,
+          hasSecretRoom: data.hasSecretRoom ?? false,
+          needsTransfer: data.needsTransfer ?? false,
+          wineCount: data.wineSelection?.length ?? 0,
+          hasPromocode: !!data.promocodeValid,
+          promocodeDiscount: data.promocodeDiscount,
+          hasGift: !!data.giftId,
+          contactType: data.contactType,
+          hasReceipt: !!data.receiptFile,
+        })
+        const { bookingId, publicId } = await submitBookingForm(data)
+        updateFormData({ createdBookingId: bookingId, createdPublicId: publicId })
+        logger.info('booking_created', { bookingId, publicId })
+
+        if (nextStepId) {
+          // Proceed to the receipt step
+          setCurrentStepId(nextStepId)
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        } else {
+          // Gift fully covers the booking — no receipt step, go straight to success
+          clearFormFromLocalStorage()
+          logger.info('booking_flow_complete', {
+            bookingId,
+            tariff: data.tariff,
+            totalPrice: data.totalPrice,
+            hasReceipt: false,
+          })
+          navigate('/booking/success', {
+            state: { booking: data, bookingId, publicId },
+            replace: true,
+          })
+        }
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error)
+        const stack = error instanceof Error ? error.stack : undefined
+        logger.error('booking_submission_error', {
+          message,
+          stack,
+          stepId: currentStepId,
+          tariff: formData.tariff,
+          totalPrice: formData.totalPrice,
+        })
+        console.error('Booking creation error:', error)
+        alert('Не удалось создать бронирование. Пожалуйста, попробуйте ещё раз.')
+      } finally {
+        setLoading(false)
+      }
+      return
+    }
+
     if (nextStepId) {
       setCurrentStepId(nextStepId)
       window.scrollTo({ top: 0, behavior: 'smooth' })
-    } else {
-      // No more steps — submit using the latest formData from ref
-      handleSubmit(formDataRef.current)
     }
   }
 
@@ -129,41 +205,25 @@ function BookingWizard() {
     }
   }
 
-  // SUBMIT: Handle final submission (from Step11Receipt or auto when last step is skipped)
+  // SUBMIT: Upload receipt to the already-created booking and navigate to success.
+  // Booking creation happens at the contact step — this function never creates a booking.
   const handleSubmit = async (extraData?: Partial<BookingFormData>) => {
     setLoading(true)
     try {
       const finalData = { ...formDataRef.current, ...extraData } as BookingFormData
-      logger.info('booking_submit_start', {
-        tariff: finalData.tariff,
-        guestCount: finalData.guestCount,
-        checkInDate: finalData.checkInDate,
-        checkInTime: finalData.checkInTime,
-        checkOutDate: finalData.checkOutDate,
-        checkOutTime: finalData.checkOutTime,
-        durationHours: finalData.durationHours,
-        basePrice: finalData.basePrice,
-        totalPrice: finalData.totalPrice,
-        hasPhotoshoot: finalData.hasPhotoshoot ?? false,
-        hasSauna: finalData.hasSauna ?? false,
-        hasBathTub: finalData.hasBathTub ?? false,
-        bedroomType: finalData.bedroomType,
-        hasExtraBedroom: finalData.hasExtraBedroom ?? false,
-        hasSecretRoom: finalData.hasSecretRoom ?? false,
-        needsTransfer: finalData.needsTransfer ?? false,
-        wineCount: finalData.wineSelection?.length ?? 0,
-        hasPromocode: !!finalData.promocodeValid,
-        promocodeDiscount: finalData.promocodeDiscount,
-        hasGift: !!finalData.giftId,
-        contactType: finalData.contactType,
-        hasReceipt: !!finalData.receiptFile,
-      })
-      const { bookingId, publicId } = await submitBookingForm(finalData)
+      const bookingId = finalData.createdBookingId
+      const publicId = finalData.createdPublicId
+
+      if (!bookingId || !publicId) {
+        throw new Error('Бронирование не было создано')
+      }
+
       if (finalData.receiptFile) {
         logger.info('booking_receipt_upload_start', { bookingId })
         await uploadReceipt(publicId, finalData.receiptFile)
         logger.info('booking_receipt_upload_complete', { bookingId })
       }
+
       clearFormFromLocalStorage()
       logger.info('booking_flow_complete', {
         bookingId,
@@ -175,7 +235,7 @@ function BookingWizard() {
       })
       navigate('/booking/success', {
         state: { booking: finalData, bookingId, publicId },
-        replace: true
+        replace: true,
       })
     } catch (error) {
       logger.error('booking_submission_error', {
@@ -185,8 +245,7 @@ function BookingWizard() {
         tariff: formData.tariff,
         totalPrice: formData.totalPrice,
       })
-      console.error('Booking submission error:', error)
-      alert('Ошибка при отправке бронирования. Пожалуйста, попробуйте еще раз.')
+      throw error  // Let Step11Receipt show the alert so only one is displayed
     } finally {
       setLoading(false)
     }

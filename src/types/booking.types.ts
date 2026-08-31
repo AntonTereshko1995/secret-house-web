@@ -132,6 +132,10 @@ export interface BookingFormData {
   receiptFile?: File
   receiptPreview?: string
 
+  // Booking created at the contact step (before receipt upload)
+  createdBookingId?: number
+  createdPublicId?: string
+
   // Metadata
   submittedAt?: Date
   bookingId?: string

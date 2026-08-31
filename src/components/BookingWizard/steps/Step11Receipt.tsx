@@ -92,13 +92,13 @@ function Step11Receipt({ formData, updateFormData, prevStep, onSubmit }: StepPro
       updateFormData(receiptData)
       await onSubmit?.(receiptData)
     } catch (error) {
-      logger.error('receipt_submission_error', {
+      logger.error('receipt_upload_error', {
         message: error instanceof Error ? error.message : String(error),
         stack: error instanceof Error ? error.stack : undefined,
         hasReceipt: !!receiptFile,
         totalPrice: formData.totalPrice,
       })
-      alert('Ошибка при отправке бронирования. Пожалуйста, попробуйте еще раз.')
+      alert('Ошибка при загрузке чека. Бронирование создано — попробуйте отправить чек ещё раз.')
     } finally {
       setIsSubmitting(false)
     }

@@ -9,6 +9,7 @@ import {
   adminUpdateServices,
   adminRescheduleBooking,
   adminUpdatePrice,
+  adminDeleteBooking,
   clearAdminToken,
   getAdminToken,
   type AdminBookingDTO,
@@ -252,6 +253,10 @@ export default function AdminPage() {
         logger.info('admin_update_price', { bookingId: id, total, prepayment })
         await adminUpdatePrice(id, total, prepayment)
       },
+      delete: async () => {
+        logger.info('admin_delete_booking', { bookingId: id })
+        await adminDeleteBooking(id)
+      },
     }
 
     return (
@@ -262,6 +267,7 @@ export default function AdminPage() {
         onReload={reloadSelectedBooking}
         actions={actions}
         onReschedule={() => setRescheduleMode(true)}
+        onDeleted={() => { setSelectedBooking(null); setRescheduleMode(false); loadBookings() }}
       />
     )
   }
