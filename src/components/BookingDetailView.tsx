@@ -847,7 +847,7 @@ export function BookingDetailView({
   const tariffName = TARIFF_OPTIONS.find(t => t.id === booking.tariff)?.name ?? booking.tariff
 
   const showInstructionsBlock =
-    !isAdmin && !!booking.publicId && !booking.isCanceled
+    !isAdmin && !!booking.publicId && !booking.isCanceled && !booking.isDone
   const instructionsAvailable = showInstructionsBlock && isInstructionsAvailable(booking.startDate)
 
   const openPanel = (p: ActivePanel) => { setActivePanel(p); setActionError(null) }

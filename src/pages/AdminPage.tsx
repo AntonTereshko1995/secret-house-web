@@ -80,7 +80,7 @@ export default function AdminPage() {
   const [listLoading, setListLoading] = useState(false)
   const [listError, setListError] = useState<string | null>(null)
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
-  const [statusFilter, setStatusFilter] = useState('all')
+  const [statusFilter, setStatusFilter] = useState('upcoming')
 
   // Detail
   const [selectedBooking, setSelectedBooking] = useState<AdminBookingDTO | null>(null)
