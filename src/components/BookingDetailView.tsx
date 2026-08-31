@@ -50,6 +50,7 @@ export interface BookingViewData {
   userContact?: string
   userName?: string
   source?: string
+  bedroomType?: string
 }
 
 export interface ServicesPayload {
@@ -210,6 +211,9 @@ function buildBookingCopyText(booking: BookingViewData): string {
     `Секретная комната: ${yesNo(booking.hasSecretRoom)}`,
     `Количество гостей: ${booking.guestCount}`,
   ]
+
+  if (booking.bedroomType === 'white') lines.push('Белая спальня: Да')
+  if (booking.bedroomType === 'green') lines.push('Зеленая спальня: Да')
 
   if (booking.comment) lines.push(`Комментарий: ${booking.comment}`)
 
@@ -1054,6 +1058,12 @@ export function BookingDetailView({
             <DetailRow label="Итого" value={`${booking.totalPrice} BYN`} />
             <DetailRow label="Предоплата" value={`${booking.prepaymentPrice} BYN`} />
             <DetailRow label="Оплачено" value={booking.isPrepaymented ? 'Да' : 'Нет'} />
+            {booking.bedroomType && (booking.tariff === '12h-standard' || booking.tariff === 'work-standard') && (
+              <DetailRow
+                label="Спальня"
+                value={booking.bedroomType === 'white' ? 'Белая спальня' : 'Зеленая спальня'}
+              />
+            )}
             {booking.hasSauna && <DetailRow label="Сауна" value="Да" />}
             {booking.hasPhotoshoot && <DetailRow label="Фотосессия" value="Да" />}
             {booking.hasBathTub && <DetailRow label="Банный чан" value="Да" />}

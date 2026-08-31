@@ -218,6 +218,7 @@ export interface BookingDetailDTO {
   canReschedule: boolean
   canCancel: boolean
   canPay: boolean
+  bedroomType?: string
 }
 
 export interface BookingUpdateServicesPayload {

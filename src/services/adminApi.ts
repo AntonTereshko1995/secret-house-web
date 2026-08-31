@@ -43,6 +43,7 @@ export interface AdminBookingDTO {
   source?: string
   userContact?: string
   userName?: string
+  bedroomType?: string
 }
 
 export interface AdminBookingsPage {
