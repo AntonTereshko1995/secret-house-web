@@ -4,6 +4,7 @@ import { searchMyBookings } from '../services/api'
 import { logger } from '../services/logger'
 import type { BookingDetailDTO } from '../types/booking.types'
 import { TARIFF_OPTIONS } from '../utils/booking'
+import { normalizePhone } from '../utils/phone'
 import { getBookingStatusBadge } from '../lib/bookingStatus'
 
 type ContactType = 'telegram' | 'phone'
@@ -30,6 +31,7 @@ function getTariffName(tariffId: string): string {
 function detectContactType(contact: string): ContactType {
   return contact.startsWith('@') ? 'telegram' : 'phone'
 }
+
 
 export default function MyBookingsPage() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -67,7 +69,8 @@ export default function MyBookingsPage() {
   // Auto-search when URL already has a contact (e.g. after browser back)
   useEffect(() => {
     if (urlContact) {
-      runSearch(urlContact)
+      const normalized = urlContact.startsWith('@') ? urlContact : normalizePhone(urlContact)
+      runSearch(normalized)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -76,12 +79,15 @@ export default function MyBookingsPage() {
     e.preventDefault()
     if (!contactValue.trim()) return
 
+    const raw = contactValue.trim()
     const contact =
       contactType === 'telegram'
-        ? contactValue.startsWith('@')
-          ? contactValue.trim()
-          : `@${contactValue.trim()}`
-        : contactValue.trim()
+        ? raw.startsWith('@') ? raw : `@${raw}`
+        : normalizePhone(raw)
+
+    if (contactType === 'phone' && contact !== raw) {
+      setContactValue(contact)
+    }
 
     setSearchParams({ contact }, { replace: true })
     await runSearch(contact)

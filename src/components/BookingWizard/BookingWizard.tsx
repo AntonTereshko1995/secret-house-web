@@ -174,7 +174,7 @@ function BookingWizard() {
         hasReceipt: !!finalData.receiptFile,
       })
       navigate('/booking/success', {
-        state: { booking: finalData, bookingId },
+        state: { booking: finalData, bookingId, publicId },
         replace: true
       })
     } catch (error) {

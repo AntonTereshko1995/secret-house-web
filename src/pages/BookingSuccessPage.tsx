@@ -8,6 +8,7 @@ function BookingSuccessPage() {
   const location = useLocation()
   const navigate = useNavigate()
   const booking = location.state?.booking as Partial<BookingFormData> | undefined
+  const publicId = location.state?.publicId as string | undefined
 
   useEffect(() => {
     if (!booking) {
@@ -86,15 +87,27 @@ function BookingSuccessPage() {
         <div className="bg-gray-800 rounded-lg px-4 py-3 mb-4 text-left">
           <p className="text-gray-300 text-sm">
             Администратор проверит оплату и свяжется с вами по <strong>{contact}</strong> в течение <strong>15 минут</strong>.
+            Следить за статусом бронирования можно на этом сайте в разделе{' '}
+            <strong className="text-yellow-500">«Мои бронирования»</strong>.
           </p>
         </div>
 
-        <button
-          onClick={() => navigate('/')}
-          className="w-full bg-yellow-600 hover:bg-yellow-500 text-black font-bold py-3 px-8 uppercase tracking-wider transition-all"
-        >
-          Вернуться на главную
-        </button>
+        <div className="flex flex-col gap-2">
+          {publicId && (
+            <button
+              onClick={() => navigate(`/my-bookings/${publicId}`)}
+              className="w-full bg-yellow-600 hover:bg-yellow-500 text-black font-bold py-3 px-8 uppercase tracking-wider transition-all"
+            >
+              Перейти к бронированию
+            </button>
+          )}
+          <button
+            onClick={() => navigate('/')}
+            className="w-full border border-zinc-700 hover:border-zinc-500 text-zinc-400 hover:text-white font-medium py-3 px-8 uppercase tracking-wider transition-all text-sm"
+          >
+            Вернуться на главную
+          </button>
+        </div>
       </div>
     </div>
   )

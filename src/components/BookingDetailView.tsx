@@ -1,4 +1,5 @@
 import { useState, useMemo, type FormEvent } from 'react'
+import { getEnv } from '../utils/env'
 import { PriceBreakdown } from './PriceBreakdown'
 import {
   TARIFF_OPTIONS,
@@ -20,6 +21,7 @@ import { getBookingStatusBadge } from '../lib/bookingStatus'
 
 export interface BookingViewData {
   bookingId: number
+  publicId?: string
   startDate: string
   endDate: string
   tariff: string
@@ -74,7 +76,7 @@ export interface BookingViewActions {
   uploadReceipt?(file: File): Promise<void>
 }
 
-type ActivePanel = 'tariff' | 'services' | 'reschedule' | 'cancel' | 'confirm' | 'price' | 'pay' | null
+type ActivePanel = 'tariff' | 'services' | 'reschedule' | 'cancel' | 'confirm' | 'price' | 'pay' | 'instructions' | null
 
 // ─── Shared helpers ───────────────────────────────────────────────────────────
 
@@ -663,6 +665,159 @@ function PricePanel({ booking, onClose, onSuccess, onError, actions }: PanelProp
 
 // ─── Pay panel (user only) ────────────────────────────────────────────────────
 
+// ─── Instructions helpers ─────────────────────────────────────────────────────
+
+function instructionsAvailableFrom(startDate: string): Date {
+  const d = new Date(startDate)
+  d.setDate(d.getDate() - 1)
+  d.setHours(0, 0, 0, 0)
+  return d
+}
+
+function isInstructionsAvailable(startDate: string): boolean {
+  return new Date() >= instructionsAvailableFrom(startDate)
+}
+
+// ─── Instructions panel ───────────────────────────────────────────────────────
+
+function InstructionsPanel({ booking, onClose }: { booking: BookingViewData; onClose(): void }) {
+  const keyBoxPassword = getEnv('VITE_HOUSE_KEY_PASSWORD')
+  const bankCardNumber = getEnv('VITE_BANK_CARD_NUMBER')
+  const remainingAmount = Math.max(0, booking.totalPrice - booking.prepaymentPrice)
+
+  return (
+    <div className="space-y-5">
+      <div className="flex items-center justify-between">
+        <h3 className="text-white font-semibold">Инструкция по заселению</h3>
+        <button onClick={onClose} className="text-zinc-500 hover:text-white transition-colors">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Route */}
+      <InstructionSection icon="📍" title="Маршрут до дома">
+        <p className="text-zinc-300 text-sm leading-relaxed">
+          Через 500 метров после ж/д переезда по левую сторону будет оранжевый магазин.
+          После магазина нужно повернуть налево — это ориентир нужного поворота, далее навигатор привезёт правильно.
+          Когда будете ехать вдоль леса, поверните на садовое товарищество «Юбилейное‑68» (будет вывеска).
+        </p>
+        <p className="text-zinc-400 text-xs mt-1 font-mono">ст. Юбилейное‑68, ул. Сосновая, д. 2</p>
+        <div className="flex gap-3 mt-3">
+          <a
+            href="https://yandex.com.ge/maps/157/minsk/?l=stv%2Csta&ll=27.297381%2C53.932145&mode=routes&rtext=53.939763%2C27.333107~53.938194%2C27.324665~53.932431%2C27.315410~53.930789%2C27.299320~53.934190%2C27.300387&rtt=auto&ruri=~~~~ymapsbm1%3A%2F%2Fgeo%3Fdata%3DCgo0Mzk0MjMwMTgwErMB0JHQtdC70LDRgNGD0YHRjCwg0JzRltC90YHQutGWINGA0LDRkdC9LCDQltC00LDQvdC-0LLRltGG0LrRliDRgdC10LvRjNGB0LDQstC10YIsINGB0LDQtNCw0LLQvtC00YfQsNC1INGC0LDQstCw0YDRi9GB0YLQstCwINCu0LHRltC70LXQudC90LDQtS02OCwg0KHQsNGB0L3QvtCy0LDRjyDQstGD0LvRltGF0LAsIDIiCg0sZ9pBFZ28V0I%2C&z=16.06"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs text-amber-400 hover:text-amber-300 border border-amber-500/30 rounded-lg px-3 py-1.5 transition-colors"
+          >
+            Yandex Maps
+          </a>
+          <a
+            href="https://maps.app.goo.gl/Hsf9Xw69N8tqHyqt5"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs text-amber-400 hover:text-amber-300 border border-amber-500/30 rounded-lg px-3 py-1.5 transition-colors"
+          >
+            Google Maps
+          </a>
+        </div>
+      </InstructionSection>
+
+      {/* Key box */}
+      <InstructionSection icon="🔑" title="Ключница и заселение">
+        <p className="text-zinc-300 text-sm leading-relaxed">
+          Ключница находится <strong className="text-white">за территорией дома</strong> — в ней лежат ключи от ворот и дома.
+        </p>
+        {keyBoxPassword && (
+          <div className="mt-2 flex items-center gap-3 bg-black/40 border border-amber-500/20 rounded-lg px-3 py-2">
+            <span className="text-zinc-500 text-xs">Пароль ключницы:</span>
+            <span className="text-amber-400 font-mono font-bold tracking-widest">{keyBoxPassword}</span>
+          </div>
+        )}
+        <p className="text-zinc-300 text-sm leading-relaxed mt-2">
+          Ящик находится на территории участка возле ворот в дом. Положите в него подписанный договор
+          и оплату наличными (если платите наличкой) в течение первых 30 минут пребывания.
+          Договор и ручка будут лежать на острове на кухне. Вложите деньги и договор в розовый конверт.
+        </p>
+        {(remainingAmount > 0 || bankCardNumber) && (
+          <div className="mt-3 bg-zinc-800/60 border border-zinc-700 rounded-lg p-3 space-y-1">
+            {remainingAmount > 0 && (
+              <p className="text-sm">
+                <span className="text-zinc-500">К доплате: </span>
+                <span className="text-yellow-500 font-bold">{remainingAmount} BYN</span>
+              </p>
+            )}
+            {bankCardNumber && (
+              <p className="text-sm">
+                <span className="text-zinc-500">Перевод (BSB‑Bank): </span>
+                <span className="text-white font-mono">{bankCardNumber}</span>
+              </p>
+            )}
+          </div>
+        )}
+      </InstructionSection>
+
+      {/* Admin contact */}
+      <InstructionSection icon="📞" title="Связь с администратором">
+        <p className="text-zinc-300 text-sm">
+          Если нужна помощь или возникли вопросы по дороге — напишите администратору:{' '}
+          <a
+            href="https://t.me/the_secret_house"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-amber-400 hover:text-amber-300"
+          >
+            @the_secret_house
+          </a>
+        </p>
+      </InstructionSection>
+
+      {/* Sauna */}
+      {booking.hasSauna && (
+        <InstructionSection icon="🧖" title="Инструкция по сауне">
+          <ol className="text-zinc-300 text-sm space-y-1 list-decimal list-inside leading-relaxed">
+            <li>Подойдите к входной двери.</li>
+            <li>По правую руку находится электрический счётчик.</li>
+            <li>Все рубильники подписаны — переключите рубильник с надписью «Сауна».</li>
+            <li>Через 1 час сауна нагреется.</li>
+            <li>После использования выключите рубильник.</li>
+          </ol>
+        </InstructionSection>
+      )}
+
+      {/* Bath tub */}
+      {booking.hasBathTub && (
+        <InstructionSection icon="🛁" title="Банный чан">
+          <p className="text-zinc-400 text-xs mb-2">
+            Оптимальная температура: 38–40°C. Сеанс: 15–20 мин, делайте перерывы. Алкоголь несовместим с горячим чаном.
+          </p>
+          <ol className="text-zinc-300 text-sm space-y-1 list-decimal list-inside leading-relaxed">
+            <li>Полейте бумагу, щепу и полено розжигом. Розжиг убрать — больше не использовать.</li>
+            <li>С помощью газового баллона с пистолетом разожгите до полного возгорания (3–7 мин).</li>
+            <li>Положите в огонь ещё 3 полена.</li>
+            <li>После полного возгорания постепенно подкладывайте дрова 1–2 часа.</li>
+            <li>Пользуйтесь перчатками и кочергой.</li>
+            <li>Открывайте крышку чана непосредственно перед купанием, после — закройте.</li>
+          </ol>
+        </InstructionSection>
+      )}
+    </div>
+  )
+}
+
+function InstructionSection({
+  icon, title, children,
+}: {
+  icon: string; title: string; children: React.ReactNode
+}) {
+  return (
+    <div className="border-l-2 border-amber-500/30 pl-4">
+      <p className="text-white text-sm font-semibold mb-2">{icon} {title}</p>
+      {children}
+    </div>
+  )
+}
 
 // ─── Main export ──────────────────────────────────────────────────────────────
 
@@ -690,6 +845,10 @@ export function BookingDetailView({
     ? booking.isCanceled || booking.isDone
     : !booking.canModify && !booking.canPay
   const tariffName = TARIFF_OPTIONS.find(t => t.id === booking.tariff)?.name ?? booking.tariff
+
+  const showInstructionsBlock =
+    !isAdmin && !!booking.publicId && !booking.isCanceled
+  const instructionsAvailable = showInstructionsBlock && isInstructionsAvailable(booking.startDate)
 
   const openPanel = (p: ActivePanel) => { setActivePanel(p); setActionError(null) }
   const closePanel = () => setActivePanel(null)
@@ -853,6 +1012,44 @@ export function BookingDetailView({
             {!isAdmin && !booking.canModify && !booking.canPay && !booking.isCanceled && !booking.isDone && (
               <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 text-center">
                 <p className="text-zinc-500 text-sm">Это бронирование уже завершено или прошло</p>
+              </div>
+            )}
+
+            {/* Instructions button */}
+            {showInstructionsBlock && activePanel !== 'instructions' && (
+              <div className={[
+                'rounded-xl p-4 border',
+                instructionsAvailable
+                  ? 'bg-zinc-900 border-amber-500/20'
+                  : 'bg-zinc-900/40 border-zinc-800',
+              ].join(' ')}>
+                <p className={[
+                  'text-xs uppercase tracking-widest mb-3',
+                  instructionsAvailable ? 'text-amber-400/70' : 'text-zinc-600',
+                ].join(' ')}>Инструкция</p>
+                {instructionsAvailable ? (
+                  <button
+                    onClick={() => openPanel('instructions')}
+                    className="w-full flex items-center justify-between p-3 rounded-lg border
+                      border-amber-500/40 hover:border-amber-500/70 text-amber-400 hover:text-amber-300
+                      text-sm transition-all"
+                  >
+                    <span>Инструкция по заселению</span>
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                ) : (
+                  <div className="flex items-center justify-between p-3 rounded-lg border border-zinc-800 cursor-not-allowed">
+                    <span className="text-zinc-600 text-sm">Инструкция по заселению</span>
+                    <span className="text-zinc-700 text-xs">Доступна за 1 день до заезда</span>
+                  </div>
+                )}
+              </div>
+            )}
+            {showInstructionsBlock && instructionsAvailable && activePanel === 'instructions' && (
+              <div className="bg-zinc-900 border border-amber-500/20 rounded-xl p-4">
+                <InstructionsPanel booking={booking} onClose={closePanel} />
               </div>
             )}
           </div>
