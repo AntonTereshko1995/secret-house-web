@@ -29,6 +29,7 @@ const PRICE_FIELDS: Array<{ key: keyof TariffPriceUpdatePayload; label: string }
   { key: 'price', label: 'Базовая цена' },
   { key: 'saunaPrice', label: 'Сауна' },
   { key: 'bathTubPrice', label: 'Банный чан' },
+  { key: 'combinedSaunaBathTubPrice', label: 'Сауна+Чан (комбо)' },
   { key: 'secretRoomPrice', label: 'Секретная комната' },
   { key: 'extraBedroomPrice', label: 'Доп. спальня' },
   { key: 'extraHourPrice', label: 'Доп. час' },
@@ -40,6 +41,7 @@ const SALE_PRICE_FIELDS: Array<{ key: keyof TariffPriceUpdatePayload; label: str
   { key: 'salePrice', label: 'Базовая цена (акция)' },
   { key: 'saleSaunaPrice', label: 'Сауна (акция)' },
   { key: 'saleBathTubPrice', label: 'Банный чан (акция)' },
+  { key: 'saleCombinedSaunaBathTubPrice', label: 'Сауна+Чан (комбо, акция)' },
   { key: 'saleSecretRoomPrice', label: 'Секретная комната (акция)' },
   { key: 'saleExtraBedroomPrice', label: 'Доп. спальня (акция)' },
   { key: 'saleExtraHourPrice', label: 'Доп. час (акция)' },
@@ -52,6 +54,7 @@ function recordToPayload(r: TariffPriceRecord): TariffPriceUpdatePayload {
     price: r.price,
     saunaPrice: r.saunaPrice,
     bathTubPrice: r.bathTubPrice,
+    combinedSaunaBathTubPrice: r.combinedSaunaBathTubPrice,
     secretRoomPrice: r.secretRoomPrice,
     extraBedroomPrice: r.extraBedroomPrice,
     extraHourPrice: r.extraHourPrice,
@@ -61,6 +64,7 @@ function recordToPayload(r: TariffPriceRecord): TariffPriceUpdatePayload {
     salePrice: r.salePrice,
     saleSaunaPrice: r.saleSaunaPrice,
     saleBathTubPrice: r.saleBathTubPrice,
+    saleCombinedSaunaBathTubPrice: r.saleCombinedSaunaBathTubPrice,
     saleSecretRoomPrice: r.saleSecretRoomPrice,
     saleExtraBedroomPrice: r.saleExtraBedroomPrice,
     saleExtraHourPrice: r.saleExtraHourPrice,
@@ -149,7 +153,10 @@ function AdminPricingPage() {
   const [error, setError] = useState<string | null>(null)
 
   const [forms, setForms] = useState<Record<string, TariffPriceUpdatePayload>>({})
-  const [settings, setSettings] = useState<PricingSettingsPayload>({ isSaleActive: false })
+  const [settings, setSettings] = useState<PricingSettingsPayload>({
+    isSaleActive: false,
+    isSaunaBathTubComboActive: false,
+  })
 
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
@@ -171,7 +178,10 @@ function AdminPricingPage() {
         initialForms[r.tariffId] = recordToPayload(r)
       }
       setForms(initialForms)
-      setSettings({ isSaleActive: data.isSaleActive })
+      setSettings({
+        isSaleActive: data.isSaleActive,
+        isSaunaBathTubComboActive: data.isSaunaBathTubComboActive,
+      })
     } catch (e) {
       if (e instanceof Error && e.message === 'UNAUTHORIZED') {
         navigate('/admin')
@@ -304,6 +314,25 @@ function AdminPricingPage() {
                 </div>
                 <span className="text-sm text-white">
                   Акционные цены {settings.isSaleActive ? '(включены)' : '(выключены)'}
+                </span>
+              </label>
+              <label className="flex items-center gap-3 cursor-pointer select-none mt-3">
+                <div
+                  onClick={() =>
+                    setSettings((s) => ({ ...s, isSaunaBathTubComboActive: !s.isSaunaBathTubComboActive }))
+                  }
+                  className={`relative w-10 h-6 rounded-full transition-colors cursor-pointer ${
+                    settings.isSaunaBathTubComboActive ? 'bg-amber-500' : 'bg-zinc-600'
+                  }`}
+                >
+                  <div
+                    className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${
+                      settings.isSaunaBathTubComboActive ? 'translate-x-5' : 'translate-x-1'
+                    }`}
+                  />
+                </div>
+                <span className="text-sm text-white">
+                  Комбо сауна+чан {settings.isSaunaBathTubComboActive ? '(включено)' : '(выключено)'}
                 </span>
               </label>
             </div>

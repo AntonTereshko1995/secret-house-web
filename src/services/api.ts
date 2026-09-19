@@ -29,6 +29,7 @@ export interface EffectiveTariffPriceRecord {
   extraHourPrice: number
   extraPeoplePrice: number
   photoshootPrice: number
+  combinedSaunaBathTubPrice: number
   multiDayPrices: Record<number, number>
   updatedAt: string
 }
@@ -43,12 +44,14 @@ export interface TariffPriceRecord extends EffectiveTariffPriceRecord {
   saleExtraHourPrice: number
   saleExtraPeoplePrice: number
   salePhotoshootPrice: number
+  saleCombinedSaunaBathTubPrice: number
   saleMultiDayPrices: Record<number, number>
 }
 
 export interface PricingApiResponse {
   tariffs: EffectiveTariffPriceRecord[]
   isSaleActive: boolean
+  isSaunaBathTubComboActive: boolean
 }
 
 export interface AvailabilityResponse {

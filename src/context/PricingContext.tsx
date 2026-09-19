@@ -13,6 +13,7 @@ import { TARIFF_CONFIG, _updateRuntimePricing } from '../utils/booking'
 interface PricingContextValue {
   tariffConfig: Record<TariffType, TariffConfig>
   isSaleActive: boolean
+  isSaunaBathTubComboActive: boolean
   loading: boolean
   refresh: () => void
 }
@@ -37,6 +38,7 @@ function buildTariffConfig(
       extraHourPrice: r.extraHourPrice,
       extraPeoplePrice: r.extraPeoplePrice,
       photoshootPrice: r.photoshootPrice,
+      combinedSaunaBathTubPrice: r.combinedSaunaBathTubPrice,
       multiDayPrices: mdp,
     }
   }
@@ -46,6 +48,7 @@ function buildTariffConfig(
 const PricingContext = createContext<PricingContextValue>({
   tariffConfig: TARIFF_CONFIG,
   isSaleActive: false,
+  isSaunaBathTubComboActive: false,
   loading: true,
   refresh: () => {},
 })
@@ -53,6 +56,7 @@ const PricingContext = createContext<PricingContextValue>({
 export function PricingProvider({ children }: { children: ReactNode }) {
   const [tariffConfig, setTariffConfig] = useState<Record<TariffType, TariffConfig>>(TARIFF_CONFIG)
   const [isSaleActive, setIsSaleActive] = useState(false)
+  const [isSaunaBathTubComboActive, setIsSaunaBathTubComboActive] = useState(false)
   const [loading, setLoading] = useState(true)
 
   const fetchPricing = useCallback(async () => {
@@ -64,6 +68,7 @@ export function PricingProvider({ children }: { children: ReactNode }) {
       _updateRuntimePricing(effectiveConfig, effectiveConfig)
       setTariffConfig(effectiveConfig)
       setIsSaleActive(data.isSaleActive)
+      setIsSaunaBathTubComboActive(data.isSaunaBathTubComboActive)
     } catch {
       // Fall back to hardcoded defaults silently — app remains functional
     } finally {
@@ -77,7 +82,7 @@ export function PricingProvider({ children }: { children: ReactNode }) {
 
   return (
     <PricingContext.Provider
-      value={{ tariffConfig, isSaleActive, loading, refresh: fetchPricing }}
+      value={{ tariffConfig, isSaleActive, isSaunaBathTubComboActive, loading, refresh: fetchPricing }}
     >
       {children}
     </PricingContext.Provider>

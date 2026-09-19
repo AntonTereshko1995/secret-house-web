@@ -172,6 +172,7 @@ export interface TariffConfig {
   /** Extra charge per additional guest beyond base (0 = no extra charge) */
   extraPeoplePrice: number
   photoshootPrice: number
+  combinedSaunaBathTubPrice?: number
   maxPeople: number
   isCheckInTimeLimit: boolean
   /** Whether the photoshoot step is offered for this tariff */

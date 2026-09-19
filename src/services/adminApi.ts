@@ -370,6 +370,7 @@ export type { TariffPriceRecord }
 export interface AdminPricingApiResponse {
   tariffs: TariffPriceRecord[]
   isSaleActive: boolean
+  isSaunaBathTubComboActive: boolean
 }
 
 export interface TariffPriceUpdatePayload {
@@ -381,6 +382,7 @@ export interface TariffPriceUpdatePayload {
   extraHourPrice: number
   extraPeoplePrice: number
   photoshootPrice: number
+  combinedSaunaBathTubPrice: number
   multiDayPrices: Record<number, number>
   salePrice: number
   saleSaunaPrice: number
@@ -390,11 +392,13 @@ export interface TariffPriceUpdatePayload {
   saleExtraHourPrice: number
   saleExtraPeoplePrice: number
   salePhotoshootPrice: number
+  saleCombinedSaunaBathTubPrice: number
   saleMultiDayPrices: Record<number, number>
 }
 
 export interface PricingSettingsPayload {
   isSaleActive: boolean
+  isSaunaBathTubComboActive: boolean
 }
 
 export const adminGetPricing = (): Promise<AdminPricingApiResponse> =>
