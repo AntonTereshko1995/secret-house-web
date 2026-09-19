@@ -13,6 +13,8 @@ import ReschedulePage from './pages/ReschedulePage'
 import AdminPage from './pages/AdminPage'
 import AdminPromocodesPage from './pages/AdminPromocodesPage'
 import AdminStatisticsPage from './pages/AdminStatisticsPage'
+import AdminPricingPage from './pages/AdminPricingPage'
+import { PricingProvider } from './context/PricingContext'
 import FullGallery from './components/FullGallery'
 import LoadingOverlay from './components/LoadingOverlay/LoadingOverlay'
 import type { RoomCategory } from './types/gallery.types'
@@ -50,6 +52,7 @@ function App() {
   const showGallery = location.pathname === '/' && isGalleryOpen
 
   return (
+    <PricingProvider>
     <>
       <LoadingOverlay />
       <div className="min-h-screen bg-black">
@@ -66,6 +69,7 @@ function App() {
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/admin/promocodes" element={<AdminPromocodesPage />} />
           <Route path="/admin/statistics" element={<AdminStatisticsPage />} />
+          <Route path="/admin/prices" element={<AdminPricingPage />} />
         </Routes>
       </div>
 
@@ -78,6 +82,7 @@ function App() {
         />
       )}
     </>
+    </PricingProvider>
   )
 }
 

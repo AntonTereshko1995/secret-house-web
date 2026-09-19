@@ -18,6 +18,39 @@ export interface BookedPeriodDTO {
   bookingId: number
 }
 
+/** Effective prices returned by the public /api/pricing endpoint (sale or standard, server-side). */
+export interface EffectiveTariffPriceRecord {
+  tariffId: string
+  price: number
+  saunaPrice: number
+  bathTubPrice: number
+  secretRoomPrice: number
+  extraBedroomPrice: number
+  extraHourPrice: number
+  extraPeoplePrice: number
+  photoshootPrice: number
+  multiDayPrices: Record<number, number>
+  updatedAt: string
+}
+
+/** Full record with both standard and sale fields — used by the admin endpoint only. */
+export interface TariffPriceRecord extends EffectiveTariffPriceRecord {
+  salePrice: number
+  saleSaunaPrice: number
+  saleBathTubPrice: number
+  saleSecretRoomPrice: number
+  saleExtraBedroomPrice: number
+  saleExtraHourPrice: number
+  saleExtraPeoplePrice: number
+  salePhotoshootPrice: number
+  saleMultiDayPrices: Record<number, number>
+}
+
+export interface PricingApiResponse {
+  tariffs: EffectiveTariffPriceRecord[]
+  isSaleActive: boolean
+}
+
 export interface AvailabilityResponse {
   available: boolean
 }
@@ -264,7 +297,7 @@ export async function submitGiftPurchase(
   form.append('hasAdditionalBedroom', String(giftData.hasExtraBedroom))
   form.append('hasBathTub', String(giftData.hasBathTub))
   const contact = giftData.contactType === 'telegram'
-    ? `@${giftData.telegram}`
+    ? `@${giftData.telegram!.toLowerCase()}`
     : giftData.phone!
   form.append('contact', contact)
   form.append('price', String(giftData.totalPrice))
@@ -392,6 +425,15 @@ export async function rescheduleBooking(
   )
   logger.info('booking_rescheduled', { publicId, checkInDate, checkOutDate })
   return result
+}
+
+/**
+ * Fetch all tariff prices from the public pricing endpoint.
+ */
+export async function getPricing(): Promise<PricingApiResponse> {
+  const res = await fetch(`${getApiBase()}/api/pricing`)
+  if (!res.ok) throw new Error(`pricing fetch failed: ${res.status}`)
+  return res.json() as Promise<PricingApiResponse>
 }
 
 /**

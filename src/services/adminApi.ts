@@ -359,3 +359,62 @@ export const adminGetStatistics = (
   const qs = params.toString()
   return adminFetch<AdminStatisticsDTO>('GET', `/api/admin/statistics${qs ? `?${qs}` : ''}`)
 }
+
+// ---------------------------------------------------------------------------
+// Pricing management
+// ---------------------------------------------------------------------------
+
+import type { TariffPriceRecord } from './api'
+export type { TariffPriceRecord }
+
+export interface AdminPricingApiResponse {
+  tariffs: TariffPriceRecord[]
+  isSaleActive: boolean
+}
+
+export interface TariffPriceUpdatePayload {
+  price: number
+  saunaPrice: number
+  bathTubPrice: number
+  secretRoomPrice: number
+  extraBedroomPrice: number
+  extraHourPrice: number
+  extraPeoplePrice: number
+  photoshootPrice: number
+  multiDayPrices: Record<number, number>
+  salePrice: number
+  saleSaunaPrice: number
+  saleBathTubPrice: number
+  saleSecretRoomPrice: number
+  saleExtraBedroomPrice: number
+  saleExtraHourPrice: number
+  saleExtraPeoplePrice: number
+  salePhotoshootPrice: number
+  saleMultiDayPrices: Record<number, number>
+}
+
+export interface PricingSettingsPayload {
+  isSaleActive: boolean
+}
+
+export const adminGetPricing = (): Promise<AdminPricingApiResponse> =>
+  adminFetch<AdminPricingApiResponse>('GET', '/api/admin/pricing')
+
+export const adminUpdateTariffPricing = (
+  tariffId: string,
+  payload: TariffPriceUpdatePayload,
+): Promise<{ tariffId: string; message: string }> =>
+  adminFetch<{ tariffId: string; message: string }>(
+    'PATCH',
+    `/api/admin/pricing/${tariffId}`,
+    payload,
+  )
+
+export const adminUpdatePricingSettings = (
+  payload: PricingSettingsPayload,
+): Promise<{ tariffId: string; message: string }> =>
+  adminFetch<{ tariffId: string; message: string }>(
+    'PATCH',
+    '/api/admin/pricing-settings',
+    payload,
+  )

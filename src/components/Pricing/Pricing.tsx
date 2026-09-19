@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import { TARIFF_CONFIG } from '../../utils/booking'
-import type { TariffConfig } from '../../types/booking.types'
+import { usePricingContext } from '../../context/PricingContext'
+import type { TariffConfig, TariffType } from '../../types/booking.types'
 
 type FeatureItem = string | ((config: TariffConfig) => string | null)
 
@@ -120,7 +120,8 @@ interface TariffCardProps {
 }
 
 function TariffCard({ id, name, duration, features, incognito }: TariffCardProps) {
-  const config = TARIFF_CONFIG[id as keyof typeof TARIFF_CONFIG]
+  const { tariffConfig } = usePricingContext()
+  const config = tariffConfig[id as TariffType]
   const price = config?.price ?? 0
 
   const resolvedFeatures = features
