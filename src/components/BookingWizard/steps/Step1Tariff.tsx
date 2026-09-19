@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { TARIFF_OPTIONS } from '../../../utils/booking'
+import { getTariffOptions } from '../../../utils/booking'
 import { validateGiftCode } from '../../../services/api'
 import { useLoading } from '../../../context/LoadingContext'
 import { logger } from '../../../services/logger'
@@ -12,6 +12,7 @@ interface StepProps {
 }
 
 function Step1Tariff({ formData, updateFormData, nextStep }: StepProps) {
+  const tariffOptions = getTariffOptions()
   const [selected, setSelected] = useState<string>(
     formData.giftId ? 'gift-certificate' : (formData.tariff || '')
   )
@@ -112,7 +113,7 @@ function Step1Tariff({ formData, updateFormData, nextStep }: StepProps) {
       </h2>
 
       <div className="grid grid-cols-2 gap-2 mb-4">
-        {TARIFF_OPTIONS.map(tariff => (
+        {tariffOptions.map(tariff => (
           <div
             key={tariff.id}
             onClick={() => handleTariffSelect(tariff.id)}
@@ -190,7 +191,7 @@ function Step1Tariff({ formData, updateFormData, nextStep }: StepProps) {
               <p className="text-green-400 text-xs font-semibold">{giftSuccess}</p>
               {formData.giftTariff && (
                 <p className="text-gray-400 text-xs">
-                  Тариф: <span className="text-white">{TARIFF_OPTIONS.find(t => t.id === formData.giftTariff)?.name ?? formData.giftTariff}</span>
+                  Тариф: <span className="text-white">{tariffOptions.find(t => t.id === formData.giftTariff)?.name ?? formData.giftTariff}</span>
                 </p>
               )}
               <div className="flex flex-wrap gap-1 mt-1">

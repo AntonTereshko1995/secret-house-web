@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { getTariffConfig, BATH_TUB_BUFFER_HOURS } from '../../../utils/booking'
+import { usePricingContext } from '../../../context/PricingContext'
 import { logger } from '../../../services/logger'
 import type { StepProps } from '../../../types/booking.types'
 import type { BookedPeriod } from '../../../utils/booking'
@@ -28,8 +29,16 @@ function addOneHour(date: Date, time: string): { date: Date; time: string } {
 function StepBathTub({ formData, updateFormData, nextStep, prevStep, bookedPeriods = [] }: StepProps) {
   const [hasBathTub, setHasBathTub] = useState(formData.hasBathTub || false)
   const [bufferError, setBufferError] = useState(false)
+  const { isSaunaBathTubComboActive } = usePricingContext()
 
-  const bathTubPrice = getTariffConfig(formData.tariff ?? '')?.bathTubPrice ?? 0
+  const tariffConfig = getTariffConfig(formData.tariff ?? '')
+  const bathTubPrice = tariffConfig?.bathTubPrice ?? 0
+  const combinedSaunaBathTubPrice = tariffConfig?.combinedSaunaBathTubPrice ?? 0
+
+  // Combo applies if: global toggle ON + user chose sauna + tariff has a non-zero combo price
+  const isComboApplicable = isSaunaBathTubComboActive &&
+    (formData.hasSauna === true) &&
+    combinedSaunaBathTubPrice > 0
 
   // Pre-compute what the shifted check-in would look like, for the button label
   const shiftedCheckIn = useMemo(() => {
@@ -55,11 +64,30 @@ function StepBathTub({ formData, updateFormData, nextStep, prevStep, bookedPerio
       }
     }
 
-    logger.info('booking_select', { step: 'bath_tub', hasBathTub, bathTubPrice: hasBathTub ? bathTubPrice : 0, tariff: formData.tariff })
-    updateFormData({
+    logger.info('booking_select', {
+      step: 'bath_tub',
       hasBathTub,
-      bathTubPrice: hasBathTub ? bathTubPrice : 0
+      isComboApplicable,
+      bathTubPrice: hasBathTub ? (isComboApplicable ? combinedSaunaBathTubPrice : bathTubPrice) : 0,
+      tariff: formData.tariff,
     })
+
+    if (isComboApplicable && hasBathTub) {
+      // Combo: combined price replaces sauna price; bath tub price becomes 0
+      updateFormData({
+        hasBathTub: true,
+        bathTubPrice: 0,
+        saunaPrice: combinedSaunaBathTubPrice,
+      })
+    } else {
+      // Restore saunaPrice to config value in case combo was previously applied but now undone
+      const configSaunaPrice = (formData.hasSauna && tariffConfig) ? tariffConfig.saunaPrice : 0
+      updateFormData({
+        hasBathTub,
+        bathTubPrice: hasBathTub ? bathTubPrice : 0,
+        saunaPrice: configSaunaPrice,
+      })
+    }
     nextStep()
   }
 
@@ -133,13 +161,27 @@ function StepBathTub({ formData, updateFormData, nextStep, prevStep, bookedPerio
       {/* Price Info */}
       <div className="bg-zinc-800/60 border border-zinc-700 p-4 rounded-lg mb-4">
         <div className="text-center">
-          <div className="text-gray-400 text-sm mb-1">Стоимость банного чана:</div>
-          <div className="text-amber-400 font-bold text-3xl">
-            {bathTubPrice} BYN
-          </div>
-          <div className="text-gray-400 text-xs mt-3">
-            💡 Банный чан для полного расслабления
-          </div>
+          {isComboApplicable ? (
+            <>
+              <div className="text-gray-400 text-sm mb-1">Сауна + банный чан (комбо):</div>
+              <div className="text-amber-400 font-bold text-3xl">
+                {combinedSaunaBathTubPrice} BYN
+              </div>
+              <div className="text-green-400 text-xs mt-1">
+                💡 Выгоднее, чем по отдельности ({(tariffConfig?.saunaPrice ?? 0) + bathTubPrice} BYN)
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="text-gray-400 text-sm mb-1">Стоимость банного чана:</div>
+              <div className="text-amber-400 font-bold text-3xl">
+                {bathTubPrice} BYN
+              </div>
+              <div className="text-gray-400 text-xs mt-3">
+                💡 Банный чан для полного расслабления
+              </div>
+            </>
+          )}
         </div>
       </div>
 

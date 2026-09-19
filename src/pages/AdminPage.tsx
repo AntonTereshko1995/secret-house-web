@@ -305,6 +305,12 @@ export default function AdminPage() {
               hover:border-amber-500/50 hover:text-amber-400 transition-all">
             Статистика →
           </Link>
+          <Link
+            to="/admin/prices"
+            className="text-xs px-3 py-1.5 rounded-lg border border-zinc-700 text-zinc-400
+              hover:border-amber-500/50 hover:text-amber-400 transition-all">
+            Цены →
+          </Link>
         </div>
 
         {/* Sort + filter */}

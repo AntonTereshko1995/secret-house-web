@@ -82,7 +82,7 @@ export default function MyBookingsPage() {
     const raw = contactValue.trim()
     const contact =
       contactType === 'telegram'
-        ? raw.startsWith('@') ? raw : `@${raw}`
+        ? `@${raw.replace('@', '').toLowerCase()}`
         : normalizePhone(raw)
 
     if (contactType === 'phone' && contact !== raw) {

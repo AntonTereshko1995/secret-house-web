@@ -400,7 +400,7 @@ export const TARIFF_CONFIG: Record<TariffType, TariffConfig> = {
  * Sale (weekday) tariff configuration sourced from the booking bot (tariff_rate_sale.json).
  * Lower prices applied on weekdays and off-peak periods.
  */
-export const TARIFF_SALE_CONFIG: Record<TariffType, TariffConfig> = {
+const TARIFF_SALE_CONFIG: Record<TariffType, TariffConfig> = {
   'incognito-daily': {
     id: 'incognito-daily',
     botTariffId: 3,
@@ -547,12 +547,27 @@ export const TARIFF_SALE_CONFIG: Record<TariffType, TariffConfig> = {
   }
 }
 
+// Runtime pricing state — updated by PricingContext after fetching from API.
+// Initialized to hardcoded defaults so everything works without a backend.
+let _runtimeConfig: Record<TariffType, TariffConfig> = { ...TARIFF_CONFIG }
+let _runtimeSaleConfig: Record<TariffType, TariffConfig> = { ...TARIFF_SALE_CONFIG }
+
+/** Called once by PricingContext after the API response is received. */
+export function _updateRuntimePricing(
+  config: Record<TariffType, TariffConfig>,
+  saleConfig: Record<TariffType, TariffConfig>,
+): void {
+  _runtimeConfig = config
+  _runtimeSaleConfig = saleConfig
+}
+
 /**
  * Returns the tariff config for the given tariff ID.
+ * Reads from the runtime config that PricingContext keeps up to date.
  * Defaults to the standard (weekend) config.
  */
 export function getTariffConfig(tariffId: TariffType | string, sale = false): TariffConfig | undefined {
-  const map = sale ? TARIFF_SALE_CONFIG : TARIFF_CONFIG
+  const map = sale ? _runtimeSaleConfig : _runtimeConfig
   return map[tariffId as TariffType]
 }
 
@@ -602,66 +617,72 @@ export function getDatePriceOverride(
 }
 
 /**
- * Tariff options with pricing
+ * Returns current tariff options with live prices from runtime config.
+ * Call this function at render time (not at module load) so prices reflect DB values.
  */
-export const TARIFF_OPTIONS: TariffOption[] = [
-  {
-    id: 'incognito-daily',
-    name: 'Инкогнито (Суточно)',
-    description: '24 часа с полной конфиденциальностью',
-    basePrice: TARIFF_CONFIG['incognito-daily'].price,
-    unit: '900 BYN'
-  },
-  {
-    id: 'incognito-12h',
-    name: 'Инкогнито (12 часов)',
-    description: '12 часов с полной конфиденциальностью',
-    basePrice: TARIFF_CONFIG['incognito-12h'].price,
-    unit: '600 BYN'
-  },
-  {
-    id: 'incognito-work',
-    name: 'Инкогнито (Рабочий)',
-    description: 'Будни с полной конфиденциальностью',
-    basePrice: TARIFF_CONFIG['incognito-work'].price,
-    unit: '450 BYN'
-  },
-  {
-    id: 'daily-3plus',
-    name: 'Суточно от 3 человек',
-    description: '24 часа для компании от 3 человек',
-    basePrice: TARIFF_CONFIG['daily-3plus'].price,
-    unit: '700 BYN'
-  },
-  {
-    id: 'daily-couple',
-    name: 'Суточно для двоих',
-    description: '24 часа для пары',
-    basePrice: TARIFF_CONFIG['daily-couple'].price,
-    unit: '500 BYN'
-  },
-  {
-    id: '12h-standard',
-    name: '12 часов',
-    description: 'Стандартный тариф на 12 часов',
-    basePrice: TARIFF_CONFIG['12h-standard'].price,
-    unit: 'от 250 BYN'
-  },
-  {
-    id: 'work-standard',
-    name: 'Рабочий',
-    description: 'Будние дни (пн-пт)',
-    basePrice: TARIFF_CONFIG['work-standard'].price,
-    unit: 'от 180 BYN'
-  },
-  {
-    id: 'gift-certificate',
-    name: 'Подарочный сертификат',
-    description: 'Бронирование по коду сертификата',
-    basePrice: 0,
-    unit: 'Бесплатно с сертификатом'
-  }
-]
+export function getTariffOptions(): TariffOption[] {
+  return [
+    {
+      id: 'incognito-daily',
+      name: 'Инкогнито (Суточно)',
+      description: '24 часа с полной конфиденциальностью',
+      basePrice: getTariffConfig('incognito-daily')?.price ?? 0,
+      unit: `${getTariffConfig('incognito-daily')?.price ?? 0} BYN`,
+    },
+    {
+      id: 'incognito-12h',
+      name: 'Инкогнито (12 часов)',
+      description: '12 часов с полной конфиденциальностью',
+      basePrice: getTariffConfig('incognito-12h')?.price ?? 0,
+      unit: `${getTariffConfig('incognito-12h')?.price ?? 0} BYN`,
+    },
+    {
+      id: 'incognito-work',
+      name: 'Инкогнито (Рабочий)',
+      description: 'Будни с полной конфиденциальностью',
+      basePrice: getTariffConfig('incognito-work')?.price ?? 0,
+      unit: `${getTariffConfig('incognito-work')?.price ?? 0} BYN`,
+    },
+    {
+      id: 'daily-3plus',
+      name: 'Суточно от 3 человек',
+      description: '24 часа для компании от 3 человек',
+      basePrice: getTariffConfig('daily-3plus')?.price ?? 0,
+      unit: `${getTariffConfig('daily-3plus')?.price ?? 0} BYN`,
+    },
+    {
+      id: 'daily-couple',
+      name: 'Суточно для двоих',
+      description: '24 часа для пары',
+      basePrice: getTariffConfig('daily-couple')?.price ?? 0,
+      unit: `${getTariffConfig('daily-couple')?.price ?? 0} BYN`,
+    },
+    {
+      id: '12h-standard',
+      name: '12 часов',
+      description: 'Стандартный тариф на 12 часов',
+      basePrice: getTariffConfig('12h-standard')?.price ?? 0,
+      unit: `от ${getTariffConfig('12h-standard')?.price ?? 0} BYN`,
+    },
+    {
+      id: 'work-standard',
+      name: 'Рабочий',
+      description: 'Будние дни (пн-пт)',
+      basePrice: getTariffConfig('work-standard')?.price ?? 0,
+      unit: `от ${getTariffConfig('work-standard')?.price ?? 0} BYN`,
+    },
+    {
+      id: 'gift-certificate',
+      name: 'Подарочный сертификат',
+      description: 'Бронирование по коду сертификата',
+      basePrice: 0,
+      unit: 'Бесплатно с сертификатом',
+    },
+  ]
+}
+
+/** @deprecated Use getTariffOptions() for live prices. */
+export const TARIFF_OPTIONS: TariffOption[] = getTariffOptions()
 
 /**
  * Wine options with pricing
