@@ -71,8 +71,7 @@ async function main() {
   console.log(`\n✅ Done! ${toCreate.length} originals in flat structure.`)
   console.log('\nNext steps:')
   console.log('  1. npm run images:optimize         — generate thumbnails/medium/large variants')
-  console.log('  2. npm run images:generate-manifest — regenerate gallery-manifest.json')
-  console.log('  3. Upload all files from public/images/rooms/ to /data/images/rooms/ on Amvera')
+  console.log('  2. Upload the files to the root of /data on Amvera (named <category>__<n>.jpg)')
 }
 
 main().catch(console.error)

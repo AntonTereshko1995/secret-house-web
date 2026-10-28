@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
-import type { GalleryItem, RoomCategory, GalleryManifest } from '../../types/gallery.types'
+import type { GalleryItem, RoomCategory } from '../../types/gallery.types'
+import { loadGallery } from '../../utils/gallery'
 
 interface FullGalleryProps {
   isOpen: boolean
@@ -28,11 +29,8 @@ function FullGallery({ isOpen, onClose, initialCategory }: FullGalleryProps) {
 
   // Load images
   useEffect(() => {
-    import('../../data/gallery-manifest.json')
-      .then((data) => {
-        const manifest = data as GalleryManifest
-        setImages(manifest.items)
-      })
+    loadGallery()
+      .then(setImages)
       .catch(console.error)
   }, [])
 
@@ -200,10 +198,8 @@ function FullGallery({ isOpen, onClose, initialCategory }: FullGalleryProps) {
                     onClick={() => openLightbox(index)}
                   >
                     <img
-                      src={image.images.thumbnail.jpg}
+                      src={image.src}
                       alt={image.alt}
-                      width={image.images.thumbnail.width}
-                      height={image.images.thumbnail.height}
                       loading="lazy"
                       decoding="async"
                       className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
@@ -284,7 +280,7 @@ function FullGallery({ isOpen, onClose, initialCategory }: FullGalleryProps) {
 
           <div className="relative w-full h-full sm:w-auto sm:h-auto sm:border-2 sm:border-yellow-600/30 sm:p-4">
             <img
-              src={filteredImages[currentIndex].images.large.jpg}
+              src={filteredImages[currentIndex].src}
               alt={filteredImages[currentIndex].alt}
               className="w-full h-full sm:w-auto sm:h-auto object-contain sm:max-h-[80vh]"
               onClick={(e) => e.stopPropagation()}
