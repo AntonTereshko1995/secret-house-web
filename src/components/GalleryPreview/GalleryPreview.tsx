@@ -1,56 +1,59 @@
-import { useState, useEffect } from 'react'
-import type { GalleryItem, GalleryManifest, RoomCategory } from '../../types/gallery.types'
+import { useState, useEffect, useMemo } from 'react'
+import type { GalleryItem, RoomCategory } from '../../types/gallery.types'
+import { CATEGORY_LABELS, loadGallery } from '../../utils/gallery'
 
 interface GalleryPreviewProps {
   onOpenFullGallery: (category?: RoomCategory) => void
 }
 
+const ROOMS_ON_PAGE = 4
+// Every TICK_MS one tile (in turn) moves to its next photo
+const TICK_MS = 1500
+
+interface RoomSlides {
+  category: RoomCategory
+  images: GalleryItem[]
+}
+
 function GalleryPreview({ onOpenFullGallery }: GalleryPreviewProps) {
-  const [featuredImages, setFeaturedImages] = useState<GalleryItem[]>([])
+  const [images, setImages] = useState<GalleryItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [failedImages, setFailedImages] = useState<Set<string>>(new Set())
-
-  const categoryLabels: Record<string, string> = {
-    'green-bedroom': 'Зеленая спальня',
-    'white-bedroom': 'Белая спальня',
-    'secret-room': 'Секретная комната',
-    'sauna': 'Сауна',
-    'first-floor': '1й этаж',
-    'first-bathroom': '1-ая ванная',
-    'second-bathroom': '2-ая ванная',
-    'terrace': 'Терраса'
-  }
+  const [tick, setTick] = useState(0)
 
   useEffect(() => {
-    setIsLoading(true)
-
-    // Load gallery manifest
-    import('../../data/gallery-manifest.json')
-      .then((data) => {
-        const manifest = data as GalleryManifest
-
-        // Get first 4 featured images or first 4 images
-        const featured = manifest.items
-          .filter((item) => item.featured)
-          .slice(0, 4)
-
-        if (featured.length < 4) {
-          // If less than 4 featured, fill with regular images
-          const remaining = manifest.items
-            .filter((item) => !item.featured)
-            .slice(0, 4 - featured.length)
-          setFeaturedImages([...featured, ...remaining])
-        } else {
-          setFeaturedImages(featured)
-        }
-
+    loadGallery()
+      .then((items) => {
+        setImages(items)
         setIsLoading(false)
       })
       .catch((error) => {
-        console.error('Failed to load gallery manifest:', error)
+        console.error('Failed to load gallery:', error)
         setIsLoading(false)
       })
   }, [])
+
+  // First rooms that have photos; each tile cycles through its room from __1 to the last number
+  const rooms = useMemo(() => {
+    const byCategory = new Map<RoomCategory, GalleryItem[]>()
+    for (const image of images) {
+      if (failedImages.has(image.id)) continue
+      byCategory.set(image.category, [...(byCategory.get(image.category) ?? []), image])
+    }
+    return Array.from(byCategory, ([category, roomImages]): RoomSlides => ({ category, images: roomImages }))
+      .slice(0, ROOMS_ON_PAGE)
+  }, [images, failedImages])
+
+  useEffect(() => {
+    if (rooms.length === 0) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const id = window.setInterval(() => setTick((t) => t + 1), TICK_MS)
+    return () => window.clearInterval(id)
+  }, [rooms.length])
+
+  // Tile i has advanced once for every full round of ticks that reached it
+  const slideIndex = (tileIndex: number, count: number) =>
+    Math.floor((tick + rooms.length - 1 - tileIndex) / rooms.length) % count
 
   return (
     <section id="gallery-preview" className="py-10 sm:py-14 bg-luxury-gradient relative overflow-hidden">
@@ -76,26 +79,30 @@ function GalleryPreview({ onOpenFullGallery }: GalleryPreviewProps) {
           <div className="text-center py-8">
             <p className="text-yellow-600/60">Загрузка...</p>
           </div>
-        ) : featuredImages.filter(img => !failedImages.has(img.id)).length > 0 ? (
+        ) : rooms.length > 0 ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              {featuredImages.filter(img => !failedImages.has(img.id)).map((image, index) => (
+              {rooms.map((room, tileIndex) => {
+                const current = slideIndex(tileIndex, room.images.length)
+                return (
                 <div
-                  key={image.id}
+                  key={room.category}
                   className="group relative overflow-hidden shadow-luxury hover:shadow-luxury-hover transition-all duration-500 cursor-pointer bg-luxury-card"
-                  onClick={() => onOpenFullGallery(image.category)}
+                  onClick={() => onOpenFullGallery(room.category)}
                 >
                   <div className="relative w-full aspect-[4/3] overflow-hidden">
-                    <img
-                        src={image.images.thumbnail.jpg}
-                        alt={image.alt}
-                        width={image.images.thumbnail.width}
-                        height={image.images.thumbnail.height}
-                        loading={index < 4 ? 'eager' : 'lazy'}
+                    {room.images.map((image, i) => (
+                      <img
+                        key={image.id}
+                        src={image.src}
+                        alt={i === current ? image.alt : ''}
+                        aria-hidden={i !== current}
+                        loading={i === 0 ? 'eager' : 'lazy'}
                         decoding="async"
-                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                        className={`absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-[opacity,transform] duration-1000 ease-out ${i === current ? 'opacity-100' : 'opacity-0'}`}
                         onError={() => setFailedImages(prev => new Set(prev).add(image.id))}
                       />
+                    ))}
                     {/* Luxury overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-yellow-600/10 transition-all duration-500" />
@@ -105,10 +112,11 @@ function GalleryPreview({ onOpenFullGallery }: GalleryPreviewProps) {
                   </div>
                   {/* Category Badge */}
                   <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-sm px-3 py-1 border border-yellow-600/30 text-xs font-light text-yellow-500 uppercase tracking-wider">
-                    {categoryLabels[image.category] || image.category}
+                    {CATEGORY_LABELS[room.category]}
                   </div>
                 </div>
-              ))}
+                )
+              })}
             </div>
 
             {/* CTA Button */}
