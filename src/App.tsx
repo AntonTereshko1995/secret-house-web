@@ -9,6 +9,7 @@ import AvailabilityPage from './pages/AvailabilityPage'
 import GiftCertificatePage from './pages/GiftCertificatePage'
 import MyBookingsPage from './pages/MyBookingsPage'
 import BookingDetailPage from './pages/BookingDetailPage'
+import ReviewPage from './pages/ReviewPage'
 import ReschedulePage from './pages/ReschedulePage'
 import AdminPage from './pages/AdminPage'
 import AdminPromocodesPage from './pages/AdminPromocodesPage'
@@ -65,6 +66,7 @@ function App() {
           <Route path="/gift" element={<GiftCertificatePage />} />
           <Route path="/my-bookings" element={<MyBookingsPage />} />
           <Route path="/my-bookings/:publicId" element={<BookingDetailPage />} />
+          <Route path="/my-bookings/:publicId/review" element={<ReviewPage />} />
           <Route path="/my-bookings/:publicId/reschedule" element={<ReschedulePage />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/admin/promocodes" element={<AdminPromocodesPage />} />

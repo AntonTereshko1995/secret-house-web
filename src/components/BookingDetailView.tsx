@@ -343,7 +343,6 @@ interface PanelProps {
   onError(msg: string): void
   actions: BookingViewActions
 }
-}
 
 // ─── Tariff panel ─────────────────────────────────────────────────────────────
 
