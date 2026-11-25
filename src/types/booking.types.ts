@@ -10,6 +10,8 @@ export type TariffType =
 
 export type ContactType = 'telegram' | 'phone'
 
+export type RewardPromoStatus = 'active' | 'used' | 'expired' | null
+
 export type BedroomType = 'white' | 'green'
 
 export type StepType =
@@ -220,6 +222,12 @@ export interface BookingDetailDTO {
   canCancel: boolean
   canPay: boolean
   bedroomType?: string
+  canReview: boolean
+  reviewDeadline: string | null
+  feedbackSubmitted: boolean
+  rewardPromoCode: string | null
+  rewardPromoStatus: RewardPromoStatus
+  rewardPromoValidUntil: string | null
 }
 
 export interface BookingUpdateServicesPayload {

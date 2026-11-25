@@ -33,6 +33,13 @@ function toViewData(b: AdminBookingDTO): BookingViewData {
     canReschedule: canAct,
     canCancel: canAct,
     canPay: false,
+    // Guest-review fields are not part of the admin DTO.
+    canReview: false,
+    reviewDeadline: null,
+    feedbackSubmitted: false,
+    rewardPromoCode: null,
+    rewardPromoStatus: null,
+    rewardPromoValidUntil: null,
   }
 }
 
