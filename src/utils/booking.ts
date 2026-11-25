@@ -1040,6 +1040,7 @@ export async function submitBookingForm(
     hasBathTub: formData.hasBathTub ?? false,
     comment: formData.comment,
     promocode: formData.promocode,
+    promocodeId: formData.promocodeId,
     wineSelection: formData.wineSelection ?? [],
     needsTransfer: formData.needsTransfer ?? false,
     transferAddress: formData.transferAddress,

@@ -104,6 +104,7 @@ export interface BookingFormData {
 
   // Step 11: Promocode
   promocode?: string
+  promocodeId?: number
   promocodeDiscount?: number
   promocodeValid?: boolean
 

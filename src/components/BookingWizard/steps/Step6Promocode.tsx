@@ -18,6 +18,7 @@ function Step6Promocode({ formData, updateFormData, nextStep, prevStep }: StepPr
     discount: number
     discountPercentage: number
     message: string
+    promocodeId?: number
     isPersonal?: boolean
   } | null>(formData.promocode && formData.promocodeValid !== undefined ? {
     valid: formData.promocodeValid,
@@ -73,7 +74,8 @@ function Step6Promocode({ formData, updateFormData, nextStep, prevStep }: StepPr
     updateFormData({
       promocode: promocode.trim() || undefined,
       promocodeDiscount: validationResult?.valid ? validationResult.discount : 0,
-      promocodeValid: validationResult?.valid || false
+      promocodeValid: validationResult?.valid || false,
+      promocodeId: validationResult?.valid ? validationResult.promocodeId : undefined
     })
     nextStep()
   }
