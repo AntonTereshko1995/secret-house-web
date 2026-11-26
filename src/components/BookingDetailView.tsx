@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback, type FormEvent } from 'react'
+import { Link } from 'react-router-dom'
 import { getEnv } from '../utils/env'
 import { PriceBreakdown } from './PriceBreakdown'
 import {
@@ -16,6 +17,8 @@ import CustomCalendar from './BookingWizard/CustomCalendar'
 import TimePicker from './BookingWizard/TimePicker'
 import { useRescheduleBookedPeriods } from '../hooks/useRescheduleBookedPeriods'
 import { getBookingStatusBadge } from '../lib/bookingStatus'
+import { formatDayMonth, getRewardPromoDisplay } from '../utils/review'
+import { reviewUrl } from '../utils/navigation'
 
 // ─── Public types ─────────────────────────────────────────────────────────────
 
@@ -51,6 +54,13 @@ export interface BookingViewData {
   userName?: string
   source?: string
   bedroomType?: string
+  // Guest review / reward promo code
+  canReview: boolean
+  reviewDeadline: string | null
+  feedbackSubmitted: boolean
+  rewardPromoCode: string | null
+  rewardPromoStatus: 'active' | 'used' | 'expired' | null
+  rewardPromoValidUntil: string | null
 }
 
 export interface ServicesPayload {
@@ -274,6 +284,53 @@ function CopyBookingButton({ booking }: { booking: BookingViewData }) {
         </svg>
       )}
     </button>
+  )
+}
+
+// ─── Review reward block ──────────────────────────────────────────────────────
+
+function ReviewRewardBlock({ booking, contact }: { booking: BookingViewData; contact?: string | null }) {
+  if (!booking.publicId) return null
+
+  if (booking.canReview) {
+    return (
+      <div className="bg-zinc-900 border border-amber-500/30 rounded-xl p-4">
+        <p className="text-white text-sm font-semibold mb-1">
+          За отзыв дарим скидку 10% на следующее бронирование
+        </p>
+        {booking.reviewDeadline && (
+          <p className="text-zinc-400 text-xs mb-3">
+            Оставьте отзыв до {formatDayMonth(booking.reviewDeadline)}
+          </p>
+        )}
+        <Link
+          to={reviewUrl(booking.publicId, contact)}
+          className="w-full flex items-center justify-between p-3 rounded-lg border
+            border-amber-500/40 hover:border-amber-500/70 text-amber-400 hover:text-amber-300
+            text-sm transition-all group"
+        >
+          <span>Оставить отзыв</span>
+          <svg className="w-4 h-4 text-amber-900/60 group-hover:text-amber-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </Link>
+      </div>
+    )
+  }
+
+  const promo = getRewardPromoDisplay(
+    booking.rewardPromoStatus,
+    booking.rewardPromoCode,
+    booking.rewardPromoValidUntil,
+  )
+  if (!promo) return null
+
+  return (
+    <div className="bg-zinc-900 border border-zinc-700 rounded-xl p-4">
+      <p className="text-zinc-500 text-xs uppercase tracking-widest mb-2">Промокод за отзыв</p>
+      <p className="text-amber-300 text-sm font-bold tracking-wider">{promo.label}</p>
+      {promo.detail && <p className="text-zinc-400 text-xs mt-1">{promo.detail}</p>}
+    </div>
   )
 }
 
@@ -1029,6 +1086,7 @@ export function BookingDetailView({
   actions,
   onReschedule,
   onDeleted,
+  contact,
 }: {
   booking: BookingViewData
   mode: 'user' | 'admin'
@@ -1037,6 +1095,7 @@ export function BookingDetailView({
   actions: BookingViewActions
   onReschedule?: () => void
   onDeleted?: () => void
+  contact?: string | null
 }) {
   const [activePanel, setActivePanel] = useState<ActivePanel>(null)
   const [actionError, setActionError] = useState<string | null>(null)
@@ -1144,6 +1203,9 @@ export function BookingDetailView({
                 <p className="text-red-400 text-sm">{actionError}</p>
               </div>
             )}
+
+            {/* Guest review / reward promo code */}
+            {!isAdmin && <ReviewRewardBlock booking={booking} contact={contact} />}
 
             {/* Admin: copy booking description */}
             {isAdmin && (

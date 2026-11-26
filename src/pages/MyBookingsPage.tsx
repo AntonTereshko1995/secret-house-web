@@ -6,6 +6,8 @@ import type { BookingDetailDTO } from '../types/booking.types'
 import { TARIFF_OPTIONS } from '../utils/booking'
 import { normalizePhone } from '../utils/phone'
 import { getBookingStatusBadge } from '../lib/bookingStatus'
+import { formatDayMonth, getRewardPromoDisplay } from '../utils/review'
+import { bookingDetailUrl } from '../utils/navigation'
 
 type ContactType = 'telegram' | 'phone'
 
@@ -212,10 +214,15 @@ export default function MyBookingsPage() {
                 </p>
                 {bookings.map(booking => {
                   const badge = getStatusBadge(booking)
+                  const promo = getRewardPromoDisplay(
+                    booking.rewardPromoStatus,
+                    booking.rewardPromoCode,
+                    booking.rewardPromoValidUntil,
+                  )
                   return (
                     <Link
                       key={booking.bookingId}
-                      to={`/my-bookings/${booking.publicId}`}
+                      to={bookingDetailUrl(booking.publicId, urlContact)}
                       className="block bg-zinc-900 border border-zinc-700 hover:border-zinc-500
                         rounded-xl p-4 transition-all group"
                     >
@@ -240,6 +247,23 @@ export default function MyBookingsPage() {
                           <p className="text-zinc-300 text-xs font-medium">{formatDatetime(booking.endDate)}</p>
                         </div>
                       </div>
+
+                      {booking.canReview && (
+                        <div className="mb-3 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2">
+                          <p className="text-amber-300 text-xs font-medium">
+                            Оставьте отзыв до {formatDayMonth(booking.reviewDeadline)} — скидка 10%
+                          </p>
+                        </div>
+                      )}
+
+                      {promo && (
+                        <div className="mb-3 rounded-lg border border-zinc-700 bg-black/30 px-3 py-2">
+                          <p className="text-amber-300 text-xs font-bold tracking-wider">{promo.label}</p>
+                          {promo.detail && (
+                            <p className="text-zinc-400 text-[11px] mt-0.5">{promo.detail}</p>
+                          )}
+                        </div>
+                      )}
 
                       <div className="flex items-center justify-between">
                         <p className="text-yellow-600 font-bold text-sm">

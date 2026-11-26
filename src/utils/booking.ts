@@ -982,18 +982,20 @@ export async function validatePromocode(
   code: string,
   bookingDate?: Date,
   tariff?: string,
+  contact?: string,
 ): Promise<{
   valid: boolean
   discount: number
   discountPercentage: number
   message: string
   promocodeId?: number
+  isPersonal?: boolean
 }> {
   const date = bookingDate ?? new Date()
   const dateStr = date.toISOString().slice(0, 10)
   const tariffStr = tariff ?? '12h-standard'
 
-  const result = await validatePromocodeApi(code, dateStr, tariffStr)
+  const result = await validatePromocodeApi(code, dateStr, tariffStr, contact)
 
   return {
     valid: result.valid,
@@ -1001,6 +1003,7 @@ export async function validatePromocode(
     discountPercentage: result.discountPercentage,
     message: result.message,
     promocodeId: result.promocodeId,
+    isPersonal: result.isPersonal,
   }
 }
 
@@ -1037,6 +1040,7 @@ export async function submitBookingForm(
     hasBathTub: formData.hasBathTub ?? false,
     comment: formData.comment,
     promocode: formData.promocode,
+    promocodeId: formData.promocodeId,
     wineSelection: formData.wineSelection ?? [],
     needsTransfer: formData.needsTransfer ?? false,
     transferAddress: formData.transferAddress,

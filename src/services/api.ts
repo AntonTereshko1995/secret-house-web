@@ -64,12 +64,26 @@ export interface PromoValidateResponse {
   discountPercentage: number
   message: string
   promocodeId?: number
+  isPersonal?: boolean
 }
 
 export interface BookingCreateResponse {
   bookingId: number
   publicId: string
   message: string
+}
+
+export interface PublicReviewItem {
+  reviewId: number
+  text: string
+  avgRating: number
+  stayMonth: string
+}
+
+export interface PublicReviewsResponse {
+  items: PublicReviewItem[]
+  total: number
+  averageRating: number
 }
 
 // ---------------------------------------------------------------------------
@@ -117,6 +131,20 @@ export interface BookingCreatePayload {
 // ---------------------------------------------------------------------------
 // HTTP helpers
 // ---------------------------------------------------------------------------
+
+/**
+ * Error thrown by API calls that failed with an HTTP status (non-2xx).
+ * Keeps the status code so callers can tell 403/404/409 apart.
+ */
+export class ApiError extends Error {
+  status: number
+
+  constructor(status: number, message: string) {
+    super(message)
+    this.name = 'ApiError'
+    this.status = status
+  }
+}
 
 async function apiGet<T>(path: string, params?: Record<string, string>): Promise<T> {
   const url = new URL(`${getApiBase()}${path}`, window.location.origin)
@@ -225,16 +253,19 @@ export async function validatePromocodeApi(
   code: string,
   bookingDate: string,
   tariff: string,
+  contact?: string,
 ): Promise<PromoValidateResponse> {
   const result = await apiPost<PromoValidateResponse>('/api/promocodes/validate', {
     code,
     bookingDate,
     tariff,
+    ...(contact ? { contact } : {}),
   })
   logger.info('promocode_validated', {
     valid: result.valid,
     discount: result.discount,
     tariff,
+    isPersonal: result.isPersonal,
   })
   return result
 }
@@ -259,6 +290,17 @@ export async function submitBooking(
   })
   const result = await apiPost<BookingCreateResponse>('/api/bookings', payload)
   logger.info('booking_created', { bookingId: result.bookingId })
+  return result
+}
+
+/**
+ * Fetch published guest reviews for the home page (public endpoint, no auth).
+ */
+export async function getPublicReviews(limit = 6): Promise<PublicReviewsResponse> {
+  const result = await apiGet<PublicReviewsResponse>('/api/reviews/public', {
+    limit: String(limit),
+  })
+  logger.info('public_reviews_loaded', { count: result.items.length, total: result.total })
   return result
 }
 
@@ -365,6 +407,52 @@ export async function getBookingDetail(
     `/api/bookings/${publicId}`,
   )
   logger.info('booking_detail_loaded', { publicId })
+  return result
+}
+
+export interface ReviewSubmitRequest {
+  bookingPublicId: string
+  ratingExpectations: number
+  ratingComfort: number
+  ratingCleanliness: number
+  ratingCommunication: number
+  ratingLocation: number
+  ratingRecommendation: number
+  likedMost: string
+  improvement: string
+  publicReview: string
+}
+
+export interface ReviewSubmitResponse {
+  ok: boolean
+  reviewId: number
+  rewardPromoCode: string
+  validUntil: string
+}
+
+/**
+ * Submit a guest review for a booking. Throws {@link ApiError} with the
+ * backend status on 403/404/409 so the review page can show a proper message.
+ */
+export async function submitReview(
+  payload: ReviewSubmitRequest,
+): Promise<ReviewSubmitResponse> {
+  logger.info('review_submit', { bookingPublicId: payload.bookingPublicId })
+  const response = await fetch(`${getApiBase()}/api/reviews`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+
+  if (!response.ok) {
+    const detail = await response.json().catch(() => ({ detail: response.statusText }))
+    const message = detail?.detail ?? `API error ${response.status}`
+    logger.error('review_submit_error', { status: response.status, detail: message })
+    throw new ApiError(response.status, message)
+  }
+
+  const result = (await response.json()) as ReviewSubmitResponse
+  logger.info('review_submit_success', { reviewId: result.reviewId })
   return result
 }
 

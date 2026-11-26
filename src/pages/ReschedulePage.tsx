@@ -1,14 +1,17 @@
 import { useState, useCallback, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { getBookingDetail, rescheduleBooking } from '../services/api'
 import { logger } from '../services/logger'
 import type { BookingDetailDTO } from '../types/booking.types'
 import { TARIFF_OPTIONS } from '../utils/booking'
+import { bookingDetailUrl } from '../utils/navigation'
 import RescheduleView from '../components/RescheduleView'
 
 export default function ReschedulePage() {
   const { publicId } = useParams<{ publicId: string }>()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const contact = searchParams.get('contact')
 
   const [booking, setBooking] = useState<BookingDetailDTO | null>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
@@ -50,7 +53,7 @@ export default function ReschedulePage() {
       <div className="min-h-screen bg-luxury-gradient flex items-center justify-center p-4">
         <div className="text-center">
           <p className="text-red-400 mb-4">{loadError ?? 'Бронирование не найдено'}</p>
-          <button onClick={() => navigate(-1)} className="text-amber-400 hover:text-amber-300 text-sm underline">
+          <button onClick={() => navigate(bookingDetailUrl(publicId!, contact))} className="text-amber-400 hover:text-amber-300 text-sm underline">
             Вернуться назад
           </button>
         </div>
@@ -66,9 +69,9 @@ export default function ReschedulePage() {
       tariffName={tariffName}
       onReschedule={async (ci, co, price) => {
         await rescheduleBooking(booking.publicId, ci, co, price)
-        navigate(`/my-bookings/${booking.publicId}`, { replace: true })
+        navigate(bookingDetailUrl(booking.publicId, contact), { replace: true })
       }}
-      onBack={() => navigate(-1)}
+      onBack={() => navigate(bookingDetailUrl(booking.publicId, contact))}
     />
   )
 }

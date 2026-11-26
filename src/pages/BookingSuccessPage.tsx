@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { logger } from '../services/logger'
 import { TARIFF_OPTIONS } from '../utils/booking'
+import { bookingDetailUrl } from '../utils/navigation'
 import type { BookingFormData } from '../types/booking.types'
 
 function BookingSuccessPage() {
@@ -95,7 +96,7 @@ function BookingSuccessPage() {
         <div className="flex flex-col gap-2">
           {publicId && (
             <button
-              onClick={() => navigate(`/my-bookings/${publicId}`)}
+              onClick={() => navigate(bookingDetailUrl(publicId, contact))}
               className="w-full bg-yellow-600 hover:bg-yellow-500 text-black font-bold py-3 px-8 uppercase tracking-wider transition-all"
             >
               Перейти к бронированию

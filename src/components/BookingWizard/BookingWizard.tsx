@@ -176,7 +176,18 @@ function BookingWizard() {
           totalPrice: formData.totalPrice,
         })
         console.error('Booking creation error:', error)
-        alert('Не удалось создать бронирование. Пожалуйста, попробуйте ещё раз.')
+        // A 400 about the promo code must show the backend text and let the
+        // user remove the code instead of a generic failure message.
+        if (/промокод|именной|использован/i.test(message)) {
+          updateFormData({ promocode: undefined, promocodeDiscount: 0, promocodeValid: false })
+          alert(message)
+          const promoIndex = visibleSteps.findIndex(s => s.id === 'promocode')
+          if (promoIndex >= 0) {
+            jumpToStep(promoIndex)
+          }
+        } else {
+          alert('Не удалось создать бронирование. Пожалуйста, попробуйте ещё раз.')
+        }
       } finally {
         setLoading(false)
       }
