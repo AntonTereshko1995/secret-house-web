@@ -18,6 +18,7 @@ import TimePicker from './BookingWizard/TimePicker'
 import { useRescheduleBookedPeriods } from '../hooks/useRescheduleBookedPeriods'
 import { getBookingStatusBadge } from '../lib/bookingStatus'
 import { formatDayMonth, getRewardPromoDisplay } from '../utils/review'
+import { reviewUrl } from '../utils/navigation'
 
 // ─── Public types ─────────────────────────────────────────────────────────────
 
@@ -288,7 +289,7 @@ function CopyBookingButton({ booking }: { booking: BookingViewData }) {
 
 // ─── Review reward block ──────────────────────────────────────────────────────
 
-function ReviewRewardBlock({ booking }: { booking: BookingViewData }) {
+function ReviewRewardBlock({ booking, contact }: { booking: BookingViewData; contact?: string | null }) {
   if (!booking.publicId) return null
 
   if (booking.canReview) {
@@ -303,7 +304,7 @@ function ReviewRewardBlock({ booking }: { booking: BookingViewData }) {
           </p>
         )}
         <Link
-          to={`/my-bookings/${booking.publicId}/review`}
+          to={reviewUrl(booking.publicId, contact)}
           className="w-full flex items-center justify-between p-3 rounded-lg border
             border-amber-500/40 hover:border-amber-500/70 text-amber-400 hover:text-amber-300
             text-sm transition-all group"
@@ -1085,6 +1086,7 @@ export function BookingDetailView({
   actions,
   onReschedule,
   onDeleted,
+  contact,
 }: {
   booking: BookingViewData
   mode: 'user' | 'admin'
@@ -1093,6 +1095,7 @@ export function BookingDetailView({
   actions: BookingViewActions
   onReschedule?: () => void
   onDeleted?: () => void
+  contact?: string | null
 }) {
   const [activePanel, setActivePanel] = useState<ActivePanel>(null)
   const [actionError, setActionError] = useState<string | null>(null)
@@ -1202,7 +1205,7 @@ export function BookingDetailView({
             )}
 
             {/* Guest review / reward promo code */}
-            {!isAdmin && <ReviewRewardBlock booking={booking} />}
+            {!isAdmin && <ReviewRewardBlock booking={booking} contact={contact} />}
 
             {/* Admin: copy booking description */}
             {isAdmin && (

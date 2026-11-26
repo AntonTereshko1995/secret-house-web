@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import {
   getBookingDetail,
   cancelBooking,
@@ -11,6 +11,7 @@ import {
 import { logger } from '../services/logger'
 import type { BookingDetailDTO } from '../types/booking.types'
 import { BookingDetailView, type BookingViewData, type BookingViewActions } from '../components/BookingDetailView'
+import { myBookingsUrl, rescheduleUrl } from '../utils/navigation'
 
 function toViewData(b: BookingDetailDTO): BookingViewData {
   return { ...b }
@@ -19,6 +20,8 @@ function toViewData(b: BookingDetailDTO): BookingViewData {
 export default function BookingDetailPage() {
   const { publicId } = useParams<{ publicId: string }>()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const contact = searchParams.get('contact')
 
   const [booking, setBooking] = useState<BookingDetailDTO | null>(null)
   const [loading, setLoading] = useState(true)
@@ -61,7 +64,7 @@ export default function BookingDetailPage() {
       <div className="min-h-screen bg-luxury-gradient flex items-center justify-center p-4">
         <div className="text-center">
           <p className="text-red-400 mb-4">{error ?? 'Бронирование не найдено'}</p>
-          <button onClick={() => navigate(-1)}
+          <button onClick={() => navigate(myBookingsUrl(contact))}
             className="text-amber-400 hover:text-amber-300 text-sm underline">
             Вернуться к моим бронированиям
           </button>
@@ -83,10 +86,11 @@ export default function BookingDetailPage() {
     <BookingDetailView
       booking={toViewData(booking)}
       mode="user"
-      onBack={() => navigate(-1)}
+      contact={contact}
+      onBack={() => navigate(myBookingsUrl(contact))}
       onReload={loadBooking}
       actions={actions}
-      onReschedule={() => navigate(`/my-bookings/${pid}/reschedule`)}
+      onReschedule={() => navigate(rescheduleUrl(pid, contact))}
     />
   )
 }

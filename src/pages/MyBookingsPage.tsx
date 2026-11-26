@@ -7,6 +7,7 @@ import { TARIFF_OPTIONS } from '../utils/booking'
 import { normalizePhone } from '../utils/phone'
 import { getBookingStatusBadge } from '../lib/bookingStatus'
 import { formatDayMonth, getRewardPromoDisplay } from '../utils/review'
+import { bookingDetailUrl } from '../utils/navigation'
 
 type ContactType = 'telegram' | 'phone'
 
@@ -221,7 +222,7 @@ export default function MyBookingsPage() {
                   return (
                     <Link
                       key={booking.bookingId}
-                      to={`/my-bookings/${booking.publicId}`}
+                      to={bookingDetailUrl(booking.publicId, urlContact)}
                       className="block bg-zinc-900 border border-zinc-700 hover:border-zinc-500
                         rounded-xl p-4 transition-all group"
                     >

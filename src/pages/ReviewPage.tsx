@@ -1,10 +1,11 @@
 import { useState, useCallback, useEffect, type FormEvent } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { getBookingDetail, submitReview, ApiError } from '../services/api'
 import { logger } from '../services/logger'
 import type { BookingDetailDTO } from '../types/booking.types'
 import { TARIFF_OPTIONS } from '../utils/booking'
 import { formatFullDate } from '../utils/review'
+import { bookingDetailUrl, myBookingsUrl } from '../utils/navigation'
 
 // ─── Questions (exact guest-facing texts from the PRP) ────────────────────────
 
@@ -50,6 +51,9 @@ function formatDatetime(iso: string): string {
 
 export default function ReviewPage() {
   const { publicId } = useParams<{ publicId: string }>()
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const contact = searchParams.get('contact')
 
   const [booking, setBooking] = useState<BookingDetailDTO | null>(null)
   const [loading, setLoading] = useState(true)
@@ -168,7 +172,7 @@ export default function ReviewPage() {
       <div className="min-h-screen bg-luxury-gradient flex items-center justify-center p-4">
         <div className="text-center">
           <p className="text-red-400 mb-4">{loadError ?? 'Бронирование не найдено'}</p>
-          <Link to="/my-bookings" className="text-amber-400 hover:text-amber-300 text-sm underline">
+          <Link to={myBookingsUrl(contact)} className="text-amber-400 hover:text-amber-300 text-sm underline">
             Вернуться к моим бронированиям
           </Link>
         </div>
@@ -182,7 +186,7 @@ export default function ReviewPage() {
     <div className="min-h-screen bg-luxury-gradient text-white">
       <div className="max-w-2xl mx-auto px-4 py-12">
         <Link
-          to={`/my-bookings/${publicId}`}
+          to={bookingDetailUrl(publicId!, contact)}
           className="inline-flex items-center gap-1.5 text-amber-400 hover:text-amber-300 text-sm transition-colors mb-8"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -230,12 +234,12 @@ export default function ReviewPage() {
               Промокод именной: действует один раз при бронировании с вашим контактом, до{' '}
               {formatFullDate(success.validUntil)}
             </p>
-            <Link
-              to={`/my-bookings/${publicId}`}
+            <button
+              onClick={() => navigate(bookingDetailUrl(publicId!, contact), { replace: true })}
               className="inline-block mt-6 text-amber-400 hover:text-amber-300 text-sm underline"
             >
               Вернуться к бронированию
-            </Link>
+            </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="bg-zinc-900 border border-zinc-700 rounded-xl p-5">
