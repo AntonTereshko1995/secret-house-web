@@ -15,6 +15,7 @@ import AdminPage from './pages/AdminPage'
 import AdminPromocodesPage from './pages/AdminPromocodesPage'
 import AdminStatisticsPage from './pages/AdminStatisticsPage'
 import AdminPricingPage from './pages/AdminPricingPage'
+import AdminReviewsPage from './pages/AdminReviewsPage'
 import { PricingProvider } from './context/PricingContext'
 import FullGallery from './components/FullGallery'
 import LoadingOverlay from './components/LoadingOverlay/LoadingOverlay'
@@ -72,6 +73,7 @@ function App() {
           <Route path="/admin/promocodes" element={<AdminPromocodesPage />} />
           <Route path="/admin/statistics" element={<AdminStatisticsPage />} />
           <Route path="/admin/prices" element={<AdminPricingPage />} />
+          <Route path="/admin/reviews" element={<AdminReviewsPage />} />
         </Routes>
       </div>
 

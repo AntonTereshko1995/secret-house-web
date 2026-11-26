@@ -422,3 +422,54 @@ export const adminUpdatePricingSettings = (
     '/api/admin/pricing-settings',
     payload,
   )
+
+// ---------------------------------------------------------------------------
+// Guest review moderation
+// ---------------------------------------------------------------------------
+
+export type AdminReviewPublishedFilter = 'all' | 'true' | 'false'
+
+export interface AdminReviewDTO {
+  reviewId: number
+  bookingId: number | null
+  bookingPublicId: string | null
+  contact: string | null
+  submittedAt: string
+  ratingExpectations: number
+  ratingComfort: number
+  ratingCleanliness: number
+  ratingCommunication: number
+  ratingLocation: number
+  ratingRecommendation: number
+  avgRating: number
+  likedMost: string
+  improvement: string
+  publicReview: string
+  rewardPromoCode: string | null
+  rewardPromoStatus: 'active' | 'used' | 'expired' | null
+  isPublished: boolean
+  publishedAt: string | null
+}
+
+export interface AdminReviewsPage {
+  items: AdminReviewDTO[]
+  total: number
+  page: number
+  pageSize: number
+}
+
+export const adminGetReviews = (
+  published: AdminReviewPublishedFilter,
+  page = 1,
+  pageSize = 50,
+): Promise<AdminReviewsPage> =>
+  adminFetch<AdminReviewsPage>(
+    'GET',
+    `/api/admin/reviews?published=${published}&page=${page}&page_size=${pageSize}`,
+  )
+
+export const adminSetReviewPublished = (
+  reviewId: number,
+  isPublished: boolean,
+): Promise<AdminReviewDTO> =>
+  adminFetch<AdminReviewDTO>('PATCH', `/api/admin/reviews/${reviewId}`, { isPublished })

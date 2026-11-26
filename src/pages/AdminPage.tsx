@@ -318,6 +318,12 @@ export default function AdminPage() {
               hover:border-amber-500/50 hover:text-amber-400 transition-all">
             Цены →
           </Link>
+          <Link
+            to="/admin/reviews"
+            className="text-xs px-3 py-1.5 rounded-lg border border-zinc-700 text-zinc-400
+              hover:border-amber-500/50 hover:text-amber-400 transition-all">
+            Отзывы →
+          </Link>
         </div>
 
         {/* Sort + filter */}
