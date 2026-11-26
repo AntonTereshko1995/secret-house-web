@@ -1,4 +1,4 @@
-import type { RewardPromoStatus } from '../types/booking.types'
+import type { RewardPromoStatus, BookingDetailDTO } from '../types/booking.types'
 
 /**
  * Parses a `YYYY-MM-DD` date string without timezone surprises:
@@ -52,4 +52,78 @@ export function getRewardPromoDisplay(
     label: code,
     detail: validUntil ? `до ${formatFullDate(validUntil)}` : undefined,
   }
+}
+
+// ─── Review form (PRPs/guest-review-display.md, section B) ───────────────────
+
+export const RATING_QUESTION_KEYS = [
+  'ratingExpectations',
+  'ratingComfort',
+  'ratingCleanliness',
+  'ratingCommunication',
+  'ratingLocation',
+  'ratingRecommendation',
+] as const
+
+export type RatingKey = (typeof RATING_QUESTION_KEYS)[number]
+
+export const TEXT_QUESTION_KEYS = ['likedMost', 'improvement', 'publicReview'] as const
+
+export type TextKey = (typeof TEXT_QUESTION_KEYS)[number]
+
+export type QuestionKey = RatingKey | TextKey
+
+/** 6 rating questions + 3 text questions. */
+export const TOTAL_QUESTION_COUNT = RATING_QUESTION_KEYS.length + TEXT_QUESTION_KEYS.length
+
+export type ReviewPageState = 'form' | 'alreadyReviewed' | 'windowClosed' | 'unavailable'
+
+type ReviewPageStateFields = Pick<
+  BookingDetailDTO,
+  'canReview' | 'feedbackSubmitted' | 'isCanceled' | 'isPrepaymented'
+>
+
+/**
+ * Which screen ReviewPage shows instead of (or besides) the form.
+ * Order follows the PRP: already reviewed first, then the form, then
+ * canceled / not prepaid, and anything else means the window is closed.
+ */
+export function reviewPageState(booking: ReviewPageStateFields): ReviewPageState {
+  if (booking.feedbackSubmitted) return 'alreadyReviewed'
+  if (booking.canReview) return 'form'
+  if (booking.isCanceled || !booking.isPrepaymented) return 'unavailable'
+  return 'windowClosed'
+}
+
+/** A rating answer counts only as an integer 1..10. */
+export function isRatingAnswered(value: string | number | undefined | null): boolean {
+  if (value === null || value === undefined || value === '') return false
+  const n = typeof value === 'number' ? value : Number(value)
+  return Number.isInteger(n) && n >= 1 && n <= 10
+}
+
+/** A text answer counts only when it has non-whitespace content. */
+export function isTextAnswered(value: string | undefined | null): boolean {
+  return typeof value === 'string' && value.trim().length > 0
+}
+
+export function countAnsweredQuestions(
+  ratings: Record<RatingKey, string | number | undefined | null>,
+  texts: Record<TextKey, string | undefined | null>,
+): number {
+  let count = 0
+  for (const key of RATING_QUESTION_KEYS) if (isRatingAnswered(ratings[key])) count += 1
+  for (const key of TEXT_QUESTION_KEYS) if (isTextAnswered(texts[key])) count += 1
+  return count
+}
+
+/** Keys of unanswered questions, in the order they are shown on the page. */
+export function unansweredQuestionKeys(
+  ratings: Record<RatingKey, string | number | undefined | null>,
+  texts: Record<TextKey, string | undefined | null>,
+): QuestionKey[] {
+  const keys: QuestionKey[] = []
+  for (const key of RATING_QUESTION_KEYS) if (!isRatingAnswered(ratings[key])) keys.push(key)
+  for (const key of TEXT_QUESTION_KEYS) if (!isTextAnswered(texts[key])) keys.push(key)
+  return keys
 }

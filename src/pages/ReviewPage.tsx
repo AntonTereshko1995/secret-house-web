@@ -1,10 +1,27 @@
-import { useState, useCallback, useEffect, type FormEvent } from 'react'
+import {
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  type FormEvent,
+  type KeyboardEvent as ReactKeyboardEvent,
+} from 'react'
 import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { getBookingDetail, submitReview, ApiError } from '../services/api'
 import { logger } from '../services/logger'
 import type { BookingDetailDTO } from '../types/booking.types'
 import { TARIFF_OPTIONS } from '../utils/booking'
-import { formatFullDate } from '../utils/review'
+import {
+  formatFullDate,
+  formatDayMonth,
+  getRewardPromoDisplay,
+  reviewPageState,
+  countAnsweredQuestions,
+  unansweredQuestionKeys,
+  type RatingKey,
+  type TextKey,
+  type QuestionKey,
+} from '../utils/review'
 import { bookingDetailUrl, myBookingsUrl } from '../utils/navigation'
 
 // ─── Questions (exact guest-facing texts from the PRP) ────────────────────────
@@ -24,16 +41,6 @@ const TEXT_QUESTIONS: { key: TextKey; label: string }[] = [
   { key: 'publicReview', label: 'Напишите, пожалуйста, ваш отзыв, которым мы поделимся с другими гостями.' },
 ]
 
-type RatingKey =
-  | 'ratingExpectations'
-  | 'ratingComfort'
-  | 'ratingCleanliness'
-  | 'ratingCommunication'
-  | 'ratingLocation'
-  | 'ratingRecommendation'
-
-type TextKey = 'likedMost' | 'improvement' | 'publicReview'
-
 interface ReviewSuccess {
   rewardPromoCode: string
   validUntil: string
@@ -49,6 +56,80 @@ function formatDatetime(iso: string): string {
   })
 }
 
+// ─── 1–10 rating as a row of buttons (PRP section B) ────────────────────────
+
+function RatingGroup({
+  value,
+  onChange,
+  label,
+}: {
+  value: string
+  onChange: (value: string) => void
+  label: string
+}) {
+  const buttonsRef = useRef<Array<HTMLButtonElement | null>>([])
+  const selected = value ? Number(value) : 0
+
+  useEffect(() => {
+    if (selected >= 1 && selected <= 10) {
+      buttonsRef.current[selected - 1]?.focus()
+    }
+  }, [selected])
+
+  const handleKeyDown = (e: ReactKeyboardEvent<HTMLButtonElement>) => {
+    let next: number | null = null
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      next = selected === 0 ? 1 : Math.min(selected + 1, 10)
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      next = selected === 0 ? 10 : Math.max(selected - 1, 1)
+    } else if (e.key === 'Home') {
+      next = 1
+    } else if (e.key === 'End') {
+      next = 10
+    } else {
+      return
+    }
+    e.preventDefault()
+    if (next === selected) {
+      buttonsRef.current[next - 1]?.focus()
+    } else {
+      onChange(String(next))
+    }
+  }
+
+  return (
+    <div role="radiogroup" aria-label={label} className="grid grid-cols-5 sm:grid-cols-10 gap-2">
+      {Array.from({ length: 10 }, (_, i) => i + 1).map(n => {
+        const isSelected = selected === n
+        return (
+          <button
+            key={n}
+            type="button"
+            role="radio"
+            aria-checked={isSelected}
+            aria-label={`${n} из 10`}
+            ref={el => {
+              buttonsRef.current[n - 1] = el
+            }}
+            onClick={() => onChange(String(n))}
+            onKeyDown={handleKeyDown}
+            tabIndex={selected === 0 ? (n === 1 ? 0 : -1) : isSelected ? 0 : -1}
+            className={[
+              'h-10 rounded-lg border text-sm font-semibold transition-colors',
+              'focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/70',
+              isSelected
+                ? 'border-amber-500 bg-amber-500/20 text-amber-300'
+                : 'border-zinc-700 bg-black/60 text-zinc-300 hover:border-zinc-500',
+            ].join(' ')}
+          >
+            {n}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
 export default function ReviewPage() {
   const { publicId } = useParams<{ publicId: string }>()
   const navigate = useNavigate()
@@ -61,6 +142,7 @@ export default function ReviewPage() {
 
   const [ratings, setRatings] = useState<Record<RatingKey, string>>({} as Record<RatingKey, string>)
   const [texts, setTexts] = useState<Record<TextKey, string>>({} as Record<TextKey, string>)
+  const [unanswered, setUnanswered] = useState<Set<QuestionKey>>(new Set())
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [success, setSuccess] = useState<ReviewSuccess | null>(null)
@@ -82,6 +164,26 @@ export default function ReviewPage() {
   }, [publicId])
 
   useEffect(() => { loadBooking() }, [loadBooking])
+
+  const setRating = useCallback((key: RatingKey, value: string) => {
+    setRatings(prev => ({ ...prev, [key]: value }))
+    setUnanswered(prev => {
+      if (!prev.has(key)) return prev
+      const next = new Set(prev)
+      next.delete(key)
+      return next
+    })
+  }, [])
+
+  const setText = useCallback((key: TextKey, value: string) => {
+    setTexts(prev => ({ ...prev, [key]: value }))
+    setUnanswered(prev => {
+      if (!prev.has(key)) return prev
+      const next = new Set(prev)
+      next.delete(key)
+      return next
+    })
+  }, [])
 
   const handleCopy = useCallback(async () => {
     if (!success) return
@@ -106,16 +208,13 @@ export default function ReviewPage() {
     e.preventDefault()
     if (!publicId) return
 
-    // Validate ratings (1..10)
-    const missingRatings = RATING_QUESTIONS.filter(q => {
-      const v = Number(ratings[q.key])
-      return !Number.isInteger(v) || v < 1 || v > 10
-    })
-    // Validate text answers (non-empty)
-    const missingTexts = TEXT_QUESTIONS.filter(q => !texts[q.key]?.trim())
-
-    if (missingRatings.length > 0 || missingTexts.length > 0) {
+    const missing = unansweredQuestionKeys(ratings, texts)
+    if (missing.length > 0) {
+      setUnanswered(new Set(missing))
       setSubmitError('Пожалуйста, ответьте на все вопросы: оценки от 1 до 10 и все текстовые поля.')
+      window.setTimeout(() => {
+        document.getElementById(`question-${missing[0]}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }, 0)
       return
     }
 
@@ -181,6 +280,9 @@ export default function ReviewPage() {
   }
 
   const tariffName = TARIFF_OPTIONS.find(t => t.id === booking.tariff)?.name ?? booking.tariff
+  const state = reviewPageState(booking)
+  const answeredCount = countAnsweredQuestions(ratings, texts)
+  const promo = getRewardPromoDisplay(booking.rewardPromoStatus, booking.rewardPromoCode, booking.rewardPromoValidUntil)
 
   return (
     <div className="min-h-screen bg-luxury-gradient text-white">
@@ -203,6 +305,11 @@ export default function ReviewPage() {
           <p className="text-gray-400 text-sm">
             {tariffName} · {formatDatetime(booking.startDate)}
           </p>
+          {state === 'form' && booking.reviewDeadline && (
+            <p className="text-amber-300/90 text-sm mt-2">
+              Оставьте отзыв до {formatDayMonth(booking.reviewDeadline)} — дарим скидку 10% на следующее бронирование
+            </p>
+          )}
         </div>
 
         {success ? (
@@ -234,53 +341,71 @@ export default function ReviewPage() {
               Промокод именной: действует один раз при бронировании с вашим контактом, до{' '}
               {formatFullDate(success.validUntil)}
             </p>
-            <button
-              onClick={() => navigate(bookingDetailUrl(publicId!, contact), { replace: true })}
-              className="inline-block mt-6 text-amber-400 hover:text-amber-300 text-sm underline"
-            >
-              Вернуться к бронированию
-            </button>
+            <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+              <button
+                onClick={() => navigate(myBookingsUrl(contact))}
+                className="bg-yellow-600 hover:bg-yellow-500 text-black font-bold py-2.5 px-5 rounded-lg text-sm uppercase tracking-wider transition-all"
+              >
+                К моим бронированиям
+              </button>
+              <button
+                onClick={() => navigate(bookingDetailUrl(publicId!, contact), { replace: true })}
+                className="text-amber-400 hover:text-amber-300 text-sm underline"
+              >
+                Вернуться к бронированию
+              </button>
+            </div>
           </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="bg-zinc-900 border border-zinc-700 rounded-xl p-5">
-            <div className="space-y-6">
-              {RATING_QUESTIONS.map((q, i) => (
-                <div key={q.key}>
-                  <label className="block text-sm text-zinc-300 font-medium mb-2">
-                    {i + 1}. {q.label} <span className="text-amber-400">(1–10)</span>
-                  </label>
-                  <select
-                    value={ratings[q.key] ?? ''}
-                    onChange={e => setRatings(prev => ({ ...prev, [q.key]: e.target.value }))}
-                    className="w-full bg-black/60 border border-zinc-700 rounded-lg py-2.5 px-3 text-white text-sm
-                      focus:outline-none focus:border-amber-500/60"
-                  >
-                    <option value="" disabled>
-                      Выберите оценку
-                    </option>
-                    {Array.from({ length: 10 }, (_, n) => n + 1).map(n => (
-                      <option key={n} value={n} className="bg-zinc-900">
-                        {n}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              ))}
+        ) : state === 'form' ? (
+          <form onSubmit={handleSubmit} noValidate className="bg-zinc-900 border border-zinc-700 rounded-xl p-5">
+            <div className="flex items-center justify-between mb-6">
+              <span className="text-sm text-zinc-400">
+                Ответы: {answeredCount} из 9
+              </span>
+            </div>
 
-              {TEXT_QUESTIONS.map((q, i) => (
-                <div key={q.key}>
-                  <label className="block text-sm text-zinc-300 font-medium mb-2">
-                    {RATING_QUESTIONS.length + i + 1}. {q.label}
-                  </label>
-                  <textarea
-                    value={texts[q.key] ?? ''}
-                    onChange={e => setTexts(prev => ({ ...prev, [q.key]: e.target.value }))}
-                    rows={3}
-                    className="w-full bg-black/60 border border-zinc-700 rounded-lg py-2.5 px-3 text-white text-sm
-                      focus:outline-none focus:border-amber-500/60 resize-y"
-                  />
-                </div>
-              ))}
+            <div className="space-y-8">
+              {RATING_QUESTIONS.map((q, i) => {
+                const isUnanswered = unanswered.has(q.key)
+                return (
+                  <div
+                    key={q.key}
+                    id={`question-${q.key}`}
+                    className={isUnanswered ? 'rounded-lg ring-2 ring-red-500/60' : ''}
+                  >
+                    <label id={`label-${q.key}`} className="block text-sm text-zinc-300 font-medium mb-2">
+                      {i + 1}. {q.label} <span className="text-amber-400">(1–10)</span>
+                    </label>
+                    <RatingGroup
+                      value={ratings[q.key] ?? ''}
+                      onChange={v => setRating(q.key, v)}
+                      label={q.label}
+                    />
+                  </div>
+                )
+              })}
+
+              {TEXT_QUESTIONS.map((q, i) => {
+                const isUnanswered = unanswered.has(q.key)
+                return (
+                  <div key={q.key} id={`question-${q.key}`}>
+                    <label htmlFor={`input-${q.key}`} className="block text-sm text-zinc-300 font-medium mb-2">
+                      {RATING_QUESTIONS.length + i + 1}. {q.label}
+                    </label>
+                    <textarea
+                      id={`input-${q.key}`}
+                      value={texts[q.key] ?? ''}
+                      onChange={e => setText(q.key, e.target.value)}
+                      rows={3}
+                      className={[
+                        'w-full bg-black/60 border rounded-lg py-2.5 px-3 text-white text-sm',
+                        'focus:outline-none focus:border-amber-500/60 resize-y',
+                        isUnanswered ? 'border-red-500/70' : 'border-zinc-700',
+                      ].join(' ')}
+                    />
+                  </div>
+                )
+              })}
             </div>
 
             {submitError && (
@@ -298,6 +423,39 @@ export default function ReviewPage() {
               {submitting ? 'Отправляем…' : 'Отправить отзыв'}
             </button>
           </form>
+        ) : (
+          <div className="bg-zinc-900 border border-zinc-700 rounded-xl p-6 text-center">
+            {state === 'alreadyReviewed' && (
+              <>
+                <h2 className="text-xl font-bold text-white mb-2">Вы уже оставили отзыв</h2>
+                {promo && (
+                  <div className="max-w-xs mx-auto bg-black/60 border border-zinc-700 rounded-lg px-4 py-3 mb-2">
+                    <p className="text-amber-300 text-xl font-bold tracking-widest break-all">{promo.label}</p>
+                    {promo.detail && <p className="text-gray-400 text-xs mt-1">{promo.detail}</p>}
+                  </div>
+                )}
+              </>
+            )}
+            {state === 'windowClosed' && (
+              <>
+                <h2 className="text-xl font-bold text-white mb-2">Срок для отзыва истёк</h2>
+                {booking.reviewDeadline && (
+                  <p className="text-gray-400 text-sm">
+                    Отзыв можно было оставить до {formatFullDate(booking.reviewDeadline)}
+                  </p>
+                )}
+              </>
+            )}
+            {state === 'unavailable' && (
+              <h2 className="text-xl font-bold text-white mb-2">Отзыв для этого бронирования недоступен</h2>
+            )}
+            <Link
+              to={bookingDetailUrl(publicId!, contact)}
+              className="inline-block mt-6 text-amber-400 hover:text-amber-300 text-sm underline"
+            >
+              Вернуться к бронированию
+            </Link>
+          </div>
         )}
       </div>
     </div>
