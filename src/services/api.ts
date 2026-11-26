@@ -73,6 +73,19 @@ export interface BookingCreateResponse {
   message: string
 }
 
+export interface PublicReviewItem {
+  reviewId: number
+  text: string
+  avgRating: number
+  stayMonth: string
+}
+
+export interface PublicReviewsResponse {
+  items: PublicReviewItem[]
+  total: number
+  averageRating: number
+}
+
 // ---------------------------------------------------------------------------
 // Request types
 // ---------------------------------------------------------------------------
@@ -277,6 +290,17 @@ export async function submitBooking(
   })
   const result = await apiPost<BookingCreateResponse>('/api/bookings', payload)
   logger.info('booking_created', { bookingId: result.bookingId })
+  return result
+}
+
+/**
+ * Fetch published guest reviews for the home page (public endpoint, no auth).
+ */
+export async function getPublicReviews(limit = 6): Promise<PublicReviewsResponse> {
+  const result = await apiGet<PublicReviewsResponse>('/api/reviews/public', {
+    limit: String(limit),
+  })
+  logger.info('public_reviews_loaded', { count: result.items.length, total: result.total })
   return result
 }
 

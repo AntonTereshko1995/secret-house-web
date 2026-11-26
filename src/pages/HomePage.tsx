@@ -4,6 +4,7 @@ import { getEnv } from '../utils/env'
 import GalleryPreview from '../components/GalleryPreview'
 import Amenities from '../components/Amenities'
 import Pricing from '../components/Pricing'
+import GuestReviews from '../components/GuestReviews'
 import Location from '../components/Location'
 import type { RoomCategory } from '../types/gallery.types'
 
@@ -110,6 +111,7 @@ function HomePage({ onOpenGallery }: HomePageProps) {
       <Pricing />
       <GalleryPreview onOpenFullGallery={onOpenGallery} />
       <Amenities />
+      <GuestReviews />
       <Location />
 
       {/* Footer */}
